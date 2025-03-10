@@ -19,4 +19,14 @@ from django.urls import path
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    #path('inventario_galletas/'),
+    #path('inventario_insumos/'),
+    #path('overview/'),
+    #path('produccion/'),
+    #path('proovedores/'),
+    #path('recetas/'),
+    #path('tienda/'),
+    #path('usuarios/'),
+    #path('ventas/'),
+    #path('clientes/'),
 ]
