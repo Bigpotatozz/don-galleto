@@ -13,3 +13,18 @@ class Registro_view(FormView):
     def form_valid(self, form):
         form.save()
         return super().form_valid(form)
+    
+class Login_view(FormView):
+    template_name = 'login.html'
+    form_class = forms.Form_iniciar_sesion
+    success_url = reverse_lazy('home')
+    
+    def form_valid(self, form):
+        user = form.auth()
+        if user:
+            
+            self.request.session['id_usuario'] = user.id_usuario
+            return super().form_valid(form)
+        else:
+            form.add_error(None, "Credenciales inválidas")
+            return self.form_invalid(form)

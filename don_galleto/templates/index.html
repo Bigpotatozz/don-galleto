@@ -14,9 +14,17 @@
 
     {% else %}
         <div class="text-center">
+
+            {% if 'is_authenticated'%}
+                <h1>Bienvenido, {{ user_id }}</h1>
+            {% else %}
             <h1 class="mb-4">Bienvenido, Regístrate o inicia sesión</h1>
-            <a href="#" class="btn btn-success btn-lg mx-2">Iniciar sesion</a>
+            <a href="{% url 'login'%}" class="btn btn-success btn-lg mx-2">Iniciar sesion</a>
             <a href="{% url 'registro'%}" class="btn btn-primary btn-lg mx-2">Registrarse</a>
+
+            {% endif %}
+
+
         </div>
     {% endif %}
 </div>

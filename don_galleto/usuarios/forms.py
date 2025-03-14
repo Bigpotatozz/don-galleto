@@ -23,7 +23,33 @@ class Form_registrar_usuario(forms.ModelForm):
         new_user = Usuario(nombre = self.cleaned_data['nombre'],
                             telefono = self.cleaned_data['telefono'],
                             correo = self.cleaned_data['correo'],
-                            contrasenia = contrasenia_hashed,
+                            contrasenia = contrasenia_hashed.decode('utf-8'),
                             rol = self.cleaned_data['rol'],
                             codigo_verificacion = 0)
         new_user.save()
+        
+        
+class Form_iniciar_sesion(forms.ModelForm):
+    
+    correo = forms.EmailField(max_length=60)
+    contrasenia = forms.CharField(max_length=45, widget=forms.PasswordInput)
+    
+    class Meta: 
+        model = Usuario
+        fields = ['correo', 'contrasenia']    
+        
+    def auth(self):
+        try: 
+            user = Usuario.objects.get(correo=self.cleaned_data['correo'])
+            
+            if(bcrypt.checkpw(self.cleaned_data['contrasenia'].encode('utf-8'), user.contrasenia.encode('utf-8'))):
+                return user
+            else: 
+                return None
+            
+        #Maneja la excepcion si el usuario no llegara a existir
+        except Usuario.DoesNotExist:
+            return None
+
+        
+        

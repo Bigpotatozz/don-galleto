@@ -7,7 +7,7 @@ class Usuario(models.Model):
     nombre = models.CharField(max_length=30)
     telefono = models.CharField(max_length=10)
     correo = models.EmailField(max_length=60)
-    contrasenia = models.CharField(max_length=45)
+    contrasenia = models.TextField(max_length=45)
     rol = models.CharField(max_length=10, choices=[('empleado', 'empleado'), ('cliente', 'cliente')])
     codigo_verificacion = models.IntegerField()
     
