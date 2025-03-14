@@ -74,7 +74,7 @@ create table usuario(
     nombre varchar(30),
     telefono varchar(10),
     correo varchar(60),
-    contrasenia varchar(45),
+    contrasenia varchar(100),
     rol varchar(45),
     codigo_verificacion int
 );
@@ -137,6 +137,8 @@ create table logs(
 ALTER TABLE merma_insumo
 MODIFY COLUMN cantidad FLOAT;
 
+ALTER TABLE usuario
+MODIFY COLUMN contrasenia VARCHAR(100);
 
 
 

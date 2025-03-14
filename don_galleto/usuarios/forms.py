@@ -1,5 +1,6 @@
 from django import forms
 from usuarios.models import Usuario
+import bcrypt
 
 
 class Form_registrar_usuario(forms.ModelForm):
@@ -15,10 +16,14 @@ class Form_registrar_usuario(forms.ModelForm):
         fields = ['nombre', 'telefono', 'correo', 'contrasenia', 'rol']
         
     def save(self):
+        
+        contrasenia = self.cleaned_data['contrasenia'].encode('utf-8')
+        salt  =  bcrypt.gensalt()
+        contrasenia_hashed = bcrypt.hashpw(contrasenia, salt)
         new_user = Usuario(nombre = self.cleaned_data['nombre'],
                             telefono = self.cleaned_data['telefono'],
                             correo = self.cleaned_data['correo'],
-                            contrasenia = self.cleaned_data['contrasenia'],
+                            contrasenia = contrasenia_hashed,
                             rol = self.cleaned_data['rol'],
                             codigo_verificacion = 0)
         new_user.save()
