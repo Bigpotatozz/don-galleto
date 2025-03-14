@@ -12,6 +12,8 @@ class Proovedor(models.Model):
     codigo_postal = models.CharField(max_length=7)
     estatus = models.CharField(max_length=10, default = 'activo')
     
+    class Meta:
+        db_table = 'proovedor'
     def __str__(self):
         return f" {self.nombre} - {self.nombre_contacto} - {self.telefono} - {self.correo} - {self.direccion} - {self.ciudad} - {self.estado} - {self.codigo_postal} - {self.estatus}"
 

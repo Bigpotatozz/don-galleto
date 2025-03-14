@@ -1,47 +1,40 @@
-{% extends "base.html" %}
+{%extends "base.html"%}
+{% load static %}
+    {%block content%}
 
-{% block content %}
-<div class="container min-vh-100 d-flex align-items-center justify-content-center">
-    <div class="card shadow-lg rounded-4 p-4" style="max-width: 500px; width: 100%;">
-        <h2 class="text-center mb-4">Registro de Usuario</h2>
 
-        {% if form.errors %}
-            <div class="alert alert-danger">
-                <ul>
-                    {% for field, errors in form.errors.items %}
-                        {% for error in errors %}
-                            <li>{{ error }}</li>
-                        {% endfor %}
-                    {% endfor %}
-                </ul>
-            </div>
-        {% endif %}
-
-        <form method="POST">
-            {% csrf_token %}
-            
+    <div style = "display: flex; justify-content: center; margin-top: 200px;">
+        <form method="post" enctype="multipart/form-data">
+            {%csrf_token%}
+           
             <div class="mb-3">
-                <label class="form-label">{{ form.username.label }}</label>
-                {{ form.username }}
+                <label class="form-label">Nombre:</label>
+                {{form.nombre}}
+
+                <label class="form-label">telefono:</label>
+                {{form.telefono}}
+
+                <label class="form-label">correo:</label>
+                {{form.correo}}
+
+                <label class="form-label">contraseña:</label>
+                {{form.contrasenia}}
+
+                <label class="form-label">rol:</label>
+                {{form.rol}}
             </div>
 
-            <div class="mb-3">
-                <label class="form-label">{{ form.email.label }}</label>
-                {{ form.email }}
-            </div>
+            {%for error in field.errors%}
+                <p>{{error}}</p>
+            {%endfor%}
 
-            <div class="mb-3">
-                <label class="form-label">{{ form.password1.label }}</label>
-                {{ form.password1 }}
-            </div>
 
-            <div class="mb-3">
-                <label class="form-label">{{ form.password2.label }}</label>
-                {{ form.password2 }}
-            </div>
-
-            <button type="submit" class="btn btn-primary btn-lg w-100">Registrarse</button>
+            <button type="submit" class="btn btn-success btn-lg w-100">Guardar</button>
         </form>
+    </div>         
     </div>
-</div>
-{% endblock %}
+
+   
+      
+ 
+    {%endblock content%}

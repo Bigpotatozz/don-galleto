@@ -10,6 +10,8 @@ class Venta(models.Model):
     estatus = models.CharField(max_length=30)
     id_usuario = models.ForeignKey(Usuario, on_delete=models.CASCADE, null=False, related_name='venta_cliente')
     
+    class Meta:
+        db_table = 'venta'
     def __str__(self):
         return f" {self.fecha_venta} - {self.total} - {self.tipo} - {self.estatus} - {self.id_usuario}"
     
@@ -20,5 +22,7 @@ class Detalle_venta(models.Model):
     id_venta = models.ForeignKey(Venta, on_delete=models.CASCADE, null=False, related_name='detalle_venta_venta')
     id_galleta = models.ForeignKey(Galleta, on_delete=models.CASCADE, null=False, related_name='detalle_venta_galleta')
     
+    class Meta:
+        db_table = 'detalle_venta'
     def __str__(self):
         return f" {self.cantidad} - {self.id_venta} - {self.id_galleta}"

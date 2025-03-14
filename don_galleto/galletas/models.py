@@ -11,6 +11,9 @@ class Galleta(models.Model):
     peso_unidad = models.FloatField()
     duracion_promedio = models.IntegerField()
     
+    class Meta: 
+        db_table = 'galleta'
+    
     def __str__(self):
            return f" {self.nombre} - {self.descripcion} - {self.precio_venta} - {self.cantidad} - {self.peso_unidad} - {self.duracion_promedio}"
     
@@ -19,6 +22,9 @@ class Detalle_receta(models.Model):
     cantidad = models.FloatField()
     id_insumo = models.ForeignKey(Insumo, on_delete=models.CASCADE, null=False, related_name='detalle_receta_insumo')
     id_galleta = models.ForeignKey(Galleta, on_delete=models.CASCADE, null=False, related_name='detalle_receta_galleta')
+    
+    class Meta:
+        db_table = 'detalle_receta'
     
     def __str__(self):
         return f" {self.cantidad} - {self.id_insumo} - {self.id_galleta}"
