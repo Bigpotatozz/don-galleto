@@ -23,9 +23,18 @@
                 <a class="nav-link" href="{% url 'home'%}">Home</a>
               </li>
 
-              <li class="nav-item">
-                <a class="nav-link" href="{% url 'login'%}">Login</a>
-              </li>
+              {% if is_authenticated == False%}
+                <li class="nav-item">
+                  <a class="nav-link" href="{% url 'login'%}">Login</a>
+                </li>
+
+              {%else%}
+                <li class="nav-item">
+                  <a class="nav-link" href="{% url 'logout'%}">Logout</a>
+                </li>
+
+              {% endif%}
+           
              
             </ul>
           </div>

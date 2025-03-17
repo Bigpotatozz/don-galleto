@@ -4,6 +4,8 @@ from . import forms
 from django.urls import reverse_lazy
 from django.contrib.auth.mixins import PermissionRequiredMixin
 from django.views.generic import FormView
+from django.shortcuts import redirect
+from django.contrib.auth import logout
 
 class Registro_view(FormView):
     template_name = 'registro.html'
@@ -28,3 +30,12 @@ class Login_view(FormView):
         else:
             form.add_error(None, "Credenciales inválidas")
             return self.form_invalid(form)
+        
+def logout_view(request):
+    
+    if('user_id' in request.session):
+        del request.session['user_id']
+        
+    logout(request)
+    return redirect('home')
+    
