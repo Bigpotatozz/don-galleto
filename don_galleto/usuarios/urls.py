@@ -2,9 +2,9 @@
 from django.urls import path
 from . import views
 from don_galleto.views import IndexView
-from usuarios.views import Registro_view, Login_view
+from usuarios.views import  Lista_usuarios_view, Editar_usuario_view
 urlpatterns = [
-    path('registrarse/', views.Registro_view.as_view(), name='registro'),
-    path('login/', views.Login_view.as_view(), name = 'login'),
-    path('logout/', views.logout_view, name='logout'),
+    path('listado_usuarios/', views.Lista_usuarios_view.as_view(), name='listado_usuarios'),
+    path('editar_usuario/<int:id>', views.Editar_usuario_view.as_view(), name='editar_usuario'),
+  
 ]

@@ -11,6 +11,9 @@ class Insumo(models.Model):
     cantidad = models.IntegerField()
     estatus = models.CharField(max_length=45)
     
+    class Meta:
+        db_table = 'insumo'
+    
     def __str__(self):
         return f" {self.nombre} - {self.tipo} - {self.tipo_medida} - {self.cantidad} - {self.estatus}"
     

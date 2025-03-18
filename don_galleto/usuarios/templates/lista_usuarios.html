@@ -1,0 +1,29 @@
+{%extends "base.html"%}
+{% load static %}
+    {%block content%}
+    <div style= "margin-top: 200px;">
+        <h1 class="text-center">Listado de usuarios</h1>
+    
+        <a href = "{% url 'registrar_usuario' %}"  >Agregar Usuario</a>
+        <table class= "table table-striped">
+            <thead>
+                <th>Nombre</th>
+                <th>telefono</th>
+                <th>correo</th>
+                <th>puesto</th>
+              
+            </thead>
+            <tbody>
+                {%for usuario in usuarios %}
+                    <tr>
+                        <td>{{usuario.nombre}}</td>
+                        <td>{{usuario.telefono}}</td>
+                        <td>{{usuario.correo}}</td>
+                        <td>{{usuario.rol}}</td>
+                        <td>  <a href="{% url 'editar_usuario' usuario.id_usuario%}">Editar</a> </td>
+                    </tr>
+                {%endfor%}
+        </table>
+    </div>
+  
+    {%endblock content%}
