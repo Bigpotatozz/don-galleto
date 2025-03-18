@@ -2,6 +2,8 @@
 
 Este proyecto utiliza Django como framework de desarrollo web. A continuación, se describen los comandos esenciales para configurar y migrar la base de datos.
 
+RECUERDA CONFIGURAR TUS CREEDENCIALES DE BASE DE DATOS EN EL ARCHIVO DE SETTINGS
+
 ## Activar el entorno virtual
 
 Antes de ejecutar cualquier comando, es necesario activar el entorno virtual. Para hacerlo, usa el siguiente comando:
@@ -26,11 +28,19 @@ Este comando genera archivos de migración en la carpeta `migrations` dentro de 
 
 Para aplicar las migraciones y sincronizar la base de datos con los modelos de Django, usa:
 
-```sh
-py ./manage.py migrate --fake-initial
-```
+Primero hacer el makemigrations en orden e INDIVIDUALMENTE para evitar errores relacionados a las llaves foraneas
 
-El parámetro `--fake-initial` es útil cuando la base de datos ya contiene las tablas y se quiere registrar el estado inicial sin aplicar cambios adicionales.
+py ./manage.py makemigrations proveedor
+py ./manage.py makemigrations inventario_insumos
+py ./manage.py makemigrations galletas
+py ./manage.py makemigrations usuario
+py ./manage.py makemigrations produccion
+py ./manage.py makemigrations ventas
+
+Una vez aplicadas todas las "makemigrations" ahora si aplicar el migrate
+
+py ./manage.py migrate
+
 
 ## Script de Base de Datos
 
