@@ -1,0 +1,66 @@
+{% extends "base.html" %} {% load static %} {% block content %}
+<div
+  class="container min-vh-100 d-flex align-items-center justify-content-center"
+>
+  <div
+    class="card shadow-lg rounded-4 p-4"
+    style="max-width: 500px; width: 100%"
+  >
+    <h2 class="text-center mb-4">Registrar Producto</h2>
+
+    <form method="post" enctype="multipart/form-data">
+      {% csrf_token %}
+
+      <div class="mb-3">
+        <label class="form-label">Nombre:</label>
+        {{ form.nombre }} {% if form.nombre.errors %}
+        <div class="alert alert-danger mt-2">{{ form.nombre.errors }}</div>
+        {% endif %}
+      </div>
+
+      <div class="mb-3">
+        <label class="form-label">telefono:</label>
+        {{ form.telefono }} {% if form.telefono.errors %}
+        <div class="alert alert-danger mt-2">{{ form.telefono.errors }}</div>
+        {% endif %}
+      </div>
+
+      <div class="mb-3">
+        <label class="form-label">correo:</label>
+        {{ form.correo }} {% if form.correo.errors %}
+        <div class="alert alert-danger mt-2">{{ form.correo.errors }}</div>
+        {% endif %}
+      </div>
+
+      <div class="mb-3">
+        <label class="form-label">contrasenia:</label>
+        {{ form.contrasenia }} {% if form.contrasenia.errors %}
+        <div class="alert alert-danger mt-2">{{ form.contrasenia.errors }}</div>
+        {% endif %}
+      </div>
+
+      <div class="mb-3">
+        <label class="form-label">rol:</label>
+        {{ form.rol }} {% if form.rol.errors %}
+        <div class="alert alert-danger mt-2">{{ form.rol.errors }}</div>
+        {% endif %}
+      </div>
+
+      <button type="submit" class="btn btn-success btn-lg w-100">
+        Guardar
+      </button>
+
+      {% if form.errors %}
+      <div class="alert alert-danger">
+        <strong>Errores en el formulario:</strong>
+        <ul>
+          {% for field, errors in form.errors.items %} {% for error in errors %}
+          <li>{{ field }}: {{ error }}</li>
+          {% endfor %} {% endfor %}
+        </ul>
+      </div>
+      {% endif %}
+    </form>
+  </div>
+</div>
+{% endblock %}

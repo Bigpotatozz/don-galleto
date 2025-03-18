@@ -1,15 +1,13 @@
+from django.contrib.auth.models import AbstractUser
 from django.db import models
 
 # Create your models here.
 
-class Usuario(models.Model):
-    id_usuario = models.AutoField(primary_key=True)
-    nombre = models.CharField(max_length=30)
+class Usuario(AbstractUser):
+    id_usuario = models.AutoField(primary_key=True, auto_created=True)
     telefono = models.CharField(max_length=10)
-    correo = models.EmailField(max_length=60)
-    contrasenia = models.TextField(max_length=45)
     rol = models.CharField(max_length=10, choices=[('empleado', 'empleado'), ('cliente', 'cliente')])
-    codigo_verificacion = models.IntegerField()
+    codigo_verificacion = models.IntegerField(blank=True, null=True)
     
     class Meta: 
         db_table = 'usuario'
