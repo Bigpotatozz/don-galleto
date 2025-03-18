@@ -1,6 +1,5 @@
 from django import forms
 from usuarios.models import Usuario
-import bcrypt
 
 class Form_editar_usuario(forms.ModelForm):
     nombre = forms.CharField(max_length=30)
