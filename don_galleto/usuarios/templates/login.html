@@ -15,9 +15,18 @@
                 {{form.contrasenia}}
             </div>
 
-            {%for error in field.errors%}
-                <p>{{error}}</p>
-            {%endfor%}
+            {% if form.errors %}
+            <div class="alert alert-danger">
+                <ul>
+                    {% for field, errors in form.errors.items %}
+                        {% for error in errors %}
+                            <li>{{ error }}</li>
+                        {% endfor %}
+                    {% endfor %}
+                </ul>
+            </div>
+        {% endif %}
+        
 
 
             <button type="submit" class="btn btn-success btn-lg w-100">Iniciar sesion</button>
