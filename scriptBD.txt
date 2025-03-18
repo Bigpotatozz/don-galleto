@@ -1,0 +1,146 @@
+create database pfdg;
+use pfdg;
+
+create table proovedor(
+	id_proovedor int auto_increment primary key,
+    nombre varchar(30),
+    nombre_contacto varchar(30),
+    telefono varchar(12),
+    correo varchar(45),
+    direccion varchar(100),
+    ciudad varchar(15),
+    estado varchar(15),
+    codigo_postal varchar(7),
+    estatus varchar(10)
+);
+
+create table insumo(
+	id_insumo int auto_increment primary key,
+    nombre varchar(45),
+    tipo varchar(45),
+    tipo_medida varchar(45),
+    cantidad int,
+    estatus varchar(45)
+);
+
+create table compras_insumos(
+	id_compra_insumo int auto_increment primary key,
+    nombre varchar(45),
+    cantidad float,
+    cantidad_restante float,
+    caducidad date,
+    precio float,
+    estatus varchar(15),
+    id_proovedor int,
+    id_insumo int,
+    constraint foreign key(id_proovedor)
+    references proovedor(id_proovedor),
+    constraint foreign key(id_insumo)
+    references insumo(id_insumo)
+);
+
+create table merma_insumo(
+	id_merma_insumo int auto_increment primary key,
+    cantidad float,
+    motivo varchar(45),
+    id_compra_insumo int,
+    constraint foreign key(id_compra_insumo)
+    references compras_insumos(id_compra_insumo)
+);
+
+create table galleta(
+	id_galleta int auto_increment primary key,
+    nombre varchar(30),
+    descripcion varchar(100),
+    precio_venta float,
+    cantidad int,
+    peso_unidad float,
+    duracion_promedio int
+);
+
+create table detalle_receta(
+	id_detalle_receta int auto_increment primary key,
+    cantidad float,
+    id_insumo int,
+    id_galleta int,
+	constraint foreign key(id_insumo)
+    references insumo(id_insumo),
+    constraint foreign key(id_galleta)
+    references galleta(id_galleta)
+);
+
+create table usuario(
+	id_usuario int auto_increment primary key,
+    nombre varchar(30),
+    telefono varchar(10),
+    correo varchar(60),
+    contrasenia varchar(100),
+    rol varchar(45),
+    codigo_verificacion int
+);
+
+create table lote_galleta(
+	id_lote_galleta int auto_increment primary key,
+    fecha_preparacion date,
+    estatus varchar(10),
+    cantidad_galletas int,
+    id_galleta int,
+    id_usuario int,
+	constraint foreign key(id_galleta)
+    references galleta(id_galleta),
+    constraint foreign key(id_usuario)
+    references usuario(id_usuario)
+);
+
+create table merma_producto(
+	id_merma int auto_increment primary key,
+    cantidad int,
+    motivo varchar(45),
+    id_lote_galleta int,
+    constraint foreign key(id_lote_galleta)
+    references lote_galleta(id_lote_galleta)
+);
+
+
+create table venta(
+	id_venta int auto_increment primary key,
+    fecha_venta date,
+    total float,
+    tipo varchar(30),
+    estatus varchar(30),
+    id_usuario int,
+    constraint foreign key(id_usuario)
+    references usuario(id_usuario)
+);
+
+create table detalle_venta(
+	id_detalle_venta int auto_increment primary key,
+    cantidad float,
+    id_galleta int,
+    id_venta int,
+    constraint foreign key(id_galleta)
+    references galleta(id_galleta),
+    constraint foreign key(id_venta)
+    references venta(id_venta)
+);
+
+create table logs(
+	id_log int auto_increment primary key,
+    fecha date,
+    tipo varchar(45),
+    descripcion varchar(45),
+    id_usuario int,
+    constraint foreign key(id_usuario)
+    references usuario(id_usuario)
+);
+
+ALTER TABLE merma_insumo
+MODIFY COLUMN cantidad FLOAT;
+
+ALTER TABLE usuario
+MODIFY COLUMN contrasenia VARCHAR(100);
+
+
+
+
+

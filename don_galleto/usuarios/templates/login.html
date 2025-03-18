@@ -1,0 +1,31 @@
+{%extends "base.html"%}
+{% load static %}
+    {%block content%}
+
+
+    <div style = "display: flex; justify-content: center; margin-top: 200px;">
+        <form method="post" enctype="multipart/form-data">
+            {%csrf_token%}
+           
+            <div class="mb-3">
+                <label class="form-label">Correo:</label>
+                {{form.correo}}
+
+                <label class="form-label">Contrasenia:</label>
+                {{form.contrasenia}}
+            </div>
+
+            {%for error in field.errors%}
+                <p>{{error}}</p>
+            {%endfor%}
+
+
+            <button type="submit" class="btn btn-success btn-lg w-100">Iniciar sesion</button>
+        </form>
+    </div>         
+    </div>
+
+   
+      
+ 
+    {%endblock content%}
