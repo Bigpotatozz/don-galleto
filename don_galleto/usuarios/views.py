@@ -9,8 +9,6 @@ from django.contrib.auth import logout
 from usuarios.models import Usuario
 
 
-
-    
 class Lista_usuarios_view(TemplateView):
     template_name = 'lista_usuarios.html'
     
@@ -21,18 +19,3 @@ class Lista_usuarios_view(TemplateView):
             "usuarios": usuarios
         }
         
-class Editar_usuario_view(FormView):
-    template_name = 'editar_usuario.html'
-    form_class = forms.Form_editar_usuario
-    success_url = reverse_lazy('listado_usuarios')
-    
-    def get_form_kwargs(self):
-        kwargs = super().get_form_kwargs()
-        id = self.kwargs.get('id')
-        usuario = get_object_or_404(Usuario, id_usuario = id)
-        kwargs['instance'] = usuario
-        return kwargs
-    
-    def form_valid(self, form):
-        form.save(self.kwargs.get('id'))
-        return super().form_valid(form)

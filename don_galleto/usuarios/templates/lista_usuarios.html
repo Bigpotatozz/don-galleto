@@ -4,7 +4,7 @@
     <div style= "margin-top: 200px;">
         <h1 class="text-center">Listado de usuarios</h1>
     
-        <a href = "{% url 'registrar_usuario' %}"  >Agregar Usuario</a>
+        <a href = "{% url 'registro' %}"  >Agregar Usuario</a>
         <table class= "table table-striped">
             <thead>
                 <th>Nombre</th>
@@ -16,11 +16,11 @@
             <tbody>
                 {%for usuario in usuarios %}
                     <tr>
-                        <td>{{usuario.nombre}}</td>
+                        <td>{{usuario.username}}</td>
                         <td>{{usuario.telefono}}</td>
-                        <td>{{usuario.correo}}</td>
+                        <td>{{usuario.email}}</td>
                         <td>{{usuario.rol}}</td>
-                        <td>  <a href="{% url 'editar_usuario' usuario.id_usuario%}">Editar</a> </td>
+                        <td>  <a href="#">Editar</a> </td>
                     </tr>
                 {%endfor%}
         </table>
