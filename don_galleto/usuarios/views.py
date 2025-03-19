@@ -7,6 +7,8 @@ from django.views.generic import FormView
 from django.shortcuts import redirect
 from django.contrib.auth import logout
 from usuarios.models import Usuario
+from usuarios.utils import asignar_permisos
+
 
 
 class Lista_usuarios_view(TemplateView):
@@ -26,7 +28,8 @@ class Registro_admin_view(FormView):
     success_url = reverse_lazy('listado_usuarios')
     
     def form_valid(self, form):
-        form.save()
+        
+        asignar_permisos(form, None)
         return super().form_valid(form)
     
     def form_invalid(self, form):
@@ -45,7 +48,8 @@ class Edicion_usuario_view(FormView):
         return kwargs
 
     def form_valid(self, form):
-        form.save(self.kwargs.get('id'))
+        id = self.kwargs.get('id')
+        asignar_permisos(form, id) 
         return super().form_valid(form)
 
 
