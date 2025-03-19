@@ -4,13 +4,14 @@
     <div style= "margin-top: 200px;">
         <h1 class="text-center">Listado de usuarios</h1>
     
-        <a href = "{% url 'registro' %}"  >Agregar Usuario</a>
+        <a href = "{% url 'registro_admin' %}"  >Agregar Usuario</a>
         <table class= "table table-striped">
             <thead>
                 <th>Nombre</th>
                 <th>telefono</th>
                 <th>correo</th>
                 <th>puesto</th>
+                <th>Estatus</th>
               
             </thead>
             <tbody>
@@ -20,7 +21,15 @@
                         <td>{{usuario.telefono}}</td>
                         <td>{{usuario.email}}</td>
                         <td>{{usuario.rol}}</td>
-                        <td>  <a href="#">Editar</a> </td>
+                        <td>
+                            {% if usuario.is_active %}
+                                Activo
+                            {% else %}
+                                Inactivo
+                            {% endif %}
+                        </td>
+                        <td><a href="{% url 'editar_usuario' usuario.id_usuario %}">Editar</a> </td>
+                        <td><a href="{% url 'eliminar_usuario' usuario.id_usuario %}">Eliminar</a> </td>
                     </tr>
                 {%endfor%}
         </table>
