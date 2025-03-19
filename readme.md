@@ -9,7 +9,7 @@ Antes de comenzar, asegúrate de tener instaladas las siguientes herramientas:
 - Python 3
 - pip (administrador de paquetes de Python)
 - virtualenv (opcional pero recomendado)
-- PostgreSQL (o la base de datos configurada en el proyecto)
+- MySql
 
 ## Configuración del entorno
 
