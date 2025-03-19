@@ -68,6 +68,20 @@
                 {% endif %}
             </div>
 
+            <div class="mb-3">
+                <label class="form-label">{{ form.rol.label }}</label>
+                {{ form.rol }}
+                {% if form.telefono.errors %}
+                    <div class="text-danger">
+                        {% for error in form.rol.errors %}
+                            <small>{{ error }}</small>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+            </div>
+
+
+
             <button type="submit" class="btn btn-primary btn-lg w-100">Registrarse</button>
         </form>
     </div>

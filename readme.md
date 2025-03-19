@@ -1,52 +1,83 @@
 # Proyecto Django
 
-Este proyecto utiliza Django como framework de desarrollo web. A continuación, se describen los comandos esenciales para configurar y migrar la base de datos.
+Este proyecto utiliza Django como framework de desarrollo web. A continuación, se describen los pasos para configurar y ejecutar el proyecto correctamente.
 
-RECUERDA CONFIGURAR TUS CREEDENCIALES DE BASE DE DATOS EN EL ARCHIVO DE SETTINGS
+## Requisitos previos
 
-## Activar el entorno virtual
+Antes de comenzar, asegúrate de tener instaladas las siguientes herramientas:
 
-Antes de ejecutar cualquier comando, es necesario activar el entorno virtual. Para hacerlo, usa el siguiente comando:
+- Python 3
+- pip (administrador de paquetes de Python)
+- virtualenv (opcional pero recomendado)
+- PostgreSQL (o la base de datos configurada en el proyecto)
 
+## Configuración del entorno
+
+### 1. Clonar el repositorio
 ```sh
-./env/Scripts/activate
+ git clone <URL_DEL_REPOSITORIO>
+ cd <NOMBRE_DEL_PROYECTO>
 ```
 
-Este comando activa el entorno virtual ubicado en la carpeta `env`, permitiendo el uso de las dependencias del proyecto.
-
-## Generar archivos de migración
-
-Para crear los archivos de migración a partir de los modelos definidos en el proyecto, ejecuta:
-
+### 2. Crear y activar un entorno virtual
 ```sh
-py ./manage.py makemigrations
+python -m venv env
+source env/bin/activate  # En macOS/Linux
+env\Scripts\activate  # En Windows
 ```
 
-Este comando genera archivos de migración en la carpeta `migrations` dentro de cada aplicación de Django.
+### 3. Instalar dependencias
+```sh
+pip install -r requirements.txt
+```
 
-## Aplicar migraciones a la base de datos
+## Configuración de la base de datos
 
-Para aplicar las migraciones y sincronizar la base de datos con los modelos de Django, usa:
+### 4. Configurar el archivo `.env`
+Crea un archivo `.env` en la raíz del proyecto con las variables necesarias, por ejemplo:
+```env
+DATABASE_NAME=nombre_de_la_base
+DATABASE_USER=usuario
+DATABASE_PASSWORD=contraseña
+DATABASE_HOST=localhost
+DATABASE_PORT=5432
+```
 
-Primero hacer el makemigrations en orden e INDIVIDUALMENTE para evitar errores relacionados a las llaves foraneas
+Asegúrate de que la base de datos está creada antes de continuar.
 
+## Migraciones
+
+### 5. Ejecutar migraciones en el orden específico
+Ejecuta los siguientes comandos en este orden:
+```sh
 py ./manage.py makemigrations proveedor
 py ./manage.py makemigrations inventario_insumos
 py ./manage.py makemigrations galletas
 py ./manage.py makemigrations usuario
 py ./manage.py makemigrations produccion
 py ./manage.py makemigrations ventas
-
-Una vez aplicadas todas las "makemigrations" ahora si aplicar el migrate
-
 py ./manage.py migrate
+```
 
+## Ejecutar el servidor
 
-## Script de Base de Datos
+### 6. Iniciar el servidor de desarrollo
+```sh
+py ./manage.py runserver
+```
 
-El script de la base de datos se encuentra en el repositorio. Asegúrate de revisar los archivos correspondientes para su correcta implementación.
+El servidor se ejecutará en `http://127.0.0.1:8000/` por defecto.
 
----
+## Superusuario
 
-Para cualquier duda o problema, revisa la documentación oficial de Django o consulta con el equipo de desarrollo.
+### 7. Crear un superusuario
+```sh
+py ./manage.py createsuperuser
+```
+Sigue las instrucciones en la terminal para configurar las credenciales del administrador.
+
+## ¡Listo para trabajar!
+Ahora puedes acceder al panel de administración en `http://127.0.0.1:8000/admin/` e iniciar sesión con el superusuario creado.
+
+Para más información, consulta la documentación oficial de Django: [https://docs.djangoproject.com/](https://docs.djangoproject.com/)
 
