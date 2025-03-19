@@ -6,7 +6,7 @@ from django.db import models
 class Usuario(AbstractUser):
     id_usuario = models.AutoField(primary_key=True, auto_created=True)
     telefono = models.CharField(max_length=10)
-    rol = models.CharField(max_length=10, choices=[('empleado', 'empleado'), ('cliente', 'cliente')])
+    rol = models.CharField(max_length=10, choices=[('empleado', 'empleado'), ('cliente', 'cliente')], default='cliente')
     codigo_verificacion = models.IntegerField(blank=True, null=True)
     
     class Meta: 
