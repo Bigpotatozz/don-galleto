@@ -9,7 +9,7 @@ from django.urls import reverse_lazy
 class CrearProovedorView(FormView):
     template_name = "crear_proovedor.html"  
     form_class = forms.ProovedorRegistrarForm
-    success_url = reverse_lazy("crear_proovedor")
+    success_url = reverse_lazy("lista_proovedor")
     def form_valid(self, form):
         form.save()
         return super().form_valid(form)
