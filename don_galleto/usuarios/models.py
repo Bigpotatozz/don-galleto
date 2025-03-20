@@ -11,6 +11,9 @@ class Usuario(AbstractUser):
     
     class Meta: 
         db_table = 'usuario'
+        permissions = [("admin", "Control total"), 
+                       ("empleado", "funcionalidades basicas"),
+                       ("cliente", "acceso a la plataforma de compra")]
     
     def __str__(self):
         return f" {self.nombre} - {self.telefono} - {self.correo} - {self.contrasenia} - {self.rol} - {self.codigo_verificacion}"
