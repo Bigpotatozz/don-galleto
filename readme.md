@@ -50,10 +50,10 @@ Asegúrate de que la base de datos está creada antes de continuar.
 ### 5. Ejecutar migraciones en el orden específico
 Ejecuta los siguientes comandos en este orden:
 ```sh
-py ./manage.py makemigrations proveedor
+py ./manage.py makemigrations proovedores
 py ./manage.py makemigrations inventario_insumos
 py ./manage.py makemigrations galletas
-py ./manage.py makemigrations usuario
+py ./manage.py makemigrations usuarios
 py ./manage.py makemigrations produccion
 py ./manage.py makemigrations ventas
 py ./manage.py migrate
