@@ -59,9 +59,17 @@
             {% endif %}
           
 
-            <li class="nav-item">
-              <a class="nav-link" href="{% url 'home'%}">Proovedores </a>
-            </li>
+            {% if user.is_authenticated%}
+            
+            {% if perms.usuarios.empleado%}
+              <li class="nav-item">
+                <a class="nav-link" href="{% url 'lista_proovedor'%}">Proovedores </a>
+              </li>
+            {% endif %}
+
+            {% endif %}
+
+           
 
             <li class="nav-item">
               <a class="nav-link" href="{% url 'home'%}">Galletas</a>
