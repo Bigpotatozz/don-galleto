@@ -16,7 +16,6 @@
                 <th>Estado</th>
                 <th>Código Postal</th>
                 <th>Estatus</th>
-                <th>Acciones</th>
             </tr>
         </thead>
         <tbody>
@@ -31,15 +30,7 @@
                     <td>{{ proveedor.ciudad }}</td>
                     <td>{{ proveedor.estado }}</td>
                     <td>{{ proveedor.codigo_postal }}</td>
-                    <td>
-                        {% if proveedor.estatus %}
-                            Activo
-                        {% else %}
-                            Inactivo
-                        {% endif %}
-                    </td>
-                    <td>
-                    </td>
+                    <td>{{ proveedor.estatus }}</td>
                 </tr>
             {% empty %}
                 <tr>

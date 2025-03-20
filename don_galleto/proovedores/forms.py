@@ -10,7 +10,7 @@ class ProovedorRegistrarForm(forms.Form):
     ciudad = forms.CharField(max_length=15, label='Ciudad')
     estado = forms.CharField(max_length=15, label='Estado')
     codigo_postal = forms.CharField(max_length=7, label='Codigo postal')
-    estatus = forms.CharField(max_length=10, label='Estatus', initial='activo')
+    estatus = forms.ChoiceField(choices=[('activo', 'Activo'), ('inactivo', 'Inactivo'), ('bloqueado', 'Bloqueado')])
     
     class Meta:
         model = models.Proovedor
