@@ -2,8 +2,6 @@
 
 # Ignorar archivos de caché de Python
 __pycache__/
-*.pyc
-*.pyo
+*/__pycache__/
+*.py[cod]
 
-# Ignorar migraciones (opcional, solo si quieres que cada dev haga las suyas)
-migrations/
