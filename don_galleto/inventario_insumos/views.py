@@ -20,3 +20,11 @@ class Listado_insumos_view(FormView):
             "insumos": insumos,
         }
         
+class Registrar_insumo_view(FormView):
+    template_name = 'agregar_insumo.html'
+    form_class = forms.Registro_insumo_form
+    success_url = reverse_lazy('listado_insumos')    
+    
+    def form_valid(self, form):
+        form.save()
+        return super().form_valid(form)
