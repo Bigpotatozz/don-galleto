@@ -5,11 +5,12 @@ from django.contrib.auth.forms import UserCreationForm
 class Registro_admin_form(UserCreationForm):
         
         telefono = forms.CharField(max_length=10)
-        rol = forms.ChoiceField(choices=[('empleado', 'Empleado'), ('cliente', 'Cliente')])
+        rol = forms.ChoiceField(choices=[('empleado', 'Empleado'), ('cliente', 'Cliente'), ('admin', 'admin')])
         
         class Meta: 
             model = Usuario
             fields = ['username', 'email', 'password1', 'password2', 'telefono', 'rol']
+            
 
 class Edicion_usuario_form(forms.ModelForm):
       
@@ -17,7 +18,7 @@ class Edicion_usuario_form(forms.ModelForm):
     email = forms.EmailField()
     contrasenia = forms.CharField(max_length=100, widget=forms.PasswordInput, required=False)
     telefono = forms.CharField(max_length=10)
-    rol = forms.ChoiceField(choices=[('empleado', 'Empleado'), ('cliente', 'Cliente')])
+    rol = forms.ChoiceField(choices=[('empleado', 'Empleado'), ('cliente', 'Cliente'), ('admin', 'admin')])
     is_active = forms.BooleanField(required=False, initial=True)
 
 
@@ -39,3 +40,4 @@ class Edicion_usuario_form(forms.ModelForm):
              usuario.set_password(nueva_contrasena)
         
         usuario.save()
+        return usuario
