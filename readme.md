@@ -82,9 +82,6 @@ Ahora puedes acceder al panel de administración en `http://127.0.0.1:8000/admin
 Para más información, consulta la documentación oficial de Django: [https://docs.djangoproject.com/](https://docs.djangoproject.com/)
 
 Hola
-<<<<<<< HEAD
 Hola 3
-=======
 Hola 2
 
->>>>>>> de275e9b9e6d0f416b42d091dfe116910fc7b2f4
