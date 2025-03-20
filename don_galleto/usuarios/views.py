@@ -14,11 +14,10 @@ from usuarios.utils import asignar_permisos
 class Lista_usuarios_view(TemplateView, PermissionRequiredMixin):
     
     permission_required = 'usuarios.admin'
-    template_name = 'lista_usuarios.html'
-    
-    
+
     def handle_no_permission(self):
-        return redirect('listaProducto')
+        return redirect('home')
+    template_name = 'lista_usuarios.html'
     
     def get_context_data(self):
         usuarios = Usuario.objects.all()
