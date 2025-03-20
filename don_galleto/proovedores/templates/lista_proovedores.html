@@ -16,6 +16,7 @@
                 <th>Estado</th>
                 <th>Código Postal</th>
                 <th>Estatus</th>
+                <th>Acciones</th>
             </tr>
         </thead>
         <tbody>
@@ -31,6 +32,9 @@
                     <td>{{ proveedor.estado }}</td>
                     <td>{{ proveedor.codigo_postal }}</td>
                     <td>{{ proveedor.estatus }}</td>
+                    <td>
+                        <a href="{% url 'editar_proovedor' proveedor.id_proovedor %}" class="btn btn-primary">Editar</a>
+                    </td>
                 </tr>
             {% empty %}
                 <tr>
