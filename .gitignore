@@ -1,1 +1,9 @@
 /env
+
+# Ignorar archivos de caché de Python
+__pycache__/
+*.pyc
+*.pyo
+
+# Ignorar migraciones (opcional, solo si quieres que cada dev haga las suyas)
+migrations/
