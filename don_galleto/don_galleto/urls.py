@@ -14,7 +14,6 @@ urlpatterns = [
     path('', views.IndexView.as_view(), name='home'),
     path('users/registro/', views.registro, name='registro'),
     path('users/', include("django.contrib.auth.urls")),
-    
     path('usuarios/', include('usuarios.urls')),
     path('proovedores/', include('proovedores.urls')),
     
