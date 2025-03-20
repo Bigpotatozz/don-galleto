@@ -1,0 +1,32 @@
+{%extends "base.html"%}
+{% load static %}
+    {%block content%}
+    <div style= "margin-top: 200px;">
+        <h1 class="text-center">Listado de insumos</h1>
+    
+        <a href = "#"  >Agregar Insumo</a>
+        <table class= "table table-striped">
+            <thead>
+                <th>Nombre</th>
+                <th>Tipo</th>
+                <th>Tipo de medida</th>
+                <th>cantidad</th>
+                <th>Estatus</th>
+              
+            </thead>
+            <tbody>
+                {%for insumo in insumos %}
+                    <tr>
+                        <td>{{insumo.nombre}}</td>
+                        <td>{{insumo.tipo}}</td>
+                        <td>{{insumo.tipo_medida}}</td>
+                        <td>{{insumo.cantidad}}</td>
+                        <td>{{insumo.estatus}}</td>
+                        <td><a href="#">Editar</a> </td>
+                        <td><a href="#">Eliminar</a> </td>
+                    </tr>
+                {%endfor%}
+        </table>
+    </div>
+  
+    {%endblock content%}
