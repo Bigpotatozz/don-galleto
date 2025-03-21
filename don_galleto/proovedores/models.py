@@ -7,10 +7,10 @@ class Proovedor(models.Model):
     telefono = models.CharField(max_length=12)
     correo = models.EmailField(max_length=45)
     direccion = models.CharField(max_length=100)
-    ciudad = models.CharField(max_length=15),
+    ciudad = models.CharField(max_length=15)
     estado = models.CharField(max_length=15)
     codigo_postal = models.CharField(max_length=7)
-    estatus = models.CharField(max_length=10, default = 'activo')
+    estatus = models.CharField(max_length=10, choices=[('activo', 'Activo'), ('inactivo', 'Inactivo'), ('bloqueado', 'Bloqueado')])
     
     class Meta:
         db_table = 'proovedor'
