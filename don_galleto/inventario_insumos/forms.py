@@ -60,6 +60,7 @@ class Registro_compra_insumo_form(forms.ModelForm):
         
         insumo = Insumo.objects.get(id_insumo = id_insumo_id)
         insumo.cantidad = insumo.cantidad + cantidad
+        insumo.estatus = "disponible"
 
         
 

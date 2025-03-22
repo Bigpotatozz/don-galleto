@@ -19,7 +19,7 @@ class Listado_insumos_view(FormView):
         return {
             "insumos": insumos,
         }
-        
+
 class Registrar_insumo_view(FormView):
     template_name = 'agregar_insumo.html'
     form_class = forms.Registro_insumo_form
