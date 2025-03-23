@@ -11,6 +11,8 @@ class Registro_admin_form(UserCreationForm):
             model = Usuario
             fields = ['username', 'email', 'password1', 'password2', 'telefono', 'rol']
             
+            
+            
 
 class Edicion_usuario_form(forms.ModelForm):
       

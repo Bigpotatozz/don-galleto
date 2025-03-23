@@ -17,3 +17,14 @@ class Usuario(AbstractUser):
     
     def __str__(self):
         return f" {self.nombre} - {self.telefono} - {self.correo} - {self.contrasenia} - {self.rol} - {self.codigo_verificacion}"
+    
+    
+class Logs(models.Model):
+    id_log = models.AutoField(primary_key= True, auto_created=True)
+    fecha = models.DateField()
+    tipo = models.CharField(max_length=45)
+    descripcion = models.CharField(max_length=45)
+    id_usuario = models.ForeignKey(Usuario, on_delete=models.CASCADE, null = False, related_name= "logs")
+    
+    class Meta: 
+        db_table = 'logs'
