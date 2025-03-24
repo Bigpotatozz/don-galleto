@@ -10,7 +10,7 @@ class Insumo(models.Model):
     tipo = models.CharField(max_length=45)
     tipo_medida = models.CharField(max_length=45)
     cantidad = models.IntegerField()
-    precio_unitario = models.FloatField()
+    precio_unitario = models.FloatField(default = 0)
     estatus = models.CharField(max_length=45)
     
     class Meta:
