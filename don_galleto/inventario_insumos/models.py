@@ -3,12 +3,14 @@ from proovedores.models import Proovedor
 
 
 # Create your models here.
+# Create your models here.
 class Insumo(models.Model):
     id_insumo = models.AutoField(primary_key=True)
     nombre = models.CharField(max_length=45)
     tipo = models.CharField(max_length=45)
     tipo_medida = models.CharField(max_length=45)
     cantidad = models.IntegerField()
+    precio_unitario = models.FloatField()
     estatus = models.CharField(max_length=45)
     
     class Meta:
@@ -24,7 +26,9 @@ class Compra_insumo(models.Model):
     cantidad = models.FloatField()
     cantidad_restante = models.FloatField()
     caducidad = models.DateField()
-    precio = models.FloatField()
+    total = models.FloatField(default=0)
+    precio_unitario = models.FloatField(default = 0)
+    estatus = models.CharField(max_length=15, default = "")
     id_proovedor = models.ForeignKey(Proovedor, on_delete=models.CASCADE, null = False, related_name= 'compra_insumo_proovedor')
     id_insumo = models.ForeignKey(Insumo, on_delete=models.CASCADE, null = False, related_name= 'compra_insumo_insumo')
     

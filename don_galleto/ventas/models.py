@@ -19,6 +19,8 @@ class Venta(models.Model):
 class Detalle_venta(models.Model):
     id_detalle_venta = models.AutoField(primary_key=True)
     cantidad = models.FloatField()
+    precio_galleta = models.FloatField()
+    tipo_unidad = models.CharField(max_length=45)
     id_venta = models.ForeignKey(Venta, on_delete=models.CASCADE, null=False, related_name='detalle_venta_venta')
     id_galleta = models.ForeignKey(Galleta, on_delete=models.CASCADE, null=False, related_name='detalle_venta_galleta')
     
