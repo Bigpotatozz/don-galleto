@@ -12,8 +12,6 @@
         <thead class="table-dark">
             <tr>
                 <th>Nombre</th>
-                <th>Tipo</th>
-                <th>Tipo de medida</th>
                 <th>Cantidad</th>
                 <th>Estatus</th>
                 <th>Acción</th>
@@ -23,10 +21,8 @@
             {% for insumo in insumos %}
             <tr>
                 <td>{{ insumo.nombre }}</td>
-                <td>{{ insumo.tipo }}</td>
-                <td>{{ insumo.tipo_medida }}</td>
-                <td>{{ insumo.cantidad }}</td>
-                <td>{{ insumo.estatus }}</td>
+                <td>{{ insumo.cantidad }} {{insumo.tipo_medida}}</td>
+                <td>{{ insumo.estatus}}</td>
                 <td>
                     <button class="btn btn-info btn-sm" data-bs-toggle="collapse" data-bs-target="#compras{{ insumo.id_insumo }}" aria-expanded="false">
                         Ver compras
@@ -38,22 +34,20 @@
                     <table class="table table-bordered">
                         <thead class="table-light">
                             <tr>
-                                <th>ID</th>
                                 <th>Nombre</th>
                                 <th>Cantidad</th>
                                 <th>Caducidad</th>
-                                <th>Precio</th>
+                                <th>Total</th>
                                 <th>Proveedor</th>
                             </tr>
                         </thead>
                         <tbody>
                             {% for compra in insumo.compra_insumo_insumo.all %}
                             <tr>
-                                <td>{{ compra.id_compra_insumo }}</td>
                                 <td>{{ compra.nombre }}</td>
                                 <td>{{ compra.cantidad }}</td>
                                 <td>{{ compra.caducidad }}</td>
-                                <td>${{ compra.precio }}</td>
+                                <td>${{ compra.total }}</td>
                                 <td>{{ compra.id_proovedor.nombre }}</td>
                             </tr>
                             {% empty %}

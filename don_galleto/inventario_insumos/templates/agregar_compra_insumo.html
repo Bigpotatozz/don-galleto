@@ -46,10 +46,10 @@
 
             <div class="mb-3">
                 <label class="form-label">Total</label>
-                {{ form.precio }}
-                {% if form.precio.errors %}
+                {{ form.total }}
+                {% if form.total.errors %}
                     <div class="text-danger">
-                        {% for error in form.precio.errors %}
+                        {% for error in form.total.errors %}
                             <small>{{ error }}</small>
                         {% endfor %}
                     </div>
