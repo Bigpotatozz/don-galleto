@@ -1,7 +1,7 @@
 from django import forms
 from inventario_insumos.models import Insumo
 from proovedores.models import Proovedor
-from inventario_insumos.models import Compra_insumo
+from inventario_insumos.models import Compra_insumo, Merma_insumo
 
 class Registro_insumo_form(forms.ModelForm):
     nombre = forms.CharField(max_length=45)
@@ -71,4 +71,33 @@ class Registro_compra_insumo_form(forms.ModelForm):
 
         if commit: 
             new_compra_insumo.save()
+            insumo.save()
+            
+class Registro_merma_insumo_form(forms.ModelForm):
+    cantidad = forms.FloatField()
+    motivo = forms.CharField(max_length=45)
+    
+    id_compra_insumo = forms.ModelChoiceField(
+        queryset = Compra_insumo.objects.filter(estatus = "disponible"),
+        label = "Insumo",
+        to_field_name = "id_compra_insumo"
+    )
+    
+    def save(self, commit = True):
+        cantidad = self.cleaned_data['cantidad']
+        motivo = self.cleaned_data['motivo']
+        id_compra_insumo = self.cleaned_data['id_compra_insumo']
+        new_merma_insumo = Merma_insumo(cantidad = cantidad,
+                                        motivo = motivo,
+                                        id_compra_insumo_id = id_compra_insumo)
+        
+        compra_insumo = Compra_insumo.objects.get(id_compra_insumo = id_compra_insumo)
+        compra_insumo.cantidad_restante -= cantidad
+        
+        insumo = Insumo.objects.get(id_insumo = compra_insumo.id_insumo_id)
+        insumo.cantidad -= cantidad
+        
+        if commit:
+            new_merma_insumo.save()
+            compra_insumo.save()
             insumo.save()
