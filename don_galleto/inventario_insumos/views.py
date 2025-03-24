@@ -7,6 +7,7 @@ from django.views.generic import FormView
 from django.shortcuts import redirect
 from django.contrib.auth import logout
 from inventario_insumos.models import Insumo
+from inventario_insumos.utils import verificar_insumos
 
 # Create your views here.
 
@@ -14,8 +15,8 @@ class Listado_insumos_view(FormView):
     template_name = 'lista_insumos.html'
     
     def get_context_data(self):
+        verificar_insumos()
         insumos = Insumo.objects.all()
-        
         return {
             "insumos": insumos,
         }
