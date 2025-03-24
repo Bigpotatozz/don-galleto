@@ -1,33 +1,72 @@
-{%extends "base.html"%}
+{% extends "base.html" %}
 {% load static %}
-    {%block content%}
-    <div style= "margin-top: 200px;">
-        <h1 class="text-center">Listado de insumos</h1>
-    
-        <a href = "{% url 'agregar_insumo'%}"  >Agregar Insumo</a>
-        <a href = "#"  >Agregar compra de insumo</a>
-        <table class= "table table-striped">
-            <thead>
+
+{% block content %}
+<div style="margin-top: 200px;">
+    <h1 class="text-center">Listado de insumos</h1>
+
+    <a href="{% url 'agregar_insumo' %}" class="btn btn-primary">Agregar Insumo</a>
+    <a href="{% url 'agregar_compra_insumo' %}" class="btn btn-success">Agregar compra de insumo</a>
+
+    <table class="table table-striped mt-3">
+        <thead class="table-dark">
+            <tr>
                 <th>Nombre</th>
                 <th>Tipo</th>
                 <th>Tipo de medida</th>
-                <th>cantidad</th>
+                <th>Cantidad</th>
                 <th>Estatus</th>
-              
-            </thead>
-            <tbody>
-                {%for insumo in insumos %}
-                    <tr>
-                        <td>{{insumo.nombre}}</td>
-                        <td>{{insumo.tipo}}</td>
-                        <td>{{insumo.tipo_medida}}</td>
-                        <td>{{insumo.cantidad}}</td>
-                        <td>{{insumo.estatus}}</td>
-                        <td><a href="#">Editar</a> </td>
-                        <td><a href="#">Eliminar</a> </td>
-                    </tr>
-                {%endfor%}
-        </table>
-    </div>
-  
-    {%endblock content%}
+                <th>Acción</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for insumo in insumos %}
+            <tr>
+                <td>{{ insumo.nombre }}</td>
+                <td>{{ insumo.tipo }}</td>
+                <td>{{ insumo.tipo_medida }}</td>
+                <td>{{ insumo.cantidad }}</td>
+                <td>{{ insumo.estatus }}</td>
+                <td>
+                    <button class="btn btn-info btn-sm" data-bs-toggle="collapse" data-bs-target="#compras{{ insumo.id_insumo }}" aria-expanded="false">
+                        Ver compras
+                    </button>
+                </td>
+            </tr>
+            <tr class="collapse" id="compras{{ insumo.id_insumo }}">
+                <td colspan="6">
+                    <table class="table table-bordered">
+                        <thead class="table-light">
+                            <tr>
+                                <th>ID</th>
+                                <th>Nombre</th>
+                                <th>Cantidad</th>
+                                <th>Caducidad</th>
+                                <th>Precio</th>
+                                <th>Proveedor</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for compra in insumo.compra_insumo_insumo.all %}
+                            <tr>
+                                <td>{{ compra.id_compra_insumo }}</td>
+                                <td>{{ compra.nombre }}</td>
+                                <td>{{ compra.cantidad }}</td>
+                                <td>{{ compra.caducidad }}</td>
+                                <td>${{ compra.precio }}</td>
+                                <td>{{ compra.id_proovedor.nombre }}</td>
+                            </tr>
+                            {% empty %}
+                            <tr>
+                                <td colspan="6" class="text-center">No hay compras registradas para este insumo.</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock content %}
