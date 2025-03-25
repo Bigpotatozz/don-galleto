@@ -5,7 +5,9 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}" />
+    <link rel="stylesheet" href="{% static 'css/produccionCss.css' %}" />
     <script src="{% static '/js/jquery-3.7.1.min.js'%}"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
     <title>Home</title>
   </head>
   <body>
@@ -80,7 +82,11 @@
             </li>
 
             <li class="nav-item">
-              <a class="nav-link" href="{% url 'home'%}">Produccion</a>
+              <a class="nav-link" href="{% url 'lista_galletas'%}">Solicitud de Produccion</a>
+            </li>
+
+            <li class="nav-item">
+              <a class="nav-link" href="{% url 'lista_produccion'%}">Produccion</a>
             </li>
 
             <li class="nav-item">
