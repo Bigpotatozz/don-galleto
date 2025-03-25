@@ -8,6 +8,8 @@ from django.shortcuts import redirect
 from django.contrib.auth import logout
 from inventario_insumos.models import Insumo
 from inventario_insumos.utils import verificar_insumos
+from django.forms import ValidationError
+from django.contrib import messages
 
 # Create your views here.
 
@@ -45,6 +47,33 @@ class Registrar_merma_insumo_view(FormView):
     form_class = forms.Registro_merma_insumo_form
     success_url = reverse_lazy('listado_insumos')
     
+    
+    def get_form_kwargs(self):
+        kwargs = super().get_form_kwargs()
+        kwargs['request'] = self.request.user
+        return kwargs
+    
+    
+   
+    
     def form_valid(self, form):
-        form.save()
-        return super().form_valid(form)
+        
+        try:
+            form.save()
+            return super().form_valid(form)
+        except ValidationError as e:
+            for error in e.messages:
+                messages.error(self.request, error)
+            return self.form_invalid(form)
+        except Exception as e:
+            messages.error(self.request, f'Ocurrió un error: {str(e)}')
+            return self.form_invalid(form)
+            
+        
+    def form_invalid(self, form):
+        for field, errors in form.errors.items():
+            for error in errors:
+                messages.error(self.request, f'{field}: {error}')
+        return super().form_invalid(form)
+    
+   

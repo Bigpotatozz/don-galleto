@@ -16,7 +16,7 @@ class Usuario(AbstractUser):
                        ("cliente", "acceso a la plataforma de compra")]
     
     def __str__(self):
-        return f" {self.nombre} - {self.telefono} - {self.correo} - {self.contrasenia} - {self.rol} - {self.codigo_verificacion}"
+        return f"{self.id_usuario} - {self.telefono} - {self.rol} - {self.codigo_verificacion}"
     
     
 class Logs(models.Model):

@@ -2,6 +2,10 @@ from django import forms
 from inventario_insumos.models import Insumo
 from proovedores.models import Proovedor
 from inventario_insumos.models import Compra_insumo, Merma_insumo
+from django.utils.timezone import now
+from django.contrib.auth import get_user_model
+
+usuario = get_user_model()
 
 class Registro_insumo_form(forms.ModelForm):
     nombre = forms.CharField(max_length=45)
@@ -74,30 +78,47 @@ class Registro_compra_insumo_form(forms.ModelForm):
             insumo.save()
             
 class Registro_merma_insumo_form(forms.ModelForm):
+    
+    def __init__(self, *args, **kwargs):
+        # Extrae explícitamente el request
+        self.request = kwargs.pop('request', None)
+        print(f"Request en __init__: {self.request}")  # Depuración
+        super().__init__(*args, **kwargs)
+    
     cantidad = forms.FloatField()
     motivo = forms.CharField(max_length=45)
     
-    id_compra_insumo = forms.ModelChoiceField(
-        queryset = Compra_insumo.objects.filter(estatus = "disponible"),
+    id_insumo = forms.ModelChoiceField(
+        queryset = Insumo.objects.filter(estatus = "disponible"),
         label = "Insumo",
-        to_field_name = "id_compra_insumo"
+        to_field_name = "id_insumo"
     )
     
+    
+    class Meta: 
+        model = Merma_insumo
+        fields = ['cantidad', 'motivo', 'id_insumo' ]
+    
     def save(self, commit = True):
-        cantidad = self.cleaned_data['cantidad']
+        cantidad = self.cleaned_data['cantidad']        
         motivo = self.cleaned_data['motivo']
-        id_compra_insumo = self.cleaned_data['id_compra_insumo']
-        new_merma_insumo = Merma_insumo(cantidad = cantidad,
-                                        motivo = motivo,
-                                        id_compra_insumo_id = id_compra_insumo)
-        
-        compra_insumo = Compra_insumo.objects.get(id_compra_insumo = id_compra_insumo)
+        id_insumo = self.cleaned_data['id_insumo'].id_insumo
+        compra_insumo = Compra_insumo.objects.filter(caducidad__gte = now().date(), id_insumo = id_insumo, estatus = "disponible").order_by('caducidad').first()
+        insumo = Insumo.objects.get(id_insumo = id_insumo)
+            
+        merma_insumo =  Merma_insumo(cantidad = cantidad,
+                                     motivo = motivo,
+                                     id_compra_insumo_id = compra_insumo.id_compra_insumo,
+                                     fecha = now().date(),
+                                     id_usuario_id = self.request.id_usuario)
         compra_insumo.cantidad_restante -= cantidad
         
-        insumo = Insumo.objects.get(id_insumo = compra_insumo.id_insumo_id)
-        insumo.cantidad -= cantidad
+        if(cantidad > insumo.cantidad):
+            raise forms.ValidationError('No hay suficientes insumos')
+        else: 
+            insumo.cantidad -= cantidad
         
         if commit:
-            new_merma_insumo.save()
+            merma_insumo.save()
             compra_insumo.save()
             insumo.save()
