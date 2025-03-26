@@ -41,7 +41,6 @@
                         </p>
                     </div>
 
-                    <!-- Botón alineado a la derecha -->
                     <form method="POST" action="{% url 'crear_lote_galleta' item.id_galleta %}">
                         {% csrf_token %}
                         <button type="submit" class="btn btn-outline-success btn-sm">

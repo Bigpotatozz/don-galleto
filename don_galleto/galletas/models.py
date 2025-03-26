@@ -8,6 +8,7 @@ class Galleta(models.Model):
     descripcion = models.CharField(max_length=100)
     precio_venta = models.FloatField()
     cantidad = models.IntegerField()
+    cantidad_receta = models.IntegerField()
     peso_unidad = models.FloatField()
     duracion_promedio = models.IntegerField()
     
