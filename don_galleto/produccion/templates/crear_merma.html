@@ -9,13 +9,11 @@
             <form method="POST">
                 {% csrf_token %}
                 
-                <!-- Campo para cantidad de merma -->
                 <div class="form-group">
                     <label for="id_cantidad">Cantidad de Merma:</label>
                     {{ form.cantidad }}
                 </div>
 
-                <!-- Campo para motivo de la merma -->
                 <div class="form-group mt-3">
                     <label for="id_motivo">Motivo de la Merma:</label>
                     {{ form.motivo }}
