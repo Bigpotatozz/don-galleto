@@ -5,8 +5,6 @@ from inventario_insumos.models import Compra_insumo, Merma_insumo
 from django.utils.timezone import now
 from django.contrib.auth import get_user_model
 
-usuario = get_user_model()
-
 class Registro_insumo_form(forms.ModelForm):
     nombre = forms.CharField(max_length=45)
     tipo = forms.ChoiceField(choices=[('base', 'Base'), ('complemento', 'Complemento')])

@@ -1,0 +1,267 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container min-vh-100 d-flex align-items-center justify-content-center">
+    <div class="card shadow-lg rounded-4 p-4" style="max-width: 500px; width: 100%;">
+        <h2 class="text-center mb-4">Registro de Insumo</h2>
+
+        <form method="POST">
+            {% csrf_token %}
+            
+            <div class="mb-3">
+                <label class="form-label">{{ form.nombre.label }}</label>
+                {{ form.nombre }}
+                {% if form.nombre.errors %}
+                    <div class="text-danger">
+                        {% for error in form.nombre.errors %}
+                            <small>{{ error }}</small>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">{{ form.descripcion.label }}</label>
+                {{ form.descripcion }}
+                {% if form.descripcion.errors %}
+                    <div class="text-danger">
+                        {% for error in form.descripcion.errors %}
+                            <small>{{ error }}</small>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">{{ form.peso_unidad.label }}</label>
+                {{ form.peso_unidad }}
+                {% if form.peso_unidad.errors %}
+                    <div class="text-danger">
+                        {% for error in form.peso_unidad.errors %}
+                            <small>{{ error }}</small>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">{{ form.duracion_promedio.label }}</label>
+                {{ form.duracion_promedio }}
+                {% if form.duracion_promedio.errors %}
+                    <div class="text-danger">
+                        {% for error in form.duracion_promedio.errors %}
+                            <small>{{ error }}</small>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+            </div>
+
+            <!-- Ingredientes y cantidades con diseño mejorado -->
+            <div class="mb-3 row">
+                <div class="col-6">
+                    <label class="form-label">{{ form.ingrediente1.label }}</label>
+                    {{ form.ingrediente1 }}
+                    {% if form.ingrediente1.errors %}
+                        <div class="text-danger">
+                            {% for error in form.ingrediente1.errors %}
+                                <small>{{ error }}</small>
+                            {% endfor %}
+                        </div>
+                    {% endif %}
+                </div>
+                <div class="col-6">
+                    <label class="form-label">{{ form.cantidad1.label }}</label>
+                    {{ form.cantidad1 }}
+                    {% if form.cantidad1.errors %}
+                        <div class="text-danger">
+                            {% for error in form.cantidad1.errors %}
+                                <small>{{ error }}</small>
+                            {% endfor %}
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+
+            <div class="mb-3 row">
+                <div class="col-6">
+                    <label class="form-label">{{ form.ingrediente2.label }}</label>
+                    {{ form.ingrediente2 }}
+                    {% if form.ingrediente2.errors %}
+                        <div class="text-danger">
+                            {% for error in form.ingrediente2.errors %}
+                                <small>{{ error }}</small>
+                            {% endfor %}
+                        </div>
+                    {% endif %}
+                </div>
+                <div class="col-6">
+                    <label class="form-label">{{ form.cantidad2.label }}</label>
+                    {{ form.cantidad2 }}
+                    {% if form.cantidad2.errors %}
+                        <div class="text-danger">
+                            {% for error in form.cantidad2.errors %}
+                                <small>{{ error }}</small>
+                            {% endfor %}
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+
+            <div class="mb-3 row">
+                <div class="col-6">
+                    <label class="form-label">{{ form.ingrediente3.label }}</label>
+                    {{ form.ingrediente3 }}
+                    {% if form.ingrediente3.errors %}
+                        <div class="text-danger">
+                            {% for error in form.ingrediente3.errors %}
+                                <small>{{ error }}</small>
+                            {% endfor %}
+                        </div>
+                    {% endif %}
+                </div>
+                <div class="col-6">
+                    <label class="form-label">{{ form.cantidad3.label }}</label>
+                    {{ form.cantidad3 }}
+                    {% if form.cantidad3.errors %}
+                        <div class="text-danger">
+                            {% for error in form.cantidad3.errors %}
+                                <small>{{ error }}</small>
+                            {% endfor %}
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+
+            <div class="mb-3 row">
+                <div class="col-6">
+                    <label class="form-label">{{ form.ingrediente4.label }}</label>
+                    {{ form.ingrediente4 }}
+                    {% if form.ingrediente4.errors %}
+                        <div class="text-danger">
+                            {% for error in form.ingrediente4.errors %}
+                                <small>{{ error }}</small>
+                            {% endfor %}
+                        </div>
+                    {% endif %}
+                </div>
+                <div class="col-6">
+                    <label class="form-label">{{ form.cantidad4.label }}</label>
+                    {{ form.cantidad4 }}
+                    {% if form.cantidad4.errors %}
+                        <div class="text-danger">
+                            {% for error in form.cantidad4.errors %}
+                                <small>{{ error }}</small>
+                            {% endfor %}
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+
+            <div class="mb-3 row">
+                <div class="col-6">
+                    <label class="form-label">{{ form.ingrediente5.label }}</label>
+                    {{ form.ingrediente5 }}
+                    {% if form.ingrediente5.errors %}
+                        <div class="text-danger">
+                            {% for error in form.ingrediente5.errors %}
+                                <small>{{ error }}</small>
+                            {% endfor %}
+                        </div>
+                    {% endif %}
+                </div>
+                <div class="col-6">
+                    <label class="form-label">{{ form.cantidad5.label }}</label>
+                    {{ form.cantidad5 }}
+                    {% if form.cantidad5.errors %}
+                        <div class="text-danger">
+                            {% for error in form.cantidad5.errors %}
+                                <small>{{ error }}</small>
+                            {% endfor %}
+                        </div>
+                    {% endif %}
+                </div>
+
+                <div class="mb-3 row">
+                    <div class="col-6">
+                        <label class="form-label">{{ form.ingrediente6.label }}</label>
+                        {{ form.ingrediente6 }}
+                        {% if form.ingrediente6.errors %}
+                            <div class="text-danger">
+                                {% for error in form.ingrediente6.errors %}
+                                    <small>{{ error }}</small>
+                                {% endfor %}
+                            </div>
+                        {% endif %}
+                    </div>
+                    <div class="col-6">
+                        <label class="form-label">{{ form.cantidad6.label }}</label>
+                        {{ form.cantidad6 }}
+                        {% if form.cantidad6.errors %}
+                            <div class="text-danger">
+                                {% for error in form.cantidad6.errors %}
+                                    <small>{{ error }}</small>
+                                {% endfor %}
+                            </div>
+                        {% endif %}
+                    </div>
+                </div>
+    
+                <div class="mb-3 row">
+                    <div class="col-6">
+                        <label class="form-label">{{ form.ingrediente7.label }}</label>
+                        {{ form.ingrediente7 }}
+                        {% if form.ingrediente7.errors %}
+                            <div class="text-danger">
+                                {% for error in form.ingrediente7.errors %}
+                                    <small>{{ error }}</small>
+                                {% endfor %}
+                            </div>
+                        {% endif %}
+                    </div>
+                    <div class="col-6">
+                        <label class="form-label">{{ form.cantidad7.label }}</label>
+                        {{ form.cantidad7 }}
+                        {% if form.cantidad7.errors %}
+                            <div class="text-danger">
+                                {% for error in form.cantidad7.errors %}
+                                    <small>{{ error }}</small>
+                                {% endfor %}
+                            </div>
+                        {% endif %}
+                    </div>
+                </div>
+    
+                <div class="mb-3 row">
+                    <div class="col-6">
+                        <label class="form-label">{{ form.ingrediente8.label }}</label>
+                        {{ form.ingrediente8 }}
+                        {% if form.ingrediente8.errors %}
+                            <div class="text-danger">
+                                {% for error in form.ingrediente8.errors %}
+                                    <small>{{ error }}</small>
+                                {% endfor %}
+                            </div>
+                        {% endif %}
+                    </div>
+                    <div class="col-6">
+                        <label class="form-label">{{ form.cantidad8.label }}</label>
+                        {{ form.cantidad8 }}
+                        {% if form.cantidad8.errors %}
+                            <div class="text-danger">
+                                {% for error in form.cantidad8.errors %}
+                                    <small>{{ error }}</small>
+                                {% endfor %}
+                            </div>
+                        {% endif %}
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- Continuar con los ingredientes y cantidades restantes (ingrediente6, ingrediente7, etc.) siguiendo la misma estructura -->
+
+            <button type="submit" class="btn btn-primary btn-lg w-100">Registrarse</button>
+        </form>
+    </div>
+</div>
+{% endblock %}

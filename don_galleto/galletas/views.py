@@ -7,6 +7,7 @@ from django.shortcuts import redirect
 from django.forms import ValidationError
 from django.contrib import messages
 from galletas.models import Galleta
+from . import forms
 
 # Create your views here.
 
@@ -19,3 +20,12 @@ class Lista_galletas_view(FormView):
             "galletas": galletas,
         }
         
+        
+class Registrar_galleta_view(FormView):
+    template_name = 'agregar_galleta.html'
+    form_class = forms.Registro_galleta_form
+    success_url = reverse_lazy('listado_galletas')
+    
+    def form_valid(self, form):
+        form.save()
+        return super().form_valid(form)
