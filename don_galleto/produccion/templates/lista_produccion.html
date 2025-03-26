@@ -24,7 +24,13 @@
                         {% elif item.estatus == 'Completado' %}bg-dark
                         {% else %}bg-danger{% endif %}">
                             
-                        <i class="bi {% if item.estatus == 'Pendiente' %}bi-hourglass-split{% elif item.estatus == 'Mezclando' %}bi-arrow-repeat{% elif item.estatus == 'Formando' %}bi-hand-index-thumb{% elif item.estatus == 'Horneando' %}bi-fire{% elif item.estatus == 'Enfriando' %}bi-snow{% elif item.estatus == 'Completado' %}bi-check-circle{% else %}bi-x-circle{% endif %}"></i> {{ item.estatus }}
+                        <i class="bi {% if item.estatus == 'Pendiente' %}bi-hourglass-split
+                        {% elif item.estatus == 'Mezclando' %}bi-arrow-repeat
+                        {% elif item.estatus == 'Formando' %}bi-hand-index-thumb
+                        {% elif item.estatus == 'Horneando' %}bi-fire
+                        {% elif item.estatus == 'Enfriando' %}bi-snow
+                        {% elif item.estatus == 'Completado' %}bi-check-circle
+                        {% else %}bi-x-circle{% endif %}"></i> {{ item.estatus }}
                         </span>
                     </p>
 
