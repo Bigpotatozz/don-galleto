@@ -6,8 +6,9 @@ from django.contrib.auth.mixins import PermissionRequiredMixin
 from django.views.generic import FormView
 from django.shortcuts import redirect
 from django.contrib.auth import logout
-from usuarios.models import Usuario
+from usuarios.models import Usuario, Logs
 from usuarios.utils import asignar_permisos
+from datetime import date
 
 
 
@@ -42,10 +43,30 @@ class Registro_admin_view(PermissionRequiredMixin,FormView):
     def form_valid(self, form):
         
         asignar_permisos(form, None)
+        
+        if self.request.user.is_authenticated:
+            Logs.objects.create(
+                fecha = date.today(),
+                tipo = "registro usuario",
+                descripcion = "registro de usuario",
+                id_usuario = self.request.user
+            )
+        
         return super().form_valid(form)
-    
+
     def form_invalid(self, form):
+        
+        if self.request.user.is_authenticated:
+            Logs.objects.create(
+                fecha = date.today(),
+                tipo = "error registro usuario",
+                descripcion = "error registro de usuario",
+                id_usuario = self.request.user
+            )
         return super().form_invalid(form)
+    
+    
+    
     
 class Edicion_usuario_view(FormView):
     

@@ -1,0 +1,88 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container min-vh-100 d-flex align-items-center justify-content-center">
+    <div class="card shadow-lg rounded-4 p-4" style="max-width: 500px; width: 100%;">
+        <h2 class="text-center mb-4">Registro de compra</h2>
+
+        <form method="POST">
+            {% csrf_token %}
+            
+            <div class="mb-3">
+                <label class="form-label">{{ form.nombre.label }}</label>
+                {{ form.nombre }}
+                {% if form.nombre.errors %}
+                    <div class="text-danger">
+                        {% for error in form.nombre.errors %}
+                            <small>{{ error }}</small>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">{{ form.cantidad.label }}</label>
+                {{ form.cantidad }}
+                {% if form.cantidad.errors %}
+                    <div class="text-danger">
+                        {% for error in form.cantidad.errors %}
+                            <small>{{ error }}</small>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">{{ form.caducidad.label }}</label>
+                {{ form.caducidad }}
+                {% if form.caducidad.errors %}
+                    <div class="text-danger">
+                        {% for error in form.caducidad.errors %}
+                            <small>{{ error }}</small>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">Total</label>
+                {{ form.total }}
+                {% if form.total.errors %}
+                    <div class="text-danger">
+                        {% for error in form.total.errors %}
+                            <small>{{ error }}</small>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">proovedor</label>
+                {{ form.id_proovedor_id }}
+                {% if form.id_proovedor_id.errors %}
+                    <div class="text-danger">
+                        {% for error in form.id_proovedor_id.errors %}
+                            <small>{{ error }}</small>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">Insumo</label>
+                {{ form.id_insumo_id }}
+                {% if form.id_insumo_id.errors %}
+                    <div class="text-danger">
+                        {% for error in form.id_insumo_id.errors %}
+                            <small>{{ error }}</small>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+            </div>
+
+
+            <button type="submit" class="btn btn-primary btn-lg w-100">Registrarse</button>
+        </form>
+    </div>
+</div>
+{% endblock %}
