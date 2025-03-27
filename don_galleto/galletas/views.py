@@ -26,6 +26,15 @@ class Registrar_galleta_view(FormView):
     form_class = forms.Registro_galleta_form
     success_url = reverse_lazy('listado_galletas')
     
+      
     def form_valid(self, form):
         form.save()
         return super().form_valid(form)
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        
+        contador = [1, 2, 3, 4, 5, 6, 7, 8]
+        context['contador'] = contador
+        
+        return context

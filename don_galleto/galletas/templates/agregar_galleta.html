@@ -3,71 +3,116 @@
 {% block content %}
 <div class="container min-vh-100 d-flex align-items-center justify-content-center">
     <div class="card shadow-lg rounded-4 p-4" style="max-width: 500px; width: 100%;">
-        <h2 class="text-center mb-4">Registro de Insumo</h2>
+        <h2 class="text-center mb-4">Registro de Galleta</h2>
 
         <form method="POST">
             {% csrf_token %}
             
             <div class="mb-3">
-                <label class="form-label">{{ form.nombre.label }}</label>
-                {{ form.nombre }}
-                {% if form.nombre.errors %}
-                    <div class="text-danger">
-                        {% for error in form.nombre.errors %}
-                            <small>{{ error }}</small>
-                        {% endfor %}
-                    </div>
+
+                <label class="form-label" style="color: #34495e; font-weight: 500;">
+                    <i  style="color: #95a5a6;"></i>{{ form.nombre.label }}
+                  </label>
+                <div class="input-group">
+                    <span class="input-group-text" style="background-color: #f5f7fa; border: 1px solid #ced4da; border-right: none;">
+                      <i class="bi bi-person" style="color: #95a5a6;"></i>
+                    </span>
+                    {{ form.nombre }}
+                  </div>
+
+                  {% if form.username.errors %}
+                  <div class="text-danger mt-2">
+                    <small><i class="bi bi-exclamation-circle me-1"></i>{{ form.username.errors.0 }}</small>
+                  </div>
+                {% endif %}
+            </div>
+
+              
+            <div class="mb-3">
+
+                <label class="form-label" style="color: #34495e; font-weight: 500;">
+                    <i  style="color: #95a5a6;"></i>{{ form.descripcion.label }}
+                  </label>
+
+                <div class="input-group">
+                    <span class="input-group-text" style="background-color: #f5f7fa; border: 1px solid #ced4da; border-right: none;">
+                      <i class="bi bi-pencil" style="color: #95a5a6;"></i>
+                    </span>
+                    {{ form.descripcion }}
+                  </div>
+
+                  {% if form.descripcion.errors %}
+                  <div class="text-danger mt-2">
+                    <small><i class="bi bi-exclamation-circle me-1"></i>{{ form.descripcion.errors.0 }}</small>
+                  </div>
                 {% endif %}
             </div>
 
             <div class="mb-3">
-                <label class="form-label">{{ form.descripcion.label }}</label>
-                {{ form.descripcion }}
-                {% if form.descripcion.errors %}
-                    <div class="text-danger">
-                        {% for error in form.descripcion.errors %}
-                            <small>{{ error }}</small>
-                        {% endfor %}
-                    </div>
+
+                <label class="form-label" style="color: #34495e; font-weight: 500;">
+                    <i  style="color: #95a5a6;"></i>{{ form.peso_unidad.label }}
+                  </label>
+
+                <div class="input-group">
+                    <span class="input-group-text" style="background-color: #f5f7fa; border: 1px solid #ced4da; border-right: none;">
+                      <i  style="color: #95a5a6;"> </i>
+                    </span>
+                    {{ form.peso_unidad }}
+                  </div>
+
+                  {% if form.peso_unidad.errors %}
+                  <div class="text-danger mt-2">
+                    <small><i class="bi bi-exclamation-circle me-1"></i>{{ form.peso_unidad.errors.0 }}</small>
+                  </div>
                 {% endif %}
             </div>
 
             <div class="mb-3">
-                <label class="form-label">{{ form.peso_unidad.label }}</label>
-                {{ form.peso_unidad }}
-                {% if form.peso_unidad.errors %}
-                    <div class="text-danger">
-                        {% for error in form.peso_unidad.errors %}
-                            <small>{{ error }}</small>
-                        {% endfor %}
-                    </div>
+
+                <label class="form-label" style="color: #34495e; font-weight: 500;">
+                    <i  style="color: #95a5a6;"></i>{{ form.duracion_promedio.label }}
+                  </label>
+
+                <div class="input-group">
+                    <span class="input-group-text" style="background-color: #f5f7fa; border: 1px solid #ced4da; border-right: none;">
+                      <i class="bi bi-alarm" style="color: #95a5a6;"></i>
+                    </span>
+                    {{ form.duracion_promedio }}
+                  </div>
+
+                  {% if form.descripcion.errors %}
+                  <div class="text-danger mt-2">
+                    <small><i class="bi bi-exclamation-circle me-1"></i>{{ form.duracion_promedio.errors.0 }}</small>
+                  </div>
                 {% endif %}
             </div>
 
             <div class="mb-3">
-                <label class="form-label">{{ form.duracion_promedio.label }}</label>
-                {{ form.duracion_promedio }}
-                {% if form.duracion_promedio.errors %}
-                    <div class="text-danger">
-                        {% for error in form.duracion_promedio.errors %}
-                            <small>{{ error }}</small>
-                        {% endfor %}
-                    </div>
+
+                <label class="form-label" style="color: #34495e; font-weight: 500;">
+                    <i  style="color: #95a5a6;"></i>{{ form.cantidad_por_lote.label }}
+                  </label>
+
+                <div class="input-group">
+                    <span class="input-group-text" style="background-color: #f5f7fa; border: 1px solid #ced4da; border-right: none;">
+                      <i class="bi" style="color: #95a5a6;"></i>
+                    </span>
+                    {{ form.cantidad_por_lote }}
+                  </div>
+
+                  {% if form.descripcion.errors %}
+                  <div class="text-danger mt-2">
+                    <small><i class="bi bi-exclamation-circle me-1"></i>{{ form.cantidad_por_lote.errors.0 }}</small>
+                  </div>
                 {% endif %}
             </div>
 
-            <div class="mb-3">
-                <label class="form-label">{{ form.cantidad_por_lote.label }}</label>
-                {{ form.cantidad_por_lote }}
-                {% if form.cantidad_por_lote.errors %}
-                    <div class="text-danger">
-                        {% for error in form.cantidad_por_lote.errors %}
-                            <small>{{ error }}</small>
-                        {% endfor %}
-                    </div>
-                {% endif %}
-            </div>
-            <!-- Ingredientes y cantidades con diseño mejorado -->
+
+            
+
+
+            
             <div class="mb-3 row">
                 <div class="col-6">
                     <label class="form-label">{{ form.ingrediente1.label }}</label>
@@ -80,6 +125,7 @@
                         </div>
                     {% endif %}
                 </div>
+                
                 <div class="col-6">
                     <label class="form-label">{{ form.cantidad1.label }}</label>
                     {{ form.cantidad1 }}
@@ -268,9 +314,6 @@
                 </div>
 
             </div>
-
-            <!-- Continuar con los ingredientes y cantidades restantes (ingrediente6, ingrediente7, etc.) siguiendo la misma estructura -->
-
             <button type="submit" class="btn btn-primary btn-lg w-100">Registrarse</button>
         </form>
     </div>
