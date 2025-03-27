@@ -17,7 +17,6 @@
                         <table class="table table-bordered text-center align-middle">
                             <thead class="table-light">
                                 <tr>
-                                    <th>Seleccionar</th>
                                     <th>Insumo</th>
                                     <th>Cantidad</th>
                                 </tr>
@@ -25,11 +24,6 @@
                             <tbody>
                                 {% for insumo in insumos %}
                                 <tr>
-                                    <td>
-                                        <input type="checkbox" class="form-check-input" 
-                                            name="insumo_{{ insumo.id_insumo }}" 
-                                            {% if insumo in galleta.insumos.all %}checked{% endif %}>
-                                    </td>
                                     <td class="fw-bold">{{ insumo.nombre }}</td>
                                     <td>
                                         <input type="number" class="form-control text-center"
