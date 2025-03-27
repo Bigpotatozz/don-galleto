@@ -73,12 +73,15 @@
 
             {% endif %}
 
-           
+            {% if user.is_authenticated%}
+            {% if perms.usuarios.empleado%}
 
             <li class="nav-item">
               <a class="nav-link" href="{% url 'lista_galletas_receta'%}">Galletas</a>
             </li>
+            {% endif %}
 
+            {% endif %}
 
             {% if user.is_authenticated%}
             
@@ -91,14 +94,18 @@
             {% endif %}
 
           
-
+            {% if user.is_authenticated%}
+            
+            {% if perms.usuarios.empleado%}
             <li class="nav-item">
               <a class="nav-link" href="{% url 'lista_galletas_solicitud'%}">Solicitud de Produccion</a>
             </li>
-
             <li class="nav-item">
               <a class="nav-link" href="{% url 'lista_produccion'%}">Produccion</a>
             </li>
+            {% endif %}
+
+            {% endif %}
 
             <li class="nav-item">
               <a class="nav-link" href="{% url 'home'%}">Ventas</a>
