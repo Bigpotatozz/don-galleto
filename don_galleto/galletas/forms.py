@@ -14,6 +14,15 @@ class GalletaForm(forms.ModelForm):
             'peso_unidad': forms.NumberInput(attrs={'class': 'form-control', 'placeholder': 'Peso por unidad (g)'}),
             'duracion_promedio': forms.NumberInput(attrs={'class': 'form-control', 'placeholder': 'Duración promedio (días)'}),
         }
+class DetalleRecetaForm(forms.ModelForm):
+    class Meta:
+        model = Detalle_receta
+        fields = ['id_insumo', 'cantidad']
+        
+        widgets = {
+            'id_insumo': forms.Select(attrs={'class': 'form-control'}),
+            'cantidad': forms.NumberInput(attrs={'class': 'form-control', 'placeholder': 'Cantidad del insumo'}),
+        }
 
 class GalletaEditarForm(forms.ModelForm):
     class Meta:
@@ -37,16 +46,5 @@ class GalletaEditarForm(forms.ModelForm):
         galleta.cantidad_receta = self.cleaned_data['cantidad_receta']
         galleta.peso_unidad = self.cleaned_data['peso_unidad']
         galleta.duracion_promedio = self.cleaned_data['duracion_promedio']
-        galleta.save()
-
-class DetalleRecetaForm(forms.ModelForm):
-    class Meta:
-        model = Detalle_receta
-        fields = ['id_insumo', 'cantidad']
-        
-        widgets = {
-            'id_insumo': forms.Select(attrs={'class': 'form-control'}),
-            'cantidad': forms.NumberInput(attrs={'class': 'form-control', 'placeholder': 'Cantidad del insumo'}),
-        }
-        
+        galleta.save()        
 
