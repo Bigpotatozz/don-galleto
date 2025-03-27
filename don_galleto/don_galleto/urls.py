@@ -21,7 +21,7 @@ urlpatterns = [
     #path('inventario_insumos/'),
     #path('overview/'),
     path('produccion/', include('produccion.urls')),
-    #path('recetas/'),
+    path('recetas/', include('galletas.urls')),
     #path('tienda/'),
     #path('usuarios/'),
     #path('ventas/'),

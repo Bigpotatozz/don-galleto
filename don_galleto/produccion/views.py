@@ -84,7 +84,7 @@ class CambiarEstatusLote(View):
             
             galletas_disponibles = lote.cantidad_galletas - total_mermas_galleta
             
-            # Actualizar stock de las galletas
+            # Actualizar stock de las galletas 
             galleta = lote.id_galleta
             galleta.cantidad += galletas_disponibles
             galleta.save()
