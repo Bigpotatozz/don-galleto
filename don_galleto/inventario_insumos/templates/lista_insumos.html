@@ -28,6 +28,8 @@
                     <button class="btn btn-info btn-sm" data-bs-toggle="collapse" data-bs-target="#compras{{ insumo.id_insumo }}" aria-expanded="false">
                         Ver compras
                     </button>
+
+                    <a href = "{% url 'editar_insumo' insumo.id_insumo%}"  class="btn btn-info btn-sm" >Editar insumo</a>
                 </td>
             </tr>
             <tr class="collapse" id="compras{{ insumo.id_insumo }}">

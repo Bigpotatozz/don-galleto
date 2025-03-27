@@ -33,6 +33,23 @@ class Registrar_insumo_view(FormView):
         form.save()
         return super().form_valid(form)
     
+class Edicion_insumo_view(FormView):
+    template_name = 'editar_insumo.html'
+    form_class = forms.Edicion_insumo_form
+    success_url = reverse_lazy('listado_insumos')
+    
+    def get_form_kwargs(self):
+        kwargs = super().get_form_kwargs()
+        id = self.kwargs.get('id')
+        insumo = get_object_or_404(Insumo, id_insumo = id)
+        kwargs['instance'] = insumo
+        return kwargs
+    
+    def form_valid(self, form):
+        id = self.kwargs.get('id')
+        form.save(id)
+        return super().form_valid(form)
+    
 class Registrar_compra_insumo_view(FormView):
     template_name = 'agregar_compra_insumo.html'
     form_class = forms.Registro_compra_insumo_form
