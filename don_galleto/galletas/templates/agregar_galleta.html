@@ -56,6 +56,17 @@
                 {% endif %}
             </div>
 
+            <div class="mb-3">
+                <label class="form-label">{{ form.cantidad_por_lote.label }}</label>
+                {{ form.cantidad_por_lote }}
+                {% if form.cantidad_por_lote.errors %}
+                    <div class="text-danger">
+                        {% for error in form.cantidad_por_lote.errors %}
+                            <small>{{ error }}</small>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+            </div>
             <!-- Ingredientes y cantidades con diseño mejorado -->
             <div class="mb-3 row">
                 <div class="col-6">

@@ -22,8 +22,9 @@
             {% for galleta in galletas %}
             <tr>
                 <td>{{ galleta.nombre }}</td>
-                <td>{{ galleta.cantidad }} {{insumo.tipo_medida}}</td>
-                <td>{{ galleta.estatus}}</td>
+                <td>{{ galleta.descripcion }}</td>
+                <td>{{ galleta.precio_venta}}</td>
+                <td>{{ galleta.cantidad}}</td>
             {% endfor %}
         </tbody>
     </table>

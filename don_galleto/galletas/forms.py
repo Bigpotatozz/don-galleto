@@ -12,6 +12,7 @@ class Registro_galleta_form(forms.ModelForm):
     descripcion = forms.CharField(max_length=100)
     peso_unidad = forms.FloatField()
     duracion_promedio = forms.IntegerField()
+    cantidad_por_lote = forms.IntegerField()
     
     ingrediente1 = forms.ModelChoiceField(
         queryset = Insumo.objects.filter(estatus = 'disponible'),
@@ -93,14 +94,15 @@ class Registro_galleta_form(forms.ModelForm):
         descripcion = self.cleaned_data['descripcion']
         peso_unidad = self.cleaned_data['peso_unidad']
         duracion_promedio = self.cleaned_data['duracion_promedio']
-        ingredientes = [self.cleaned_data['ingrediente1'].id_insumo,
-                        self.cleaned_data['ingrediente2'].id_insumo,
-                        self.cleaned_data['ingrediente3'].id_insumo,
-                        self.cleaned_data['ingrediente4'].id_insumo,
-                        self.cleaned_data['ingrediente5'].id_insumo,
-                        self.cleaned_data['ingrediente6'].id_insumo,
-                        self.cleaned_data['ingrediente7'].id_insumo,
-                        self.cleaned_data['ingrediente8'].id_insumo]
+        cantidad_por_lote = self.cleaned_data['cantidad_por_lote']
+        ingredientes = [self.cleaned_data['ingrediente1'],
+                        self.cleaned_data['ingrediente2'],
+                        self.cleaned_data['ingrediente3'],
+                        self.cleaned_data['ingrediente4'],
+                        self.cleaned_data['ingrediente5'],
+                        self.cleaned_data['ingrediente6'],
+                        self.cleaned_data['ingrediente7'],
+                        self.cleaned_data['ingrediente8']]
         
         cantidades = [self.cleaned_data['cantidad1'],
                       self.cleaned_data['cantidad2'],
@@ -117,6 +119,7 @@ class Registro_galleta_form(forms.ModelForm):
                               descripcion = descripcion,
                               precio_venta = 0,
                               cantidad = 0,
+                              cantidad_por_lote = cantidad_por_lote,
                               peso_unidad = peso_unidad,
                               duracion_promedio = duracion_promedio)
 
@@ -127,15 +130,16 @@ class Registro_galleta_form(forms.ModelForm):
             precio = 0
             contador = 0
             for ingrediente in ingredientes:
-                detalle_receta = Detalle_receta(cantidad = cantidades[contador], id_insumo = ingrediente, id_galleta = id_galleta)
+                detalle_receta = Detalle_receta(cantidad = cantidades[contador], id_insumo = ingrediente, id_galleta = galleta)
                 detalle_receta.save()
-                insumo = Insumo.objects.get(id_insumo = ingrediente)
+                insumo = Insumo.objects.get(id_insumo = ingrediente.id_insumo)
                 subtotal = insumo.precio_unitario * cantidades[contador]
                 precio += subtotal
                 contador += 1
         
             segunda_request = Galleta.objects.get(id_galleta = id_galleta)
-            segunda_request.precio_venta = precio
+            segunda_request.precio_venta = precio / cantidad_por_lote
+            
             
             segunda_request.save()
 
