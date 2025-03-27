@@ -11,8 +11,15 @@ from . import forms
 
 # Create your views here.
 
-class Lista_galletas_view(FormView):
+class Lista_galletas_view(PermissionRequiredMixin, FormView):
+    permission_required = 'usuarios.empleado'
+    
+    
+    def handle_no_permission(self):
+        return redirect('home')
+    
     template_name = 'lista_galletas.html'
+    
     
     def get_context_data(self):
         galletas = Galleta.objects.all()
@@ -21,12 +28,19 @@ class Lista_galletas_view(FormView):
         }
         
         
-class Registrar_galleta_view(FormView):
+class Registrar_galleta_view(PermissionRequiredMixin, FormView):
+    
+    permission_required = 'usuarios.empleado'
+        
+    def handle_no_permission(self):
+        return redirect('home')
+      
+    
     template_name = 'agregar_galleta.html'
     form_class = forms.Registro_galleta_form
     success_url = reverse_lazy('listado_galletas')
     
-      
+
     def form_valid(self, form):
         form.save()
         return super().form_valid(form)

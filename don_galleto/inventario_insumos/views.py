@@ -13,7 +13,13 @@ from django.contrib import messages
 
 # Create your views here.
 
-class Listado_insumos_view(FormView):
+class Listado_insumos_view(PermissionRequiredMixin, FormView):
+    
+    permission_required = 'usuarios.empleado'
+        
+    def handle_no_permission(self):
+        return redirect('home')
+      
     template_name = 'lista_insumos.html'
     
     def get_context_data(self):
@@ -23,7 +29,13 @@ class Listado_insumos_view(FormView):
             "insumos": insumos,
         }
 
-class Registrar_insumo_view(FormView):
+class Registrar_insumo_view(PermissionRequiredMixin, FormView):
+    
+    permission_required = 'usuarios.empleado'
+        
+    def handle_no_permission(self):
+        return redirect('home')
+      
     template_name = 'agregar_insumo.html'
     form_class = forms.Registro_insumo_form
     success_url = reverse_lazy('listado_insumos')
@@ -33,7 +45,13 @@ class Registrar_insumo_view(FormView):
         form.save()
         return super().form_valid(form)
     
-class Edicion_insumo_view(FormView):
+class Edicion_insumo_view(PermissionRequiredMixin, FormView):
+    
+    permission_required = 'usuarios.empleado'
+        
+    def handle_no_permission(self):
+        return redirect('home')
+      
     template_name = 'editar_insumo.html'
     form_class = forms.Edicion_insumo_form
     success_url = reverse_lazy('listado_insumos')
@@ -50,7 +68,13 @@ class Edicion_insumo_view(FormView):
         form.save(id)
         return super().form_valid(form)
     
-class Registrar_compra_insumo_view(FormView):
+class Registrar_compra_insumo_view(PermissionRequiredMixin, FormView):
+    
+    permission_required = 'usuarios.empleado'
+        
+    def handle_no_permission(self):
+        return redirect('home')
+      
     template_name = 'agregar_compra_insumo.html'
     form_class = forms.Registro_compra_insumo_form
     success_url = reverse_lazy('listado_insumos')
@@ -59,7 +83,14 @@ class Registrar_compra_insumo_view(FormView):
         form.save()
         return super().form_valid(form)
     
-class Registrar_merma_insumo_view(FormView):
+class Registrar_merma_insumo_view(PermissionRequiredMixin, FormView):
+    
+    permission_required = 'usuarios.empleado'
+        
+    def handle_no_permission(self):
+        return redirect('home')
+      
+    
     template_name = 'agregar_merma_insumo.html'
     form_class = forms.Registro_merma_insumo_form
     success_url = reverse_lazy('listado_insumos')
