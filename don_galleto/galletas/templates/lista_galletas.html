@@ -1,0 +1,191 @@
+{% extends "base.html" %} {% load static %} {% block content %}
+<style>
+  .container {
+    max-width: 800px;
+    margin: 2rem auto;
+    padding: 2rem;
+    background: linear-gradient(135deg, #f3f4f6, #ffffff);
+    border-radius: 1rem;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+    animation: fadeIn 0.8s ease-in-out;
+  }
+
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+      transform: translateY(-10px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  .card {
+    background: #fff;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    padding: 15px;
+    text-align: center;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+  }
+  .card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.15);
+  }
+  .card-title {
+    font-size: 1rem;
+    font-weight: bold;
+    color: #35424a;
+  }
+  .btn-dark {
+    background-color: #333;
+    border: none;
+    transition: transform 0.2s ease;
+  }
+  .btn-dark:hover {
+    background-color: #222;
+    transform: scale(1.1);
+  }
+  .placeholder-img {
+    height: 200px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #ddd;
+    color: #777;
+    font-size: 14px;
+    border-radius: 8px;
+  }
+
+  .dashboard-header {
+    text-align: center;
+    color: #35424a;
+    margin-bottom: 2rem;
+    font-size: 2.5rem;
+    font-weight: bold;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+  }
+
+  #carrito {
+    margin-top: 2rem;
+    padding: 1rem;
+    background: #f8f9fa;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    transition: max-height 0.5s ease-out;
+  }
+
+  #lista-carrito li {
+    list-style: none;
+    padding: 10px;
+    background: #e9ecef;
+    margin: 5px 0;
+    border-radius: 5px;
+    opacity: 0;
+    transform: translateX(-20px);
+    animation: fadeInItem 0.5s forwards;
+  }
+
+  @keyframes fadeInItem {
+    from {
+      opacity: 0;
+      transform: translateX(-20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateX(0);
+    }
+  }
+
+  #total-carrito {
+    text-align: center;
+    font-size: 1.2rem;
+    font-weight: bold;
+    margin-top: 10px;
+    color: #28a745;
+  }
+</style>
+
+<div class="container">
+  <div class="dashboard-header">Menú</div>
+  <div class="row row-cols-2 row-cols-md-3 g-4">
+    {% for galleta in galletas %}
+    <div class="col">
+      <div class="card border-0 shadow-sm text-center">
+        <div class="card-body">
+          <h5 class="card-title">{{ galleta.nombre }}</h5>
+          <p class="text-muted">${{ galleta.precio_venta }}</p>
+          <button class="btn btn-dark rounded-pill agregar-carrito" data-id="{{ galleta.id_galleta }}">+</button>        </div>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+  <div id="carrito">
+    <h4>Carrito de Compras</h4>
+    <ul id="lista-carrito">
+      {% for item in carrito %}
+      <li>{{ item.nombre }} - ${{ item.precio_venta }} (x{{ item.cantidad }})</li>
+      {% endfor %}
+    </ul>
+    <div id="total-carrito">Total: $0.00</div>
+  </div>
+</div>
+
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    document.querySelectorAll(".agregar-carrito").forEach(button => {
+      button.addEventListener("click", function () {
+        let galletaId = this.getAttribute("data-id");
+        fetch(`/galletas/agregar/${galletaId}/`, {
+          method: "POST", 
+          headers: {
+            "X-Requested-With": "XMLHttpRequest",
+            "Content-Type": "application/json",
+            "X-CSRFToken": getCookie('csrftoken') 
+          },
+          body: JSON.stringify({})  
+        })
+        .then(response => response.json())
+        .then(data => {
+          actualizarCarrito(data.galleta);
+        })
+        .catch(error => console.error("Error al agregar al carrito:", error));
+      });
+    });
+  });
+
+  function getCookie(name) {
+    let cookieValue = null;
+    if (document.cookie && document.cookie !== '') {
+      const cookies = document.cookie.split(';');
+      for (let i = 0; i < cookies.length; i++) {
+        const cookie = cookies[i].trim();
+        if (cookie.substring(0, name.length + 1) === (name + '=')) {
+          cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+          break;
+        }
+      }
+    }
+    return cookieValue;
+  }
+
+  function actualizarCarrito(carrito) {
+    let listaCarrito = document.getElementById("lista-carrito");
+    let totalCarrito = document.getElementById("total-carrito");
+    listaCarrito.innerHTML = "";
+    let total = 0;
+    carrito.forEach((item, index) => {
+      let li = document.createElement("li");
+      li.textContent = `${item.nombre} - $${item.precio_venta} (x${item.cantidad})`;
+      li.style.animationDelay = `${index * 0.1}s`;
+      listaCarrito.appendChild(li);
+      total += item.precio_venta * item.cantidad;
+    });
+    totalCarrito.textContent = `Total: $${total.toFixed(2)}`;
+  }
+</script>
+
+{% endblock %}

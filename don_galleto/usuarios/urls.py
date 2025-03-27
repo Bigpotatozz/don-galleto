@@ -4,11 +4,6 @@ from . import views
 from don_galleto.views import IndexView
 from django.contrib.auth.decorators import login_required
 from usuarios.views import  Lista_usuarios_view, Registro_admin_view, Edicion_usuario_view, eliminar_usuario
-<<<<<<< HEAD
-
-=======
-from django.contrib.auth.decorators import login_required
->>>>>>> master
 urlpatterns = [
     path('listado_usuarios/', login_required(views.Lista_usuarios_view.as_view()), name='listado_usuarios'),
     path('registro_admin/', views.Registro_admin_view.as_view(), name='registro_admin'),
