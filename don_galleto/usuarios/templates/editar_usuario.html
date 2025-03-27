@@ -1,73 +1,129 @@
-{% extends "base.html" %} {% load static %} {% block content %}
-<div
-  class="container min-vh-100 d-flex align-items-center justify-content-center"
->
-  <div
-    class="card shadow-lg rounded-4 p-4"
-    style="max-width: 500px; width: 100%"
-  >
-    <h2 class="text-center mb-4">Registrar Producto</h2>
+{% extends "base.html" %}
+{% load static %}
+
+{% block content %}
+
+<div class="container d-flex justify-content-center align-items-center" style="min-height: 80vh;">
+  <div class="card p-4 shadow-sm" style="width: 100%; max-width: 500px; border: none; border-radius: 12px;">
+    <div class="text-center mb-4">
+      <h2 style="color: #2c3e50; font-weight: 600;">
+        <i class="bi bi-person-gear me-2"></i>Editar Usuario
+      </h2>
+      <p style="color: #7f8c8d;">Actualiza la información del usuario</p>
+    </div>
 
     <form method="post" enctype="multipart/form-data">
       {% csrf_token %}
 
       <div class="mb-3">
-        <label class="form-label">Username:</label>
-        {{ form.username }} {% if form.username.errors %}
-        <div class="alert alert-danger mt-2">{{ form.username.errors }}</div>
+        <label class="form-label" style="color: #34495e; font-weight: 500;">
+          <i class="bi bi-person me-2" style="color: #95a5a6;"></i>Usuario
+        </label>
+        <div class="input-group">
+          <span class="input-group-text" style="background-color: #f5f7fa; border: 1px solid #ced4da; border-right: none;">
+            <i class="bi bi-person" style="color: #95a5a6;"></i>
+          </span>
+          {{ form.username }}
+        </div>
+        {% if form.username.errors %}
+          <div class="text-danger mt-2">
+            <small><i class="bi bi-exclamation-circle me-1"></i>{{ form.username.errors.0 }}</small>
+          </div>
         {% endif %}
       </div>
 
       <div class="mb-3">
-        <label class="form-label">telefono:</label>
-        {{ form.telefono }} {% if form.telefono.errors %}
-        <div class="alert alert-danger mt-2">{{ form.telefono.errors }}</div>
+        <label class="form-label" style="color: #34495e; font-weight: 500;">
+          <i class="bi bi-telephone me-2" style="color: #95a5a6;"></i>Teléfono
+        </label>
+        <div class="input-group">
+          <span class="input-group-text" style="background-color: #f5f7fa; border: 1px solid #ced4da; border-right: none;">
+            <i class="bi bi-telephone" style="color: #95a5a6;"></i>
+          </span>
+          {{ form.telefono }}
+        </div>
+        {% if form.telefono.errors %}
+          <div class="text-danger mt-2">
+            <small><i class="bi bi-exclamation-circle me-1"></i>{{ form.telefono.errors.0 }}</small>
+          </div>
         {% endif %}
       </div>
 
       <div class="mb-3">
-        <label class="form-label">correo:</label>
-        {{ form.email }} {% if form.email.errors %}
-        <div class="alert alert-danger mt-2">{{ form.email.errors }}</div>
+        <label class="form-label" style="color: #34495e; font-weight: 500;">
+          <i class="bi bi-envelope me-2" style="color: #95a5a6;"></i>Correo electrónico
+        </label>
+        <div class="input-group">
+          <span class="input-group-text" style="background-color: #f5f7fa; border: 1px solid #ced4da; border-right: none;">
+            <i class="bi bi-envelope" style="color: #95a5a6;"></i>
+          </span>
+          {{ form.email }}
+        </div>
+        {% if form.email.errors %}
+          <div class="text-danger mt-2">
+            <small><i class="bi bi-exclamation-circle me-1"></i>{{ form.email.errors.0 }}</small>
+          </div>
         {% endif %}
       </div>
 
       <div class="mb-3">
-        <label class="form-label">contrasenia:</label>
-        {{ form.contrasenia }} {% if form.contrasenia.errors %}
-        <div class="alert alert-danger mt-2">{{ form.contrasenia.errors }}</div>
+        <label class="form-label" style="color: #34495e; font-weight: 500;">
+          <i class="bi bi-lock me-2" style="color: #95a5a6;"></i>Contraseña
+        </label>
+        <div class="input-group">
+          <span class="input-group-text" style="background-color: #f5f7fa; border: 1px solid #ced4da; border-right: none;">
+            <i class="bi bi-lock" style="color: #95a5a6;"></i>
+          </span>
+          {{ form.contrasenia }}
+        </div>
+        {% if form.contrasenia.errors %}
+          <div class="text-danger mt-2">
+            <small><i class="bi bi-exclamation-circle me-1"></i>{{ form.contrasenia.errors.0 }}</small>
+          </div>
         {% endif %}
       </div>
 
       <div class="mb-3">
-        <label class="form-label">rol:</label>
-        {{ form.rol }} {% if form.rol.errors %}
-        <div class="alert alert-danger mt-2">{{ form.rol.errors }}</div>
+        <label class="form-label" style="color: #34495e; font-weight: 500;">
+          <i class="bi bi-person-badge me-2" style="color: #95a5a6;"></i>Rol
+        </label>
+        <div class="input-group">
+          <span class="input-group-text" style="background-color: #f5f7fa; border: 1px solid #ced4da; border-right: none;">
+            <i class="bi bi-person-badge" style="color: #95a5a6;"></i>
+          </span>
+          {{ form.rol }}
+        </div>
+        {% if form.rol.errors %}
+          <div class="text-danger mt-2">
+            <small><i class="bi bi-exclamation-circle me-1"></i>{{ form.rol.errors.0 }}</small>
+          </div>
         {% endif %}
       </div>
 
-      <div class="mb-3">
-        <label class="form-label">estatus:</label>
-        {{ form.is_active }} {% if form.is_active.errors %}
-        <div class="alert alert-danger mt-2">{{ form.is_active.errors }}</div>
+      <div class="mb-4">
+        <label class="form-label" style="color: #34495e; font-weight: 500;">
+          <i class="bi bi-toggle-on me-2" style="color: #95a5a6;"></i>Estatus
+        </label>
+        <div class="form-check form-switch ps-4">
+          {{ form.is_active }}
+          <label class="form-check-label ms-2" for="{{ form.is_active.id_for_label }}">
+            {% if form.is_active.value %}Activo{% else %}Inactivo{% endif %}
+          </label>
+        </div>
+        {% if form.is_active.errors %}
+          <div class="text-danger mt-2">
+            <small><i class="bi bi-exclamation-circle me-1"></i>{{ form.is_active.errors.0 }}</small>
+          </div>
         {% endif %}
       </div>
 
-      <button type="submit" class="btn btn-success btn-lg w-100">
-        Guardar
+      <button type="submit" class="btn w-100 py-2" 
+              style="background-color: #3498db; color: white; border: none; border-radius: 8px; font-weight: 500;">
+        <i class="bi bi-save me-2"></i> Guardar Cambios
       </button>
-
-      {% if form.errors %}
-      <div class="alert alert-danger">
-        <strong>Errores en el formulario:</strong>
-        <ul>
-          {% for field, errors in form.errors.items %} {% for error in errors %}
-          <li>{{ field }}: {{ error }}</li>
-          {% endfor %} {% endfor %}
-        </ul>
-      </div>
-      {% endif %}
     </form>
   </div>
 </div>
+
+
 {% endblock %}
