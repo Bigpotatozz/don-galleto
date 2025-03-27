@@ -3,127 +3,140 @@
 
 {% block content %}
 
-<div class="container d-flex justify-content-center align-items-center" style="min-height: 80vh;">
-  <div class="card p-4 shadow-sm" style="width: 100%; max-width: 500px; border: none; border-radius: 12px;">
-    <div class="text-center mb-4">
-      <h2 style="color: #2c3e50; font-weight: 600;">
-        <i class="bi bi-person-gear me-2"></i>Editar Usuario
-      </h2>
-      <p style="color: #7f8c8d;">Actualiza la información del usuario</p>
+<div class="container py-5">
+  <div class="card shadow-sm rounded-3 mx-auto" style="max-width: 500px; border: none;">
+    <div class="card-body p-4">
+      <div class="text-center mb-4">
+        <h2 class="fw-bold text-dark">
+          <i class="bi bi-person-gear me-2"></i>Editar Usuario
+        </h2>
+        <p class="text-muted">Actualiza la información del usuario</p>
+      </div>
+
+      <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+
+        <div class="mb-3">
+          <label class="form-label fw-medium">Usuario</label>
+          <div class="input-group">
+            <span class="input-group-text bg-light">
+              <i class="bi bi-person text-secondary"></i>
+            </span>
+            {{ form.username }}
+          </div>
+          {% if form.username.errors %}
+            <div class="text-danger small mt-1">
+              <i class="bi bi-exclamation-circle me-1"></i>{{ form.username.errors.0 }}
+            </div>
+          {% endif %}
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label fw-medium">Teléfono</label>
+          <div class="input-group">
+            <span class="input-group-text bg-light">
+              <i class="bi bi-telephone text-secondary"></i>
+            </span>
+            {{ form.telefono }}
+          </div>
+          {% if form.telefono.errors %}
+            <div class="text-danger small mt-1">
+              <i class="bi bi-exclamation-circle me-1"></i>{{ form.telefono.errors.0 }}
+            </div>
+          {% endif %}
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label fw-medium">Correo electrónico</label>
+          <div class="input-group">
+            <span class="input-group-text bg-light">
+              <i class="bi bi-envelope text-secondary"></i>
+            </span>
+            {{ form.email }}
+          </div>
+          {% if form.email.errors %}
+            <div class="text-danger small mt-1">
+              <i class="bi bi-exclamation-circle me-1"></i>{{ form.email.errors.0 }}
+            </div>
+          {% endif %}
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label fw-medium">Contraseña</label>
+          <div class="input-group">
+            <span class="input-group-text bg-light">
+              <i class="bi bi-lock text-secondary"></i>
+            </span>
+            {{ form.contrasenia }}
+          </div>
+          {% if form.contrasenia.errors %}
+            <div class="text-danger small mt-1">
+              <i class="bi bi-exclamation-circle me-1"></i>{{ form.contrasenia.errors.0 }}
+            </div>
+          {% endif %}
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label fw-medium">Rol</label>
+          <div class="input-group">
+            <span class="input-group-text bg-light">
+              <i class="bi bi-person-badge text-secondary"></i>
+            </span>
+            {{ form.rol }}
+          </div>
+          {% if form.rol.errors %}
+            <div class="text-danger small mt-1">
+              <i class="bi bi-exclamation-circle me-1"></i>{{ form.rol.errors.0 }}
+            </div>
+          {% endif %}
+        </div>
+
+
+        <div class="mb-4">
+          <label class="form-label fw-medium d-block">Estatus</label>
+          <div class="form-check form-switch ps-0">
+            {{ form.is_active }}
+            <label class="form-check-label ms-2" for="{{ form.is_active.id_for_label }}">
+              {% if form.is_active.value %}Activo{% else %}Inactivo{% endif %}
+            </label>
+          </div>
+          {% if form.is_active.errors %}
+            <div class="text-danger small mt-1">
+              <i class="bi bi-exclamation-circle me-1"></i>{{ form.is_active.errors.0 }}
+            </div>
+          {% endif %}
+        </div>
+
+        <button type="submit" class="btn btn-primary w-100 py-2 fw-medium">
+          <i class="bi bi-save me-2"></i>Guardar Cambios
+        </button>
+      </form>
     </div>
-
-    <form method="post" enctype="multipart/form-data">
-      {% csrf_token %}
-
-      <div class="mb-3">
-        <label class="form-label" style="color: #34495e; font-weight: 500;">
-          <i class="bi bi-person me-2" style="color: #95a5a6;"></i>Usuario
-        </label>
-        <div class="input-group">
-          <span class="input-group-text" style="background-color: #f5f7fa; border: 1px solid #ced4da; border-right: none;">
-            <i class="bi bi-person" style="color: #95a5a6;"></i>
-          </span>
-          {{ form.username }}
-        </div>
-        {% if form.username.errors %}
-          <div class="text-danger mt-2">
-            <small><i class="bi bi-exclamation-circle me-1"></i>{{ form.username.errors.0 }}</small>
-          </div>
-        {% endif %}
-      </div>
-
-      <div class="mb-3">
-        <label class="form-label" style="color: #34495e; font-weight: 500;">
-          <i class="bi bi-telephone me-2" style="color: #95a5a6;"></i>Teléfono
-        </label>
-        <div class="input-group">
-          <span class="input-group-text" style="background-color: #f5f7fa; border: 1px solid #ced4da; border-right: none;">
-            <i class="bi bi-telephone" style="color: #95a5a6;"></i>
-          </span>
-          {{ form.telefono }}
-        </div>
-        {% if form.telefono.errors %}
-          <div class="text-danger mt-2">
-            <small><i class="bi bi-exclamation-circle me-1"></i>{{ form.telefono.errors.0 }}</small>
-          </div>
-        {% endif %}
-      </div>
-
-      <div class="mb-3">
-        <label class="form-label" style="color: #34495e; font-weight: 500;">
-          <i class="bi bi-envelope me-2" style="color: #95a5a6;"></i>Correo electrónico
-        </label>
-        <div class="input-group">
-          <span class="input-group-text" style="background-color: #f5f7fa; border: 1px solid #ced4da; border-right: none;">
-            <i class="bi bi-envelope" style="color: #95a5a6;"></i>
-          </span>
-          {{ form.email }}
-        </div>
-        {% if form.email.errors %}
-          <div class="text-danger mt-2">
-            <small><i class="bi bi-exclamation-circle me-1"></i>{{ form.email.errors.0 }}</small>
-          </div>
-        {% endif %}
-      </div>
-
-      <div class="mb-3">
-        <label class="form-label" style="color: #34495e; font-weight: 500;">
-          <i class="bi bi-lock me-2" style="color: #95a5a6;"></i>Contraseña
-        </label>
-        <div class="input-group">
-          <span class="input-group-text" style="background-color: #f5f7fa; border: 1px solid #ced4da; border-right: none;">
-            <i class="bi bi-lock" style="color: #95a5a6;"></i>
-          </span>
-          {{ form.contrasenia }}
-        </div>
-        {% if form.contrasenia.errors %}
-          <div class="text-danger mt-2">
-            <small><i class="bi bi-exclamation-circle me-1"></i>{{ form.contrasenia.errors.0 }}</small>
-          </div>
-        {% endif %}
-      </div>
-
-      <div class="mb-3">
-        <label class="form-label" style="color: #34495e; font-weight: 500;">
-          <i class="bi bi-person-badge me-2" style="color: #95a5a6;"></i>Rol
-        </label>
-        <div class="input-group">
-          <span class="input-group-text" style="background-color: #f5f7fa; border: 1px solid #ced4da; border-right: none;">
-            <i class="bi bi-person-badge" style="color: #95a5a6;"></i>
-          </span>
-          {{ form.rol }}
-        </div>
-        {% if form.rol.errors %}
-          <div class="text-danger mt-2">
-            <small><i class="bi bi-exclamation-circle me-1"></i>{{ form.rol.errors.0 }}</small>
-          </div>
-        {% endif %}
-      </div>
-
-      <div class="mb-4">
-        <label class="form-label" style="color: #34495e; font-weight: 500;">
-          <i class="bi bi-toggle-on me-2" style="color: #95a5a6;"></i>Estatus
-        </label>
-        <div class="form-check form-switch ps-4">
-          {{ form.is_active }}
-          <label class="form-check-label ms-2" for="{{ form.is_active.id_for_label }}">
-            {% if form.is_active.value %}Activo{% else %}Inactivo{% endif %}
-          </label>
-        </div>
-        {% if form.is_active.errors %}
-          <div class="text-danger mt-2">
-            <small><i class="bi bi-exclamation-circle me-1"></i>{{ form.is_active.errors.0 }}</small>
-          </div>
-        {% endif %}
-      </div>
-
-      <button type="submit" class="btn w-100 py-2" 
-              style="background-color: #3498db; color: white; border: none; border-radius: 8px; font-weight: 500;">
-        <i class="bi bi-save me-2"></i> Guardar Cambios
-      </button>
-    </form>
   </div>
 </div>
 
+<style>
+  /* Estilos personalizados */
+  .form-control, .form-select {
+    border: 1px solid #dee2e6;
+    border-radius: 6px;
+    padding: 8px 12px;
+  }
+  
+  .input-group-text {
+    border-right: none;
+    background-color: #f8f9fa !important;
+  }
+  
+  .input-group .form-control {
+    border-left: none;
+  }
+  
+  .form-switch .form-check-input {
+    height: 24px;
+    width: 48px;
+    margin-left: 0;
+  }
+</style>
 
 {% endblock %}
