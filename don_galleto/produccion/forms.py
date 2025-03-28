@@ -2,6 +2,7 @@ from django import forms
 from .models import Merma_producto
 
 class MermaRegistrarForm(forms.ModelForm):
+    
     class Meta:
         model = Merma_producto
         fields = ['cantidad', 'motivo']

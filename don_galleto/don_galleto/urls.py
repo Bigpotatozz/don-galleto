@@ -17,11 +17,8 @@ urlpatterns = [
     path('usuarios/', include('usuarios.urls')),
     path('proovedores/', include('proovedores.urls')),
     path('inventario_insumos/', include('inventario_insumos.urls')),
-    
-    #path('inventario_insumos/'),
-    #path('overview/'),
     path('produccion/', include('produccion.urls')),
-    path('recetas/', include('galletas.urls')),
+    path('galletas/', include('galletas.urls')),
     #path('tienda/'),
     #path('usuarios/'),
     #path('ventas/'),
