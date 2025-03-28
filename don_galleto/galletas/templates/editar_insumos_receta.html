@@ -1,0 +1,50 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card shadow-lg border-light">
+                <div class="card-header text-center bg-white border-0">
+                    <h3 class="text-dark border-bottom pb-2 border-2 p-2">
+                        Editar Insumos para {{ galleta.nombre }}
+                    </h3>
+                </div>
+                <div class="card-body bg-white">
+                    <form method="post">
+                        {% csrf_token %}
+
+                        <table class="table table-bordered text-center align-middle">
+                            <thead class="table-light">
+                                <tr>
+                                    <th>Insumo</th>
+                                    <th>Cantidad</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for insumo in insumos %}
+                                <tr>
+                                    <td class="fw-bold">{{ insumo.nombre }}</td>
+                                    <td>
+                                        <input type="number" class="form-control text-center"
+                                            name="cantidad_{{ insumo.id_insumo }}" 
+                                            min="0" step="0.1" 
+                                            value="{% for item in insumos_receta %}{% if item.id_insumo.id_insumo == insumo.id_insumo %}{{ item.cantidad }}{% endif %}{% endfor %}">
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+
+                        <div class="d-flex justify-content-center mt-4">
+                            <button type="submit" class="btn btn-outline-success rounded-pill px-5 py-2 shadow-sm">
+                                Guardar Insumos
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
