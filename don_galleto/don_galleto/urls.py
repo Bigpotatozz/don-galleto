@@ -17,13 +17,6 @@ urlpatterns = [
     path('usuarios/', include('usuarios.urls')),
     path('proovedores/', include('proovedores.urls')),
     path('inventario_insumos/', include('inventario_insumos.urls')),
-    
-    #path('inventario_insumos/'),
-    #path('overview/'),
-    #path('produccion/'),
-    #path('recetas/'),
-    #path('tienda/'),
-    #path('usuarios/'),
-    #path('ventas/'),
-    #path('clientes/'),
+    path('galletas/', include('galletas.urls')),
+
 ]
