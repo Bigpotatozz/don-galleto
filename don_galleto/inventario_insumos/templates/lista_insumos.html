@@ -31,10 +31,7 @@
           <thead class="table-light">
             <tr>
                 <th>Nombre</th>
-<<<<<<< HEAD
-=======
                 <th>Tipo</th>
->>>>>>> ed8865a (modificacion front)
                 <th>Cantidad</th>
                 <th>Estatus</th>
                 <th>Acción</th>
@@ -44,14 +41,9 @@
             {% for insumo in insumos %}
             <tr>
                 <td>{{ insumo.nombre }}</td>
-<<<<<<< HEAD
-                <td>{{ insumo.cantidad }} {{insumo.tipo_medida}}</td>
-                <td>{{ insumo.estatus}}</td>
-=======
                 <td>{{ insumo.tipo }}</td>
                 <td>{{ insumo.cantidad }} {{insumo.tipo_medida}} </td>
                 <td>{{ insumo.estatus }}</td>
->>>>>>> ed8865a (modificacion front)
                 <td>
                     <button class="btn btn-info btn-sm" data-bs-toggle="collapse" data-bs-target="#compras{{ insumo.id_insumo }}" aria-expanded="false">
                         Ver compras
