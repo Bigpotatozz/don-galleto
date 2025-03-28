@@ -7,13 +7,12 @@ class Galleta(models.Model):
     id_galleta = models.AutoField(primary_key=True)
     nombre = models.CharField(max_length=30)
     descripcion = models.CharField(max_length=100)
-<<<<<<< HEAD
     precio_venta = models.FloatField()
     cantidad = models.IntegerField(default=0)
     cantidad_receta = models.IntegerField()
     peso_unidad = models.FloatField()
     duracion_promedio = models.IntegerField()
-=======
+
     costo = models.FloatField(
         validators=[MinValueValidator(0)]
     )
@@ -32,8 +31,6 @@ class Galleta(models.Model):
     duracion_promedio = models.IntegerField(
         validators=[MinValueValidator(0)]
     )
->>>>>>> 41544858cbbcb5a5c4e98f3b02f1186925d54593
-    
     class Meta: 
         db_table = 'galleta'
     

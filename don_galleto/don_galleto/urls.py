@@ -17,8 +17,7 @@ urlpatterns = [
     path('usuarios/', include('usuarios.urls')),
     path('proovedores/', include('proovedores.urls')),
     path('inventario_insumos/', include('inventario_insumos.urls')),
-<<<<<<< HEAD
-    
+
     #path('inventario_insumos/'),
     #path('overview/'),
     path('produccion/', include('produccion.urls')),
@@ -27,8 +26,6 @@ urlpatterns = [
     #path('usuarios/'),
     #path('ventas/'),
     #path('clientes/'),
-=======
     path('galletas/', include('galletas.urls')),
 
->>>>>>> 41544858cbbcb5a5c4e98f3b02f1186925d54593
 ]
