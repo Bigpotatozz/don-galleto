@@ -1,0 +1,99 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block content %}
+<head>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="static/css/style.css">
+</head>
+
+<div class="container mt-4">
+    <div class="card shadow">
+        <div class="card-header bg-primary text-white">
+            <h2 class="mb-0"><i class="bi bi-cart-plus"></i> Registrar Nueva Venta</h2>
+        </div>
+        
+        <div class="card-body">
+            <form method="post" id="ventaForm">
+                {% csrf_token %}
+                
+                <div class="form-section">
+                    <h4 class="form-title"><i class="bi bi-list-check"></i></i> Datos de la Venta</h4>
+                    <div class="row mb-3">
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label fw-bold">Fecha de Venta</label>
+                            {{ form.fecha_venta }}
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label fw-bold">Tipo de Venta</label>
+                            {{ form.tipo }}
+                        </div>
+                    </div>
+                </div>
+            
+                <div class="form-section">
+                    <h4 class="form-title"> <i class="bi bi-cookie"></i> Productos</h4>
+                    
+                    <div id="galletas-container">
+                        <div class="galleta-group border p-3 rounded mb-3 bg-white">
+                            <span class="remove-galleta" onclick="removeGalleta(this)" style="display: none;">
+                                <i class="bi bi-trash"></i>
+                            </span>
+                            <div class="row">
+                                <div class="col-md-5 mb-3">
+                                    <label class="form-label fw-bold">Galleta</label>
+                                    <select name="galletas" class="form-select" required>
+                                        <option value="">Seleccione una galleta</option>
+                                        {% for galleta in galletas %}
+                                            <option value="{{ galleta.id_galleta }}" data-price="{{ galleta.precio_venta }}">
+                                                {{ galleta.nombre }} - ${{ galleta.precio_venta }}
+                                            </option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                                <div class="col-md-3 mb-3">
+                                    <label class="form-label fw-bold">Cantidad</label>
+                                    <input type="number" name="cantidad" class="form-control" min="1" value="1" required>
+                                </div>
+                                <div class="col-md-3 mb-3">
+                                    <label class="form-label fw-bold">Presentación</label>
+                                    <select name="presentacion" class="form-select">
+                                        <option value="gr">Gramos</option>
+                                        <option value="unidad">Unidad</option>
+                                        <option value="paquete">Paquete</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-1 mb-3 d-flex align-items-end">
+                                    <div class="form-control-plaintext fw-bold">$<span class="item-total">0.00</span></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <button type="button" class="btn btn-primary mb-3" onclick="agregarProducto()">
+                        <i class="bi bi-plus-circle"></i> Agregar Producto
+                    </button>
+                    
+                    <div class="total-display text-end">
+                        Total de la Venta: $<span id="venta-total">0.00</span>
+                    </div>
+                </div>
+            
+                <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                    <a href="{% url 'lista_ventas' %}" class="btn btn-danger me-md-2">
+                        <i class="bi bi-arrow-left"></i> Cancelar
+                    </a>
+                    <button type="submit" class="btn btn-success">
+                        <i class="bi bi-save"></i> Guardar Venta
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script src="/static/js/ventas.js"></script>
+{% endblock %}

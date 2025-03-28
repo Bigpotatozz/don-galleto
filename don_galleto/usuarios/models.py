@@ -13,4 +13,4 @@ class Usuario(AbstractUser):
         db_table = 'usuario'
     
     def __str__(self):
-        return f" {self.nombre} - {self.telefono} - {self.correo} - {self.contrasenia} - {self.rol} - {self.codigo_verificacion}"
+        return f"{self.username} - {self.telefono} - {self.email} - {self.rol} - {self.codigo_verificacion}"
