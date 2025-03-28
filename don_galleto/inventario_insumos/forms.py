@@ -5,8 +5,6 @@ from inventario_insumos.models import Compra_insumo, Merma_insumo
 from django.utils.timezone import now
 from django.contrib.auth import get_user_model
 
-usuario = get_user_model()
-
 class Registro_insumo_form(forms.ModelForm):
     nombre = forms.CharField(max_length=45)
     tipo = forms.ChoiceField(choices=[('base', 'Base'), ('complemento', 'Complemento')])
@@ -24,6 +22,26 @@ class Registro_insumo_form(forms.ModelForm):
         new_insumo = Insumo(nombre=nombre, tipo=tipo, tipo_medida=tipo_medida, cantidad = 0, estatus = 'sin existencias')
         new_insumo.save()
 
+class Edicion_insumo_form(forms.ModelForm):
+    nombre = forms.CharField(max_length=45)
+    tipo = forms.ChoiceField(choices=[('base', 'Base'), ('complemento', 'Complemento')])
+    tipo_medida = forms.ChoiceField(choices=[('g', 'gramos'), ('ml', 'mililitros')])
+    
+    class Meta:
+        model = Insumo
+        fields = ['nombre', 'tipo', 'tipo_medida']
+
+    def save(self, id, commit = True):
+        insumo = Insumo.objects.get(id_insumo = id)
+        insumo.nombre = self.cleaned_data['nombre']
+        insumo.tipo = self.cleaned_data['tipo']
+        insumo.tipo_medida = self.cleaned_data['tipo_medida']
+        
+        if commit:
+            insumo.save()
+        
+        
+        
 class Registro_compra_insumo_form(forms.ModelForm):
     nombre = forms.CharField(max_length=45)
     cantidad = forms.FloatField()
