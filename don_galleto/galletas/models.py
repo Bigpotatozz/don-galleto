@@ -7,6 +7,9 @@ class Galleta(models.Model):
     id_galleta = models.AutoField(primary_key=True)
     nombre = models.CharField(max_length=30)
     descripcion = models.CharField(max_length=100)
+    costo = models.FloatField(
+        validators=[MinValueValidator(0)]
+    )
     precio_venta = models.FloatField(
         validators=[MinValueValidator(0)]
     )

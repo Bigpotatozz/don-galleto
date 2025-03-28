@@ -52,8 +52,8 @@
               <td>{{ proveedor.ciudad }}</td>
               <td>{{ proveedor.estado }}</td>
               <td>
-                <span class="badge rounded-pill {% if proveedor.estatus == 'Activo' %}bg-success{% else %}bg-secondary{% endif %}">
-                  {% if proveedor.estatus == 'Activo' %}
+                <span class="badge rounded-pill {% if proveedor.estatus == 'activo' %}bg-success{% else %}bg-secondary{% endif %}">
+                  {% if proveedor.estatus == 'activo' %}
                     <i class="bi bi-check-circle-fill me-1"></i>
                   {% else %}
                     <i class="bi bi-x-circle-fill me-1"></i>
