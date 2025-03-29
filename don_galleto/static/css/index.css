@@ -1,0 +1,45 @@
+body {
+    display: flex;
+    min-height: 100vh;
+    overflow-x: hidden;
+}
+.sidebar {
+    width: 250px;
+    background: #343a40;
+    padding: 20px;
+    height: 100vh;
+    position: fixed;
+    top: 0;
+    left: 0;
+    color: white;
+}
+.sidebar .nav-link {
+    color: white;
+    padding: 10px;
+    display: block;
+    transition: 0.3s;
+}
+.sidebar .nav-link:hover {
+    background: #495057;
+    border-radius: 5px;
+}
+.content {
+    margin-left: 270px;
+    padding: 20px;
+    flex-grow: 1;
+    width: 100%;
+}
+button.logout-btn {
+    background: none;
+    border: none;
+    color: white;
+    padding: 10px;
+    width: 100%;
+    text-align: left;
+    cursor: pointer;
+    transition: 0.3s;
+}
+button.logout-btn:hover {
+    background: #dc3545;
+    border-radius: 5px;
+}

@@ -1,38 +1,72 @@
-{%extends "base.html"%}
+{% extends "base.html" %}
 {% load static %}
-    {%block content%}
-    <div style= "margin-top: 200px;">
-        <h1 class="text-center">Listado de usuarios</h1>
-    
-        <a href = "{% url 'registro_admin' %}"  >Agregar Usuario</a>
-        <table class= "table table-striped">
-            <thead>
-                <th>Nombre</th>
-                <th>telefono</th>
-                <th>correo</th>
-                <th>puesto</th>
-                <th>Estatus</th>
-              
-            </thead>
-            <tbody>
-                {%for usuario in usuarios %}
-                    <tr>
-                        <td>{{usuario.username}}</td>
-                        <td>{{usuario.telefono}}</td>
-                        <td>{{usuario.email}}</td>
-                        <td>{{usuario.rol}}</td>
-                        <td>
-                            {% if usuario.is_active %}
-                                Activo
-                            {% else %}
-                                Inactivo
-                            {% endif %}
-                        </td>
-                        <td><a href="{% url 'editar_usuario' usuario.id_usuario %}">Editar</a> </td>
-                        <td><a href="{% url 'eliminar_usuario' usuario.id_usuario %}">Eliminar</a> </td>
-                    </tr>
-                {%endfor%}
-        </table>
+
+{% block content %}
+
+<div class="container py-5" style="min-height: calc(100vh - 120px);">
+    <div class="card shadow-lg rounded-4">
+        <div class="card-header bg-white border-0 pt-4">
+            <div class="d-flex justify-content-between align-items-center">
+                <h2 class="mb-0" style="color: #2c3e50; font-weight: 600;">
+                    <i class="bi bi-people-fill me-2"></i>Listado de Usuarios
+                </h2>
+                <a href="{% url 'registro_admin' %}" class="btn" 
+                   style="background-color: #3498db; color: white; border-radius: 8px;">
+                    <i class="bi bi-plus-circle me-2"></i>Agregar Usuario
+                </a>
+            </div>
+        </div>
+
+        <div class="card-body px-4">
+            <div class="table-responsive">
+                <table class="table table-hover align-middle">
+                    <thead class="table-light">
+                        <tr>
+                            <th style="color: #495057; font-weight: 500;">Nombre</th>
+                            <th style="color: #495057; font-weight: 500;">Teléfono</th>
+                            <th style="color: #495057; font-weight: 500;">Correo</th>
+                            <th style="color: #495057; font-weight: 500;">Puesto</th>
+                            <th style="color: #495057; font-weight: 500;">Estatus</th>
+                            <th style="color: #495057; font-weight: 500;">Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for usuario in usuarios %}
+                        <tr>
+                            <td>{{ usuario.username }}</td>
+                            <td>{{ usuario.telefono }}</td>
+                            <td>{{ usuario.email }}</td>
+                            <td>{{ usuario.rol }}</td>
+                            <td>
+                                <span class="badge rounded-pill {% if usuario.is_active %}bg-success{% else %}bg-secondary{% endif %}">
+                                    {% if usuario.is_active %}
+                                        <i class="bi bi-check-circle-fill me-1"></i>Activo
+                                    {% else %}
+                                        <i class="bi bi-x-circle-fill me-1"></i>Inactivo
+                                    {% endif %}
+                                </span>
+                            </td>
+                            <td>
+                                <div class="d-flex gap-2">
+                                    <a href="{% url 'editar_usuario' usuario.id_usuario %}" 
+                                       class="btn btn-sm" 
+                                       style="background-color: #f8f9fa; color: #3498db; border: 1px solid #3498db; border-radius: 6px;">
+                                        <i class="bi bi-pencil-square"></i> Editar
+                                    </a>
+                                    <a href="{% url 'eliminar_usuario' usuario.id_usuario %}" 
+                                       class="btn btn-sm" 
+                                       style="background-color: #f8f9fa; color: #e74c3c; border: 1px solid #e74c3c; border-radius: 6px;">
+                                        <i class="bi bi-trash"></i> Eliminar
+                                    </a>
+                                </div>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
     </div>
-  
-    {%endblock content%}
+</div>
+
+{% endblock %}

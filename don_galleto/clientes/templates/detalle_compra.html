@@ -1,0 +1,166 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<style>
+  .detalle-compra-container {
+    max-width: 600px;
+    margin: 2rem auto;
+    padding: 2rem;
+    background: linear-gradient(135deg, #f9fafb, #ffffff);
+    border-radius: 1.5rem;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    animation: fadeIn 0.8s ease-in-out;
+  }
+
+  .detalle-compra-container h4 {
+    color: #2d3436;
+    font-size: 2rem;
+    font-weight: 700;
+    margin-bottom: 1.5rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+
+  .detalle-list {
+    list-style: none;
+    padding: 0;
+  }
+
+  .detalle-list li {
+    background: #ffffff;
+    padding: 15px;
+    margin-bottom: 12px;
+    border-radius: 16px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+  }
+
+  .detalle-list li:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 6px 30px rgba(0, 0, 0, 0.15);
+  }
+
+  .cantidad-control {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    margin-top: 10px;
+  }
+
+  .btn-decrementar, .btn-incrementar {
+    background-color: #2d3436;
+    color: white;
+    border: none;
+    border-radius: 50%;
+    width: 30px;
+    height: 30px;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background-color 0.2s ease, transform 0.2s ease;
+  }
+
+  .btn-decrementar:hover, .btn-incrementar:hover {
+    background-color: #1a1e22;
+    transform: scale(1.1);
+  }
+
+  .cantidad-input {
+    width: 50px;
+    text-align: center;
+    border: none;
+    font-size: 1rem;
+    font-weight: bold;
+    background: transparent;
+  }
+
+  .form-select {
+    margin-top: 8px;
+    padding: 5px;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+  }
+
+  .total-compra {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: #27ae60;
+    margin: 15px 0;
+  }
+
+  .btn-finalizar {
+    background-color: #27ae60;
+    color: white;
+    padding: 12px 24px;
+    font-size: 1.1rem;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: transform 0.2s ease;
+  }
+
+  .btn-finalizar:hover {
+    background-color: #218838;
+    transform: scale(1.05);
+  }
+
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(-10px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+</style>
+
+<div class="detalle-compra-container">
+    <h4>Detalle de Compra</h4>
+    <form method="post" action="{% url 'finalizar_compra' %}">
+        {% csrf_token %}
+        <ul class="detalle-list">
+            {% for item in carrito %}
+            <li>
+                <span>{{ item.nombre }} - ${{ item.precio_venta }} (x{{ item.cantidad }})</span>
+                <span>{{ item.descripcion }}</span>
+                <div class="cantidad-control">
+                    <button type="button" class="btn-decrementar" data-id="{{ item.id }}">-</button>
+                    <input type="number" name="cantidad_{{ item.id }}" class="cantidad-input" value="{{ item.cantidad }}" min="1" readonly>
+                    <button type="button" class="btn-incrementar" data-id="{{ item.id }}">+</button>
+                </div>
+                <label for="presentacion_{{ forloop.counter }}">Presentación:</label>
+                <select name="presentacion_{{ item.id }}" id="presentacion_{{ item.id }}" class="form-select">
+                    <option value="Caja" {% if item.presentacion == "Caja" %}selected{% endif %}>Caja</option>
+                    <option value="Bolsa" {% if item.presentacion == "Bolsa" %}selected{% endif %}>Bolsa</option>
+                    <option value="Individual" {% if item.presentacion == "Individual" %}selected{% endif %}>Individual</option>
+                </select>
+            </li>
+            {% endfor %}
+        </ul>
+        <div class="total-compra">Total: ${{ total }}</div>
+        <button type="submit" class="btn-finalizar">Finalizar Compra</button>
+    </form>
+</div>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        document.querySelectorAll(".btn-incrementar").forEach(button => {
+            button.addEventListener("click", function () {
+                let input = this.previousElementSibling;
+                input.value = parseInt(input.value) + 1;
+            });
+        });
+
+        document.querySelectorAll(".btn-decrementar").forEach(button => {
+            button.addEventListener("click", function () {
+                let input = this.nextElementSibling;
+                if (parseInt(input.value) > 1) {
+                    input.value = parseInt(input.value) - 1;
+                }
+            });
+        });
+    });
+</script>
+{% endblock %}

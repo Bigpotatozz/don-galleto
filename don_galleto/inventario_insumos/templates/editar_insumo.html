@@ -1,0 +1,76 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block content %}
+<div class="container d-flex justify-content-center align-items-center" style="min-height: 80vh;">
+  <div class="card shadow-lg rounded-3 p-4" style="width: 100%; max-width: 500px; border: none;">
+    <div class="text-center mb-4">
+      <h2 style="color: #2c3e50; font-weight: 600;">
+        <i class="bi bi-box-seam me-2"></i>Edición de Insumo
+      </h2>
+    </div>
+
+    <form method="POST">
+      {% csrf_token %}
+      
+
+      <div class="mb-3">
+        <label class="form-label" style="color: #34495e; font-weight: 500;">
+          <i class="bi bi-tag me-2" style="color: #95a5a6;"></i>{{ form.nombre.label }}
+        </label>
+        <div class="input-group">
+          <span class="input-group-text" style="background-color: #f5f7fa; border: 1px solid #ced4da; border-right: none;">
+            <i class="bi bi-tag" style="color: #95a5a6;"></i>
+          </span>
+          {{ form.nombre }}
+        </div>
+        {% if form.nombre.errors %}
+          <div class="text-danger mt-2">
+            <small><i class="bi bi-exclamation-circle me-1"></i>{{ form.nombre.errors.0 }}</small>
+          </div>
+        {% endif %}
+      </div>
+
+
+      <div class="mb-3">
+        <label class="form-label" style="color: #34495e; font-weight: 500;">
+          <i class="bi bi-grid me-2" style="color: #95a5a6;"></i>{{ form.tipo.label }}
+        </label>
+        <div class="input-group">
+          <span class="input-group-text" style="background-color: #f5f7fa; border: 1px solid #ced4da; border-right: none;">
+            <i class="bi bi-grid" style="color: #95a5a6;"></i>
+          </span>
+          {{ form.tipo }}
+        </div>
+        {% if form.tipo.errors %}
+          <div class="text-danger mt-2">
+            <small><i class="bi bi-exclamation-circle me-1"></i>{{ form.tipo.errors.0 }}</small>
+          </div>
+        {% endif %}
+      </div>
+
+      <div class="mb-4">
+        <label class="form-label" style="color: #34495e; font-weight: 500;">
+          <i class="bi bi-rulers me-2" style="color: #95a5a6;"></i>{{ form.tipo_medida.label }}
+        </label>
+        <div class="input-group">
+          <span class="input-group-text" style="background-color: #f5f7fa; border: 1px solid #ced4da; border-right: none;">
+            <i class="bi bi-rulers" style="color: #95a5a6;"></i>
+          </span>
+          {{ form.tipo_medida }}
+        </div>
+        {% if form.tipo_medida.errors %}
+          <div class="text-danger mt-2">
+            <small><i class="bi bi-exclamation-circle me-1"></i>{{ form.tipo_medida.errors.0 }}</small>
+          </div>
+        {% endif %}
+      </div>
+
+      <button type="submit" class="btn w-100 py-2" 
+              style="background-color: #3498db; color: white; border: none; border-radius: 8px; font-weight: 500;">
+        <i class="bi bi-save me-2"></i>Guardar Cambios
+      </button>
+    </form>
+  </div>
+</div>
+{% endblock %}

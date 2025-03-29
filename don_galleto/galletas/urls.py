@@ -6,7 +6,5 @@ from galletas.views import  Lista_galletas_view, DetalleGalletaView, AgregarAlCa
 
 urlpatterns = [
     path('listado_galletas/', login_required(views.Lista_galletas_view.as_view()), name='listado_galletas'),
-    path('detalle_galletas/<int:pk>/', login_required(DetalleGalletaView.as_view()), name='detalle_galletas'),
-    path('agregar/<int:id_galleta>/', AgregarAlCarrito.as_view(), name='agregar_al_carrito'),
-    path('historial_compras/', historial_compras.as_view(), name='historial_compras'),
+    path('agregar_galleta/', login_required(views.Registrar_galleta_view.as_view()), name = 'registrar_galleta')
 ]

@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container">
+    <h3>Historial de Compras</h3>
+    {% if ventas_con_totales %}
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>N° Compra</th>
+                <th>Fecha</th>
+                <th>Total</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for item in ventas_con_totales %}
+            <tr>
+                <td>{{ forloop.counter }}</td>
+                <td>{{ item.venta.fecha_venta|date:"d/m/Y" }}</td>
+                <td>${{ item.total }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {% else %}
+    <p>No tienes compras registradas.</p>
+    {% endif %}
+</div>
+{% endblock %}

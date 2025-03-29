@@ -1,112 +1,29 @@
 {% extends "base.html" %}
 
 {% block content %}
-<style>
-.login-container {
-    max-width: 400px;
-    margin: 3rem auto;
-    padding: 2rem;
-    background: linear-gradient(135deg, #f3f4f6, #ffffff);
-    border-radius: 1rem;
-    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
-    animation: fadeIn 0.8s ease-in-out;
-    text-align: center;
-}
 
-@keyframes fadeIn {
-    from { opacity: 0; transform: translateY(-10px); }
-    to { opacity: 1; transform: translateY(0); }
-}
-
-.login-header {
-    color: #35424a;
-    margin-bottom: 1.5rem;
-    font-size: 2rem;
-    font-weight: bold;
-    letter-spacing: 1px;
-}
-
-.form-group {
-    margin-bottom: 1rem;
-    display: flex;
-    flex-direction: column;
-    text-align: left;
-}
-
-.form-group label {
-    font-weight: 600;
-    color: #35424a;
-    margin-bottom: 0.5rem;
-}
-
-.form-group input {
-    padding: 0.75rem;
-    border-radius: 0.5rem;
-    border: 1px solid #ced4da;
-    font-size: 1rem;
-    transition: border-color 0.3s ease;
-}
-
-.form-group input:focus {
-    border-color: #35424a;
-}
-
-.error-message {
-    color: #e63946;
-    font-size: 0.875rem;
-    margin-top: 0.25rem;
-}
-
-.login-container button {
-    background: linear-gradient(135deg, #35424a, #1f2a30);
-    color: #fff;
-    border: none;
-    padding: 0.75rem;
-    border-radius: 0.5rem;
-    font-size: 1rem;
-    cursor: pointer;
-    transition: transform 0.3s ease, background 0.3s ease;
-    font-weight: bold;
-}
-
-.login-container button:hover {
-    background: linear-gradient(135deg, #1f2a30, #0e161b);
-    transform: scale(1.05);
-}
-
-.forgot-password {
-    margin-top: 1rem;
-    font-size: 0.9rem;
-}
-
-.forgot-password a {
-    color: #35424a;
-    text-decoration: none;
-    font-weight: bold;
-}
-
-.forgot-password a:hover {
-    text-decoration: underline;
-}
-</style>
-
-<div class="login-container">
-    <div class="login-header">Iniciar sesión</div>
+<div class="container d-flex justify-content-center align-items-center" style="height: 100vh;">
+  <div class="card p-4" style="width: 400px; border: none; border-radius: 12px; background-color: #ffffff; box-shadow: 0 4px 20px rgba(0,0,0,0.08);">
+    
+    <div class="text-center mb-4">
+      <h2 style="color: #2c3e50; font-weight: 600; margin-bottom: 0.5rem;">Bienvenido</h2>
+      <p style="color: #7f8c8d; margin-bottom: 0;">Ingresa a tu cuenta</p>
+    </div>
 
     {% if form.errors %}
-      <div class="error-message">
-        Tu usuario o contraseña no son correctos. Inténtalo de nuevo.
+      <div class="alert alert-danger text-center" style="background-color: #fde8e8; color: #9f3a38; border: none; border-radius: 8px; padding: 12px;">
+        <i class="bi bi-exclamation-circle-fill me-2"></i> Credenciales incorrectas
       </div>
     {% endif %}
 
     {% if next %}
       {% if user.is_authenticated %}
-        <div class="error-message">
-          Tu cuenta no tiene acceso a esta página. Inicia sesión con una cuenta que tenga permisos.
+        <div class="alert alert-warning text-center" style="background-color: #fff8e6; color: #8a6d3b; border: none; border-radius: 8px; padding: 12px;">
+          <i class="bi bi-shield-lock me-2"></i> Permisos insuficientes
         </div>
       {% else %}
-        <div class="error-message">
-          Inicia sesión para acceder a esta página.
+        <div class="alert alert-info text-center" style="background-color: #e8f4fd; color: #31708f; border: none; border-radius: 8px; padding: 12px;">
+          <i class="bi bi-door-open me-2"></i> Autentícate para continuar
         </div>
       {% endif %}
     {% endif %}
@@ -114,23 +31,48 @@
     <form method="post" action="{% url 'login' %}">
       {% csrf_token %}
 
-      <div class="form-group">
-        <label for="{{ form.username.id_for_label }}">Usuario</label>
-        {{ form.username }}
+      <div class="mb-3">
+        <label for="{{ form.username.id_for_label }}" class="form-label" style="color: #34495e; font-weight: 500;">Usuario</label>
+        <div class="input-group">
+          <span class="input-group-text" style="background-color: #f5f7fa; border: 1px solid #e0e4e8; border-right: none;">
+            <i class="bi bi-person" style="color: #95a5a6;"></i>
+          </span>
+          <input type="text" name="{{ form.username.name }}" class="form-control" id="{{ form.username.id_for_label }}" 
+                 style="border: 1px solid #e0e4e8; border-left: none; border-radius: 0 8px 8px 0; padding: 10px; background-color: #f5f7fa;">
+        </div>
       </div>
 
-      <div class="form-group">
-        <label for="{{ form.password.id_for_label }}">Contraseña</label>
-        {{ form.password }}
+      <div class="mb-4">
+        <label for="{{ form.password.id_for_label }}" class="form-label" style="color: #34495e; font-weight: 500;">Contraseña</label>
+        <div class="input-group">
+          <span class="input-group-text" style="background-color: #f5f7fa; border: 1px solid #e0e4e8; border-right: none;">
+            <i class="bi bi-lock" style="color: #95a5a6;"></i>
+          </span>
+          <input type="password" name="{{ form.password.name }}" class="form-control" id="{{ form.password.id_for_label }}" 
+                 style="border: 1px solid #e0e4e8; border-left: none; border-radius: 0 8px 8px 0; padding: 10px; background-color: #f5f7fa;">
+        </div>
       </div>
 
       <input type="hidden" name="next" value="{{ next }}">
 
-      <button type="submit">Iniciar sesión</button>
+      <button type="submit" class="btn w-100 py-2 mb-3" 
+              style="background-color: #3498db; color: white; border: none; border-radius: 8px; font-weight: 500; transition: all 0.3s; box-shadow: 0 2px 8px rgba(52,152,219,0.2);">
+        <i class="bi bi-box-arrow-in-right me-2"></i> Iniciar sesión
+      </button>
+
     </form>
 
-    <div class="forgot-password">
-      <a href="{% url 'password_reset' %}">¿Olvidaste tu contraseña?</a>
+    <div class="text-center mt-3">
+      <a href="{% url 'password_reset' %}" class="text-decoration-none" style="color: #3498db; font-size: 0.9rem; font-weight: 500;">
+        <i class="bi bi-question-circle me-1"></i> ¿Olvidaste tu contraseña?
+      </a>
     </div>
+    
+    <div class="text-center mt-4 pt-3" style="border-top: 1px solid #ecf0f1;">
+      <p style="color: #bdc3c7; font-size: 0.85rem;">
+        ¿No tienes cuenta? <a href="{% url 'registro' %}" style="color: #3498db; text-decoration: none;">Regístrate</a>
+      </p>
+    </div>
+  </div>
 </div>
 {% endblock %}

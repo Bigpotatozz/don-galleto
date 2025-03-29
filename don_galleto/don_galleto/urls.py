@@ -19,6 +19,7 @@ urlpatterns = [
     path('proovedores/', include('proovedores.urls')),
     path('inventario_insumos/', include('inventario_insumos.urls')),
     path('galletas/', include('galletas.urls')),
+<<<<<<< HEAD
     
     #path('inventario_insumos/'),
     #path('overview/'),
@@ -28,4 +29,7 @@ urlpatterns = [
     #path('usuarios/'),
     #path('ventas/'),
     #path('clientes/'),
+=======
+
+>>>>>>> master
 ]

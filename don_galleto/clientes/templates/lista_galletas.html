@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+{% block content %}
+
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<link rel="stylesheet" href="/static/css/lista.css">
+
+<div class="container">
+  <div class="dashboard-header">Menú de Galletas</div>
+  <div class="row row-cols-2 row-cols-md-3 g-4">
+    {% for galleta in galletas %}
+    <div class="col">
+      <div class="card border-0 shadow-sm text-center">
+        <div class="card-body">
+          <h5 class="card-title">{{ galleta.nombre }}</h5>
+          <p class="text-muted">${{ galleta.precio_venta }}</p>
+          <button class="btn btn-dark rounded-pill agregar-carrito" data-id="{{ galleta.id_galleta }}">+</button>
+        </div>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+
+  <button id="abrir-carrito">🛒</button>
+  <div id="carrito">
+    <button id="btn-cerrar-carrito" class="btn btn-danger">&times;</button>
+    <h4>Carrito de Compras</h4>
+    <ul id="lista-carrito">
+      {% for item in carrito %}
+      <li>{{ item.nombre }} - ${{ item.precio_venta }} (x{{ item.cantidad }})</li>
+      {% endfor %}
+    </ul>
+    <div id="total-carrito">Total: $0.00</div>
+    <button id="btn-comprar" class="btn-dark" data-id="{{ id_venta }}">Comprar</button>
+  </div>
+</div>
+<script src="/static/js/lista.js"></script>
+{% endblock %}
