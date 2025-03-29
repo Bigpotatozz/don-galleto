@@ -29,12 +29,6 @@ document.addEventListener("DOMContentLoaded", function () {
 
     document.getElementById('btn-comprar').addEventListener('click', async function () {
       const btn = this;
-      const id_venta = btn.getAttribute('data-id');
-
-      if (!id_venta) {
-        alert('No se encontró un ID de venta válido. Por favor, inicia una nueva compra.');
-        return;
-      }
 
       window.location.href = `/clientes/detalle_compra/`;
 

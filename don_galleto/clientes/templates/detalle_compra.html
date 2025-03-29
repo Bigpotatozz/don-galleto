@@ -1,8 +1,92 @@
 {% extends 'base.html' %}
 {% load static %}
 
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11.4.28/dist/sweetalert2.min.css">
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.4.28/dist/sweetalert2.min.js"></script>
+
 {% block content %}
+<!-- Mostrar los mensajes de Django -->
+{% if messages %}
+<div class="alert-container">
+  {% for message in messages %}
+  <div class="alert alert-{{ message.tags }}">
+    {{ message }}
+  </div>
+  {% endfor %}
+</div>
+{% endif %}
+
 <style>
+  .alert-container {
+    position: fixed;
+    top: 10px;
+    left: 60%;
+    transform: translateX(-50%);
+    z-index: 9999;
+    width: 90%;
+    max-width: 500px;
+    padding: 0;
+    margin: 0;
+  }
+
+  .alert {
+    padding: 15px;
+    margin: 10px 0;
+    border-radius: 10px;
+    color: white;
+    font-size: 1.1rem;
+    font-weight: bold;
+    opacity: 1;
+    animation: slideIn 0.5s ease-in-out, fadeOut 3s ease-in-out forwards;
+  }
+
+  .alert-success {
+    background-color: #28a745;
+    box-shadow: 0 5px 15px rgba(0, 128, 0, 0.4);
+  }
+
+  .alert-error {
+    background-color: #dc3545;
+    box-shadow: 0 5px 15px rgba(220, 53, 69, 0.4);
+  }
+
+  .alert-info {
+    background-color: #17a2b8;
+    box-shadow: 0 5px 15px rgba(23, 162, 184, 0.4);
+  }
+
+  .alert-warning {
+    background-color: #ffc107;
+    box-shadow: 0 5px 15px rgba(255, 193, 7, 0.4);
+  }
+
+  @keyframes slideIn {
+    from {
+      transform: translateX(-50%) translateY(-20px);
+      opacity: 0;
+    }
+
+    to {
+      transform: translateX(-50%) translateY(0);
+      opacity: 1;
+    }
+  }
+
+  @keyframes fadeOut {
+    0% {
+      opacity: 1;
+    }
+
+    80% {
+      opacity: 1;
+    }
+
+    100% {
+      opacity: 0;
+      transform: translateY(-20px);
+    }
+  }
+
   .detalle-compra-container {
     max-width: 600px;
     margin: 2rem auto;
@@ -54,7 +138,8 @@
     margin-top: 10px;
   }
 
-  .btn-decrementar, .btn-incrementar {
+  .btn-decrementar,
+  .btn-incrementar {
     background-color: #2d3436;
     color: white;
     border: none;
@@ -66,7 +151,8 @@
     transition: background-color 0.2s ease, transform 0.2s ease;
   }
 
-  .btn-decrementar:hover, .btn-incrementar:hover {
+  .btn-decrementar:hover,
+  .btn-incrementar:hover {
     background-color: #1a1e22;
     transform: scale(1.1);
   }
@@ -111,56 +197,64 @@
   }
 
   @keyframes fadeIn {
-    from { opacity: 0; transform: translateY(-10px); }
-    to { opacity: 1; transform: translateY(0); }
+    from {
+      opacity: 0;
+      transform: translateY(-10px);
+    }
+
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
   }
 </style>
 
 <div class="detalle-compra-container">
-    <h4>Detalle de Compra</h4>
-    <form method="post" action="{% url 'finalizar_compra' %}">
-        {% csrf_token %}
-        <ul class="detalle-list">
-            {% for item in carrito %}
-            <li>
-                <span>{{ item.nombre }} - ${{ item.precio_venta }} (x{{ item.cantidad }})</span>
-                <span>{{ item.descripcion }}</span>
-                <div class="cantidad-control">
-                    <button type="button" class="btn-decrementar" data-id="{{ item.id }}">-</button>
-                    <input type="number" name="cantidad_{{ item.id }}" class="cantidad-input" value="{{ item.cantidad }}" min="1" readonly>
-                    <button type="button" class="btn-incrementar" data-id="{{ item.id }}">+</button>
-                </div>
-                <label for="presentacion_{{ forloop.counter }}">Presentación:</label>
-                <select name="presentacion_{{ item.id }}" id="presentacion_{{ item.id }}" class="form-select">
-                    <option value="Caja" {% if item.presentacion == "Caja" %}selected{% endif %}>Caja</option>
-                    <option value="Bolsa" {% if item.presentacion == "Bolsa" %}selected{% endif %}>Bolsa</option>
-                    <option value="Individual" {% if item.presentacion == "Individual" %}selected{% endif %}>Individual</option>
-                </select>
-            </li>
-            {% endfor %}
-        </ul>
-        <div class="total-compra">Total: ${{ total }}</div>
-        <button type="submit" class="btn-finalizar">Finalizar Compra</button>
-    </form>
+  <h4>Detalle de Compra</h4>
+  <form method="post" action="{% url 'finalizar_compra' %}">
+    {% csrf_token %}
+    <ul class="detalle-list">
+      {% for item in carrito %}
+      <li>
+        <span>{{ item.nombre }} - ${{ item.precio_venta }} (x{{ item.cantidad }})</span>
+        <span>{{ item.descripcion }}</span>
+        <div class="cantidad-control">
+          <button type="button" class="btn-decrementar" data-id="{{ item.id }}">-</button>
+          <input type="number" name="cantidad_{{ item.id }}" class="cantidad-input" value="{{ item.cantidad }}" min="1"
+            readonly>
+          <button type="button" class="btn-incrementar" data-id="{{ item.id }}">+</button>
+        </div>
+        <label for="presentacion_{{ item.id_galleta }}">Presentación:</label>
+        <select name="presentacion_{{ item.id_galleta }}" id="presentacion_{{ item.id }}" class="form-select">
+          <option value="Caja" {% if item.presentacion=="Caja" %}selected{% endif %}>Caja</option>
+          <option value="Bolsa" {% if item.presentacion=="Bolsa" %}selected{% endif %}>Bolsa</option>
+          <option value="Individual" {% if item.presentacion=="Individual" %}selected{% endif %}>Individual</option>
+        </select>
+      </li>
+      {% endfor %}
+    </ul>
+    <div class="total-compra">Total: ${{ total }}</div>
+    <button type="submit" class="btn-finalizar">Finalizar Compra</button>
+  </form>
 </div>
 
 <script>
-    document.addEventListener("DOMContentLoaded", function () {
-        document.querySelectorAll(".btn-incrementar").forEach(button => {
-            button.addEventListener("click", function () {
-                let input = this.previousElementSibling;
-                input.value = parseInt(input.value) + 1;
-            });
-        });
-
-        document.querySelectorAll(".btn-decrementar").forEach(button => {
-            button.addEventListener("click", function () {
-                let input = this.nextElementSibling;
-                if (parseInt(input.value) > 1) {
-                    input.value = parseInt(input.value) - 1;
-                }
-            });
-        });
+  document.addEventListener("DOMContentLoaded", function () {
+    document.querySelectorAll(".btn-incrementar").forEach(button => {
+      button.addEventListener("click", function () {
+        let input = this.previousElementSibling;
+        input.value = parseInt(input.value) + 1;
+      });
     });
+
+    document.querySelectorAll(".btn-decrementar").forEach(button => {
+      button.addEventListener("click", function () {
+        let input = this.nextElementSibling;
+        if (parseInt(input.value) > 1) {
+          input.value = parseInt(input.value) - 1;
+        }
+      });
+    });
+  });
 </script>
 {% endblock %}
