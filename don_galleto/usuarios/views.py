@@ -7,7 +7,7 @@ from django.views.generic import FormView
 from django.shortcuts import redirect
 from django.contrib.auth import logout
 from usuarios.models import Usuario, Logs
-from usuarios.utils import asignar_permisos
+from usuarios.utils import asignar_permisos, failed_log
 from datetime import date
 
 
@@ -54,15 +54,8 @@ class Registro_admin_view(PermissionRequiredMixin,FormView):
         
         return super().form_valid(form)
 
-    def form_invalid(self, form):
-        
-        if self.request.user.is_authenticated:
-            Logs.objects.create(
-                fecha = date.today(),
-                tipo = "error registro usuario",
-                descripcion = "error registro de usuario",
-                id_usuario = self.request.user
-            )
+    def form_invalid(self, form):    
+        failed_log(self, form, "Error registro usuario")
         return super().form_invalid(form)
     
     
@@ -90,6 +83,11 @@ class Edicion_usuario_view(FormView):
         id = self.kwargs.get('id')
         asignar_permisos(form, id) 
         return super().form_valid(form)
+    
+    def form_invalid(self, form):    
+        failed_log(self, form, "Error edicion usuario")
+        return super().form_invalid(form)
+        
 
 
 def eliminar_usuario(request, id):

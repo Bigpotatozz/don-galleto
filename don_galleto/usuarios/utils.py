@@ -1,5 +1,7 @@
 from django.contrib.auth.models import Group,  Permission
 from django.shortcuts import render, get_object_or_404, redirect
+from usuarios.models import Logs
+from datetime import date
 
 def asignar_permisos(form, id: int | None):
 
@@ -25,4 +27,15 @@ def asignar_permisos(form, id: int | None):
         user.groups.add(grupo)
         user.save()
         return redirect('listado_usuarios')
+    
+    
+def failed_log(self, form, titulo_error):
+    
+    if self.request.user.is_authenticated:
+            Logs.objects.create(
+                fecha = date.today(),
+                tipo = f"error {titulo_error}",
+                descripcion = f" error {titulo_error}",
+                id_usuario = self.request.user
+            )
     
