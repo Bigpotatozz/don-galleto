@@ -8,7 +8,7 @@ from django.forms import ValidationError
 from django.contrib import messages
 from galletas.models import Galleta
 from . import forms
-from usuarios.utils import failed_log
+from usuarios.utils import log
 # Create your views here.
 
 class Lista_galletas_view(PermissionRequiredMixin, FormView):
@@ -46,7 +46,7 @@ class Registrar_galleta_view(PermissionRequiredMixin, FormView):
         return super().form_valid(form)
     
     def form_invalid(self, form):   
-        failed_log(self, form, "Error registro galleta")
+        log(self, form, "Error registro galleta")
         return super().form_invalid(form)
     
     def get_context_data(self, **kwargs):

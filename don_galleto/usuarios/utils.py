@@ -29,13 +29,13 @@ def asignar_permisos(form, id: int | None):
         return redirect('listado_usuarios')
     
     
-def failed_log(self, form, titulo_error):
+def log(self, form, titulo):
     
     if self.request.user.is_authenticated:
             Logs.objects.create(
                 fecha = date.today(),
-                tipo = f"error {titulo_error}",
-                descripcion = f" error {titulo_error}",
+                tipo = f"{titulo}",
+                descripcion = f"{titulo}",
                 id_usuario = self.request.user
             )
     

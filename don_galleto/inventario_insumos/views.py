@@ -10,7 +10,7 @@ from inventario_insumos.models import Insumo
 from inventario_insumos.utils import verificar_insumos
 from django.forms import ValidationError
 from django.contrib import messages
-from usuarios.utils import failed_log
+from usuarios.utils import log
 
 # Create your views here.
 
@@ -47,7 +47,7 @@ class Registrar_insumo_view(PermissionRequiredMixin, FormView):
         return super().form_valid(form)
     
     def form_invalid(self, form):    
-        failed_log(self, form, "Error registro insumo")
+        log(self, form, "Error registro insumo")
         return super().form_invalid(form)
     
     
@@ -76,7 +76,7 @@ class Edicion_insumo_view(PermissionRequiredMixin, FormView):
         return super().form_valid(form)
     
     def form_invalid(self, form):    
-        failed_log(self, form, "Error edicion insumo")
+        log(self, form, "Error edicion insumo")
         return super().form_invalid(form)
     
 class Registrar_compra_insumo_view(PermissionRequiredMixin, FormView):
@@ -94,7 +94,7 @@ class Registrar_compra_insumo_view(PermissionRequiredMixin, FormView):
         form.save()
         return super().form_valid(form)
     def form_invalid(self, form):    
-        failed_log(self, form, "Error registro compra insumo")
+        log(self, form, "Error registro compra insumo")
         return super().form_invalid(form)
     
 class Registrar_merma_insumo_view(PermissionRequiredMixin, FormView):
@@ -133,7 +133,7 @@ class Registrar_merma_insumo_view(PermissionRequiredMixin, FormView):
             
         
     def form_invalid(self, form):    
-        failed_log(self, form, "Error registro merma insumo")
+        log(self, form, "Error registro merma insumo")
         return super().form_invalid(form)
     
    
