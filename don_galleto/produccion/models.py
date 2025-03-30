@@ -22,6 +22,7 @@ class Lote_galleta(models.Model):
 
     class Meta:
         db_table = 'lote_galleta'
+        ordering = ['-id_lote_galleta']
 
     def __str__(self):
         return f"Lote {self.id_lote_galleta} - {self.fecha_preparacion} - {self.get_estatus_display()} - {self.cantidad_galletas} - {self.id_galleta.nombre}"

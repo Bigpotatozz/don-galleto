@@ -2,59 +2,102 @@
 {% load static %}
 
 {% block content %}
-<div class="container mt-5">
-    <h1 class="text-center mb-4"><i class="bi bi-gear-wide-connected"></i> Solicitud de Galletas para Producción</h1>
+<div class="container py-5">
+    <div class="card-header border-0 pt-4">
+        <div class="d-flex justify-content-between align-items-center mb-3">
+            <h2 class="mb-0" style="color: #2c3e50; font-weight: 600;">
+                <i class="bi bi-gear-wide-connected me-2"></i>Solicitud de Galletas para Producción
+            </h2>
+        </div>
+    </div>
 
-    <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-3">
-        {% for item in lista %}
-        <div class="col">
-            <div class="card border rounded-4 p-2">
-                <div class="card-body d-flex justify-content-between align-items-center">
-                    <div>
-                        <h6 class="mb-1 text-black fw-bold">{{ item.nombre }}</h6>
-                        <p class="mb-1 text-muted">
-                            <i class="bi bi-cash-coin"></i> ${{ item.precio_venta }} |
-                            <i class="bi bi-box-seam"></i> {{ item.cantidad }} galletas disponibles
-                        </p>
-                        <p class="mb-0">
-                            {% if item.lote_galleta_galleta.last %}
-                                {% with estado=item.lote_galleta_galleta.last.estatus %}
-                                    {% if estado == "Pendiente" %}
-                                        <span class="badge bg-secondary"><i class="bi bi-hourglass-split"></i> Pendiente</span>
-                                    {% elif estado == "Mezclando" %}
-                                        <span class="badge bg-primary"><i class="bi bi-arrow-repeat"></i> Mezclando</span>
-                                    {% elif estado == "Formando" %}
-                                        <span class="badge bg-info text-dark"><i class="bi bi-hand-index-thumb"></i> Formando</span>
-                                    {% elif estado == "Horneando" %}
-                                        <span class="badge bg-warning text-dark"><i class="bi bi-fire"></i> Horneando</span>
-                                    {% elif estado == "Enfriando" %}
-                                        <span class="badge bg-success"><i class="bi bi-snow"></i> Enfriando</span>
-                                    {% elif estado == "Completado" %}
-                                        <span class="badge bg-dark"><i class="bi bi-check-circle"></i> Completado</span>
-                                    {% else %}
-                                        <span class="badge bg-danger"><i class="bi bi-x-circle"></i> No producido</span>
-                                    {% endif %}
-                                {% endwith %}
-                            {% else %}
-                                <span class="badge bg-danger"><i class="bi bi-x-circle"></i> No producido</span>
-                            {% endif %}
-                        </p>
+    <div class="card-body px-1">
+        <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-3 m-2">
+            {% for item in lista %}
+            <div class="col">
+                <div class="card rounded-4 p-3" style="background-color: #ffffff;">
+                    <div class="card-body d-flex justify-content-between align-items-center">
+                        <div>
+                            <h6 class="mb-1 text-dark fw-semibold">{{ item.nombre }}</h6>
+                            <p class="mb-1 text-muted">
+                                <i class="bi bi-cash-coin"></i> ${{ item.precio_venta }} |
+                                <i class="bi bi-box-seam"></i> {{ item.cantidad }} galletas disponibles
+                            </p>
+                            <p class="mb-0">
+                                {% if item.ultimo_lote_galleta %}
+                                    <span class="badge px-3 py-2 fw-semibold
+                                        {% if item.ultimo_lote_galleta.estatus == 'Pendiente' %}bg-secondary
+                                        {% elif item.ultimo_lote_galleta.estatus == 'Mezclando' %}bg-primary
+                                        {% elif item.ultimo_lote_galleta.estatus == 'Formando' %}bg-info text-dark
+                                        {% elif item.ultimo_lote_galleta.estatus == 'Horneando' %}bg-warning text-dark
+                                        {% elif item.ultimo_lote_galleta.estatus == 'Enfriando' %}bg-success
+                                        {% elif item.ultimo_lote_galleta.estatus == 'Completado' %}bg-dark
+                                        {% else %}bg-danger{% endif %}
+                                    ">
+                                        <i class="bi 
+                                            {% if item.ultimo_lote_galleta.estatus == 'Pendiente' %}bi-hourglass-split
+                                            {% elif item.ultimo_lote_galleta.estatus == 'Mezclando' %}bi-arrow-repeat
+                                            {% elif item.ultimo_lote_galleta.estatus == 'Formando' %}bi-hand-index-thumb
+                                            {% elif item.ultimo_lote_galleta.estatus == 'Horneando' %}bi-fire
+                                            {% elif item.ultimo_lote_galleta.estatus == 'Enfriando' %}bi-snow
+                                            {% elif item.ultimo_lote_galleta.estatus == 'Completado' %}bi-check-circle
+                                            {% else %}bi-x-circle{% endif %}
+                                        "></i> {{ item.ultimo_lote_galleta.estatus }}
+                                    </span>
+                                {% else %}
+                                    <span class="badge bg-danger"><i class="bi bi-x-circle"></i> No producido</span>
+                                {% endif %}
+                            </p>
+                        </div>
+                        <form method="POST" action="{% url 'crear_lote_galleta' item.id_galleta %}">
+                            {% csrf_token %}
+                            <button type="submit" class="btn btn-outline-success btn-sm rounded-3"
+                                    id="btn-lote" data-bs-toggle="tooltip" title="Crear nuevo lote"
+                                    style="font-weight: 500; border-radius: 8px;">
+                                <i class="bi bi-box-arrow-in-down"></i> Lote
+                            </button>
+                        </form>
                     </div>
-
-                    <form method="POST" action="{% url 'crear_lote_galleta' item.id_galleta %}">
-                        {% csrf_token %}
-                        <button type="submit" class="btn btn-outline-success btn-sm" id="btn-lote">
-                            <i class="bi bi-box-arrow-in-down"></i> Lote
-                        </button>
-                    </form>
                 </div>
             </div>
+            {% empty %}
+            <div class="col-12 text-center text-muted">
+                <p><i class="bi bi-exclamation-circle me-2"></i>No hay galletas registradas.</p>
+            </div>
+            {% endfor %}
         </div>
-        {% empty %}
-        <div class="col-12 text-center text-muted">
-            <p>No hay galletas registradas.</p>
-        </div>
-        {% endfor %}
     </div>
 </div>
+
+{% if messages %}
+    <div class="toast-container position-fixed top-0 end-0 p-3" style="z-index: 1100;">
+        {% for message in messages %}
+            <div id="toast{{ forloop.counter }}" class="toast align-items-center border-0 shadow-sm" 
+                role="alert" aria-live="assertive" aria-atomic="true" data-bs-delay="5000"
+                style="
+                    {% if message.tags == 'success' %}background-color: #d4edda; color: #155724;{% endif %}
+                    {% if message.tags == 'error' %}background-color: #f8d7da; color: #721c24;{% endif %}
+                    {% if message.tags == 'warning' %}background-color: #fff3cd; color: #856404;{% endif %}
+                    {% if message.tags == 'info' or not message.tags %}background-color: #d1ecf1; color: #0c5460;{% endif %}
+                ">
+                <div class="d-flex">
+                    <div class="toast-body">
+                        {{ message }}
+                    </div>
+                    <button type="button" class="btn-close me-2 m-auto" data-bs-dismiss="toast" aria-label="Cerrar"></button>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            let toasts = document.querySelectorAll('.toast');
+            toasts.forEach(toast => {
+                let bsToast = new bootstrap.Toast(toast);
+                bsToast.show();
+            });
+        });
+    </script>
+{% endif %}
 {% endblock content %}

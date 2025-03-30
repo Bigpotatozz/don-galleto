@@ -17,66 +17,92 @@ from django.contrib import messages
 #Obtener la lista de galletas para crear los lotes
 class ListaGalletasView(TemplateView):
     template_name = "lista_galletas_solicitud.html"
-    def get_context_data(self):
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
         lista = Galleta.objects.all()
-        return {
-            "lista": lista
-        }
+        
+
+        for galleta in lista:
+            if galleta.cantidad < 100: 
+                messages.warning(self.request, f"Debes preparar más galletas de la {galleta.nombre}")
+                
+            galleta.ultimo_lote_galleta = Lote_galleta.objects.filter(
+                id_galleta=galleta
+            ).order_by('-id_lote_galleta').first()
+
+        context["lista"] = lista
+        return context
 
 
-#Creación de lotes, descontando insumos del inventario
+    
+#Lista de todos los lotes de produccion
+class ListaProduccionView(TemplateView):
+    template_name = "lista_produccion.html"
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+
+        context["lista"] = Lote_galleta.objects.exclude(estatus="Completado")
+        return context
+        
+
+
+    
 class CrearLoteView(View):
     def post(self, request, id_galleta):
         galleta = get_object_or_404(Galleta, id_galleta=id_galleta)
         
-        # Verificación de insumos disponibles
-        insumos_inventario = []
-        for detalle_receta in galleta.detalle_receta_galleta.all():
-            if detalle_receta.id_insumo.cantidad < detalle_receta.cantidad:
-                insumos_inventario.append(detalle_receta.id_insumo.nombre)
-                print(f"Falta insumo: {detalle_receta.id_insumo.nombre} (Necesario: {detalle_receta.cantidad}")
-        
-        if insumos_inventario:
-            print(f"No se puede producir lote de {galleta.nombre}. Insumos faltantes: {', '.join(insumos_inventario)}") #Por ahora solo es para debugear
+        #Verificar si hay sufiente stock
+        if galleta.cantidad >= 100: 
+            messages.error(request, f"Ya hay suficiente stock ({galleta.cantidad} galletas), no se puede crear otro lote.")
             return redirect('lista_galletas_solicitud')
         
-        # Creación del lote, pero aún no sumamos al stock, porque primero se debe de ir actualizando el estatus hasta llegar a completado
-        print(f"Creando lote de {galleta.cantidad_receta} galletas de {galleta.nombre}")
+        #Verificar si la galleta tiene insumos
+        if not galleta.detalle_receta_galleta.exists():
+            messages.error(request, "Esta receta no tiene insumos.")
+            return redirect('lista_galletas_solicitud')
+        
+        #Verificar si hay suficientes insumos para la preparación de la galleta
+        insumos_faltantes = []
+        for detalle_receta in galleta.detalle_receta_galleta.all():
+            if detalle_receta.id_insumo.cantidad < detalle_receta.cantidad:
+                insumos_faltantes.append(f"{detalle_receta.id_insumo.nombre} (Faltante: {detalle_receta.cantidad - detalle_receta.id_insumo.cantidad})")
+        
+        
+        if insumos_faltantes:
+            messages.error(request, f"Insumos insuficientes: {', '.join(insumos_faltantes)}")
+            return redirect('lista_galletas_solicitud')
+        
+        #Crear im lote nuevo de galletas
         lote = Lote_galleta.objects.create(
-            cantidad_galletas=galleta.cantidad_receta,
+            cantidad_galletas=galleta.cantidad_por_lote,
             id_galleta=galleta,
             id_usuario=Usuario.objects.get(id_usuario=1),
             estatus='Pendiente',
             fecha_preparacion=now()
         )
         
-        # Descontamos los insumos utilizados para la galleta
-        print("Descontando insumos:")
+        #Descontamos insumos de la galleta 
         for detalle_receta in galleta.detalle_receta_galleta.all():
             insumo = detalle_receta.id_insumo
-            print(f"Insumos a descontar: - {insumo.nombre}: {insumo.cantidad} -> {insumo.cantidad - detalle_receta.cantidad}")
             insumo.cantidad -= detalle_receta.cantidad
             insumo.save()
-            
-        return redirect('lista_produccion')
-    
-#Lista de todos los lotes de produccion
-class ListaProduccionView(TemplateView):
-    template_name = "lista_produccion.html"
-    def get_context_data(self):
-        lista = Lote_galleta.objects.all()
-        return {
-            "lista": lista
-        }
+
+        messages.success(request, f"Lote de {galleta.cantidad_por_lote} galletas creado correctamente. Para la galleta {galleta.nombre}")
         
+        return redirect('lista_produccion')
+
 
 class CambiarEstatusLote(View):
     def post(self, request, id_lote_galleta):
         lote = get_object_or_404(Lote_galleta, id_lote_galleta=id_lote_galleta)
         nuevo_estatus = request.POST.get('estatus')
         
+        lote.estatus = nuevo_estatus
+        lote.save()
+        
         if nuevo_estatus == 'Completado':
-            # Calcular total de mermas, por ejemplo si en un lote se hacen 50 galletas y se me tiraron 10, las que debe de agregar a la cantidad de galleta son 40 
             mermas = Merma_producto.objects.filter(id_lote_galleta=lote)
             total_mermas_galleta = 0
             for merma_producto in mermas:
@@ -84,12 +110,12 @@ class CambiarEstatusLote(View):
             
             galletas_disponibles = lote.cantidad_galletas - total_mermas_galleta
             
-            # Actualizar stock de las galletas 
+            #Actualizamos stock disponible de galletas despues de agregar la merma
             galleta = lote.id_galleta
             galleta.cantidad += galletas_disponibles
             galleta.save()
             
-            print(f"Lote completado. Galletas añadidas al stock: {galletas_disponibles}")
+            messages.success(request, f"Lote {lote.id_lote_galleta} completado. Galletas añadidas al stock: {galletas_disponibles}")
 
         lote.estatus = nuevo_estatus
         lote.save()
@@ -100,18 +126,11 @@ class AgregarMermaView(FormView):
     form_class = MermaRegistrarForm
     success_url = reverse_lazy('lista_produccion')
 
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        id_lote = self.kwargs.get('id_lote_galleta')
-        lote = get_object_or_404(Lote_galleta, id_lote_galleta=id_lote)
-        context['lote'] = lote
-        return context
-
     def form_valid(self, form):
         lote = get_object_or_404(Lote_galleta, id_lote_galleta=self.kwargs['id_lote_galleta'])
         merma = form.save(commit=False)
         merma.id_lote_galleta = lote
         merma.save()
         
-        print(f"Merma registrada: {merma.cantidad} galletas del lote {lote.id_lote_galleta}")
+        messages.success(self.request, f"Merma registrada: {merma.cantidad} galletas del lote {lote.id_lote_galleta}")
         return super().form_valid(form)
