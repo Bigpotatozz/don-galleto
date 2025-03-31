@@ -12,6 +12,8 @@ from django.contrib import messages
 from usuarios.utils import asignar_permisos
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.utils.timezone import now
+import json
+import logging
 
 
 class Lista_galletas_view(TemplateView):
@@ -28,25 +30,36 @@ class AgregarAlCarrito(TemplateView):
         galleta = get_object_or_404(Galleta, id_galleta=id_galleta)
         carrito = request.session.get('carrito', {})
 
+        data = json.loads(request.body.decode('utf-8'))
+        presentacion = data.get('presentacion', 'Individual')  # Corregido para obtener la presentación desde JSON
+
+        logging.debug(f"Presentación seleccionada: {presentacion}")
+
+        multiplicador = 1
+        if presentacion == 'Caja':
+            multiplicador = 50
+        elif presentacion == 'Bolsa':
+            multiplicador = 15
+
         if str(id_galleta) in carrito:
-            carrito[str(id_galleta)]['cantidad'] += 1
+            carrito[str(id_galleta)]['cantidad'] += multiplicador
         else:
             carrito[str(id_galleta)] = {
                 'nombre': galleta.nombre,
                 'precio_venta': galleta.precio_venta,
-                'cantidad': 1
+                'cantidad': multiplicador,
+                'presentacion': presentacion,
             }
 
         request.session['carrito'] = carrito
 
-        carrito_lista = list (carrito.values())
-
+        carrito_lista = list(carrito.values())
         carrito_total = sum(item['precio_venta'] * item['cantidad'] for item in carrito_lista)
         
         historial_compras = request.session.get('historial_compras', [])
         compra = {
-            'productos': carrito_lista,  
-            'total': carrito_total        
+            'productos': carrito_lista,
+            'total': carrito_total
         }
 
         historial_compras.append(compra)
@@ -140,13 +153,12 @@ class FinalizarCompraView(LoginRequiredMixin, View):
         )
 
         for galleta_id, item in carrito.items():
-            tipo_unidad = request.POST.get(f'presentacion_{galleta_id}', 'Individual')
             Detalle_venta.objects.create(
                 id_venta=venta,
                 id_galleta_id=galleta_id,
                 cantidad=item['cantidad'],
                 precio_galleta=item['precio_venta'],
-                tipo_unidad=tipo_unidad,
+                tipo_unidad=item['presentacion'],
             )
 
         galleta = Galleta.objects.get(id_galleta= galleta_id)

@@ -2,6 +2,10 @@ document.addEventListener("DOMContentLoaded", function () {
     document.querySelectorAll(".agregar-carrito").forEach(button => {
       button.addEventListener("click", function () {
         let galletaId = this.getAttribute("data-id");
+        let presentacionSelect = document.getElementById(`presentacion_${galletaId}`);
+        console.log(`ID de galleta: ${galletaId}`);
+        let presentacion = presentacionSelect ? presentacionSelect.value : 'Individual';
+        console.log(`Presentación seleccionada: ${presentacion}`);
         fetch(`/clientes/agregar/${galletaId}/`, {
           method: "POST",
           headers: {
@@ -9,10 +13,13 @@ document.addEventListener("DOMContentLoaded", function () {
             "Content-Type": "application/json",
             "X-CSRFToken": getCookie('csrftoken')
           },
-          body: JSON.stringify({})
+          body: JSON.stringify({
+            presentacion: presentacion
+          })
         })
           .then(response => response.json())
           .then(data => {
+            console.log('Respuesta del servidor:', data);
             actualizarCarrito(data.galleta);
             Swal.fire({
               icon: 'success',

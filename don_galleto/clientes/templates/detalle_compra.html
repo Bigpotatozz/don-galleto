@@ -224,12 +224,6 @@
             readonly>
           <button type="button" class="btn-incrementar" data-id="{{ item.id }}">+</button>
         </div>
-        <label for="presentacion_{{ item.id_galleta }}">Presentación:</label>
-        <select name="presentacion_{{ item.id_galleta }}" id="presentacion_{{ item.id }}" class="form-select">
-          <option value="Caja" {% if item.presentacion=="Caja" %}selected{% endif %}>Caja</option>
-          <option value="Bolsa" {% if item.presentacion=="Bolsa" %}selected{% endif %}>Bolsa</option>
-          <option value="Individual" {% if item.presentacion=="Individual" %}selected{% endif %}>Individual</option>
-        </select>
       </li>
       {% endfor %}
     </ul>

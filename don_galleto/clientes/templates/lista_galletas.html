@@ -13,6 +13,11 @@
         <div class="card-body">
           <h5 class="card-title">{{ galleta.nombre }}</h5>
           <p class="text-muted">${{ galleta.precio_venta }}</p>
+          <select id="presentacion_{{ galleta.id_galleta }}" class="form-select">
+            <option value="Individual">Individual</option>
+            <option value="Bolsa">Bolsa</option>
+            <option value="Caja">Caja</option>
+          </select>
           <button class="btn btn-dark rounded-pill agregar-carrito" data-id="{{ galleta.id_galleta }}">+</button>
         </div>
       </div>
