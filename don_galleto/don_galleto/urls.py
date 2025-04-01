@@ -18,5 +18,5 @@ urlpatterns = [
     path('proovedores/', include('proovedores.urls')),
     path('inventario_insumos/', include('inventario_insumos.urls')),
     path('galletas/', include('galletas.urls')),
-
+    path('dashboard/', include('ventas.urls')),
 ]
