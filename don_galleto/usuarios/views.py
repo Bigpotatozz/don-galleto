@@ -9,20 +9,6 @@ from django.contrib.auth import logout
 from usuarios.models import Usuario, Logs
 from usuarios.utils import asignar_permisos, log
 from datetime import date
-
-
-class Login_view(FormView):
-    template_name = "login2.html"
-    form_class = forms.Login_form
-
-    def form_valid(self, form):
-        valido = form.autenticar(self)
-
-        if valido:
-            return redirect('home')  # Added return
-        else:
-            return redirect('registro')  # Added return
-        
         
 class Lista_usuarios_view(PermissionRequiredMixin, TemplateView):
     

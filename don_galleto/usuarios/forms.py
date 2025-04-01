@@ -2,32 +2,6 @@ from django import forms
 from django.shortcuts import redirect
 from usuarios.models import Usuario
 from django.contrib.auth.forms import UserCreationForm
-from django.contrib.auth.hashers import check_password
-
-
-
-
-
-class Login_form(forms.ModelForm):
-    
-    email = forms.CharField()
-    password = forms.CharField()
-    
-    
-    class Meta: 
-        model = Usuario
-        fields = ['email', 'password']
-    def autenticar(self):
-        usuario = Usuario.objects.get(email = self.cleaned_data['email'])
-        
-        if check_password(self.cleaned_data['password'], usuario.password):
-            
-            return True
-            
-        else: 
-            return False
-        
-
 
 
 class Registro_admin_form(UserCreationForm):
