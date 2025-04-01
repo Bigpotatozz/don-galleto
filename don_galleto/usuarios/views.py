@@ -7,11 +7,23 @@ from django.views.generic import FormView
 from django.shortcuts import redirect
 from django.contrib.auth import logout
 from usuarios.models import Usuario, Logs
-from usuarios.utils import asignar_permisos
+from usuarios.utils import asignar_permisos, log
 from datetime import date
 
 
+class Login_view(FormView):
+    template_name = "login2.html"
+    form_class = forms.Login_form
 
+    def form_valid(self, form):
+        valido = form.autenticar(self)
+
+        if valido:
+            return redirect('home')  # Added return
+        else:
+            return redirect('registro')  # Added return
+        
+        
 class Lista_usuarios_view(PermissionRequiredMixin, TemplateView):
     
     permission_required = 'usuarios.admin'
@@ -54,15 +66,8 @@ class Registro_admin_view(PermissionRequiredMixin,FormView):
         
         return super().form_valid(form)
 
-    def form_invalid(self, form):
-        
-        if self.request.user.is_authenticated:
-            Logs.objects.create(
-                fecha = date.today(),
-                tipo = "error registro usuario",
-                descripcion = "error registro de usuario",
-                id_usuario = self.request.user
-            )
+    def form_invalid(self, form):    
+        log(self, form, "Error registro usuario")
         return super().form_invalid(form)
     
     
@@ -89,7 +94,13 @@ class Edicion_usuario_view(FormView):
     def form_valid(self, form):
         id = self.kwargs.get('id')
         asignar_permisos(form, id) 
+        log(self, form, "usuario editado")
         return super().form_valid(form)
+    
+    def form_invalid(self, form):    
+        log(self, form, "Error edicion usuario")
+        return super().form_invalid(form)
+        
 
 
 def eliminar_usuario(request, id):
@@ -97,4 +108,13 @@ def eliminar_usuario(request, id):
     usuario = get_object_or_404(Usuario, id_usuario=id)
     usuario.is_active = False
     usuario.save()
+    
+    if request.user.is_authenticated:
+        Logs.objects.create(
+            fecha = date.today(),
+            tipo = "eliminacion usuario",
+            descripcion = "eliminacion de usuario",
+            id_usuario = request.user
+        )
+    
     return redirect('listado_usuarios')
