@@ -1,6 +1,8 @@
 from django import forms
+from django.shortcuts import redirect
 from usuarios.models import Usuario
 from django.contrib.auth.forms import UserCreationForm
+
 
 class Registro_admin_form(UserCreationForm):
         

@@ -7,7 +7,7 @@ from django.conf import settings
 from django.conf.urls.static import static
 import os
 from . import views
-from don_galleto.views import IndexView
+from don_galleto.views import IndexView 
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -17,6 +17,7 @@ urlpatterns = [
     path('usuarios/', include('usuarios.urls')),
     path('proovedores/', include('proovedores.urls')),
     path('inventario_insumos/', include('inventario_insumos.urls')),
+    path('produccion/', include('produccion.urls')),
     path('galletas/', include('galletas.urls')),
     path('dashboard/', include('ventas.urls')),
 ]
