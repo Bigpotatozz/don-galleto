@@ -18,10 +18,13 @@
                 <div class="card rounded-4 p-3" style="background-color: #ffffff;">
                     <div class="card-body d-flex justify-content-between align-items-center">
                         <div>
-                            <h6 class="mb-1 text-dark fw-semibold">{{ item.nombre }}</h6>
-                            <p class="mb-1 text-muted">
-                                <i class="bi bi-cash-coin"></i> ${{ item.precio_venta }} |
-                                <i class="bi bi-box-seam"></i> {{ item.cantidad }} galletas disponibles
+                            <h6 class="mb-2 text-dark fw-semibold">
+                                <i class="bi bi-cookie" style="font-size: 1.2rem;"></i> {{ item.nombre }}
+                            </h6>
+                            <p class="mb-2 text-muted" style="font-size: 1rem;">
+                                <i class="bi bi-cash-coin" style="font-size: 1.2rem;"></i> ${{ item.precio_venta }} 
+                                | 
+                                <i class="bi bi-box-seam" style="font-size: 1.2rem;"></i> {{ item.cantidad }} galletas disponibles
                             </p>
                             <p class="mb-0">
                                 {% if item.ultimo_lote_galleta %}
@@ -82,6 +85,15 @@
                 ">
                 <div class="d-flex">
                     <div class="toast-body">
+                        {% if message.tags == 'success' %}
+                            <i class="bi bi-check-circle-fill me-2"></i> 
+                        {% elif message.tags == 'error' %}
+                            <i class="bi bi-x-circle-fill me-2"></i>
+                        {% elif message.tags == 'warning' %}
+                            <i class="bi bi-exclamation-triangle-fill me-2"></i>
+                        {% elif message.tags == 'info' %}
+                            <i class="bi bi-info-circle-fill me-2"></i>
+                        {% endif %}
                         {{ message }}
                     </div>
                     <button type="button" class="btn-close me-2 m-auto" data-bs-dismiss="toast" aria-label="Cerrar"></button>
@@ -89,15 +101,5 @@
             </div>
         {% endfor %}
     </div>
-
-    <script>
-        document.addEventListener("DOMContentLoaded", function() {
-            let toasts = document.querySelectorAll('.toast');
-            toasts.forEach(toast => {
-                let bsToast = new bootstrap.Toast(toast);
-                bsToast.show();
-            });
-        });
-    </script>
 {% endif %}
 {% endblock content %}

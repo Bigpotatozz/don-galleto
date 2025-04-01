@@ -8,8 +8,9 @@
     <link rel="stylesheet" href = "{% static 'css/index.css' %}">
     <link rel="stylesheet" href = "{% static 'css/editar_usuario.css' %}">
     <link rel="stylesheet" href = "{% static 'css/agregar_usuario.css' %}">
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    <script src="{% static 'js/controlAdmin.js' %}"></script>
+    <script src="{% static 'js/alertas.js' %}"></script>
+    
+
 
   
   
@@ -39,7 +40,15 @@
                     <li class="nav-item"><a class="nav-link" href="{% url 'listado_galletas' %}">Galletas</a></li>
                     <li class="nav-item"><a class="nav-link" href="{% url 'listado_insumos' %}">Insumos</a></li>
                     <li class="nav-item"><a class="nav-link" href="{% url 'lista_galletas_solicitud' %}">Solictud de Producción</a></li>
-                    <li class="nav-item"><a class="nav-link" href="{% url 'lista_produccion' %}">Producción</a></li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        Producción
+                        </a>
+                        <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                        <li><a class="dropdown-item" href="{% url 'lista_produccion' %}">Producción</a></li>
+                        <li><a class="dropdown-item" href="{% url 'lista_lotes_caducados' %}">Lotes Caducados</a></li>
+                        </ul>
+                    </li>
                     <li class="nav-item"><a class="nav-link" href="{% url 'home' %}">Ventas</a></li>
                 {% endif %}
             {% endif %}
@@ -52,6 +61,8 @@
     <div class="content">
         {% block content %} {% endblock content %}
     </div>
+    <script src="{% static 'js/jquery-3.7.1.min.js' %}"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
     <script src="{% static '/js/bootstrap.min.js'%}"></script>
 </body>
 </html>

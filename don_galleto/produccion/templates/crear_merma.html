@@ -60,4 +60,34 @@
         </div>
     </div>
 </div>
+{% if messages %}
+    <div class="toast-container position-fixed top-0 end-0 p-3" style="z-index: 1100;">
+        {% for message in messages %}
+            <div id="toast{{ forloop.counter }}" class="toast align-items-center border-0 shadow-sm" 
+                role="alert" aria-live="assertive" aria-atomic="true" data-bs-delay="5000"
+                style="
+                    {% if message.tags == 'success' %}background-color: #d4edda; color: #155724;{% endif %}
+                    {% if message.tags == 'error' %}background-color: #f8d7da; color: #721c24;{% endif %}
+                    {% if message.tags == 'warning' %}background-color: #fff3cd; color: #856404;{% endif %}
+                    {% if message.tags == 'info' or not message.tags %}background-color: #d1ecf1; color: #0c5460;{% endif %}
+                ">
+                <div class="d-flex">
+                    <div class="toast-body">
+                        {% if message.tags == 'success' %}
+                            <i class="bi bi-check-circle-fill me-2"></i> 
+                        {% elif message.tags == 'error' %}
+                            <i class="bi bi-x-circle-fill me-2"></i>
+                        {% elif message.tags == 'warning' %}
+                            <i class="bi bi-exclamation-triangle-fill me-2"></i>
+                        {% elif message.tags == 'info' %}
+                            <i class="bi bi-info-circle-fill me-2"></i>
+                        {% endif %}
+                        {{ message }}
+                    </div>
+                    <button type="button" class="btn-close me-2 m-auto" data-bs-dismiss="toast" aria-label="Cerrar"></button>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+{% endif %}
 {% endblock %}

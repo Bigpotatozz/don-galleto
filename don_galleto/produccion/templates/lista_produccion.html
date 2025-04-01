@@ -14,67 +14,110 @@
     <div class="card-body px-1">
         <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
             {% for item in lista %}
-            <div class="col">
-                <div class="p-4 rounded-4 border">
-                    
-                    <h5 class="text-dark fw-bold">Lote #{{ item.id_lote_galleta }}</h5>
-                    <p class="text-muted"><i class="bi bi-cookie"></i> <strong>{{ item.id_galleta.nombre }}</strong></p>
-                    <p><i class="bi bi-box-seam"></i> Cantidad: <strong>{{ item.cantidad_galletas }}</strong></p>
-                    <p><i class="bi bi-calendar-check"></i> Fecha: <strong>{{ item.fecha_preparacion }}</strong></p>
-    
-                    <p class="mb-3">
-                        <span class="badge px-3 py-2 fw-semibold
-                            {% if item.estatus == 'Pendiente' %}bg-secondary
-                            {% elif item.estatus == 'Mezclando' %}bg-primary
-                            {% elif item.estatus == 'Formando' %}bg-info text-dark
-                            {% elif item.estatus == 'Horneando' %}bg-warning text-dark
-                            {% elif item.estatus == 'Enfriando' %}bg-success
-                            {% elif item.estatus == 'Completado' %}bg-dark
-                            {% else %}bg-danger{% endif %}">
-                            
-                        <i class="bi 
-                            {% if item.estatus == 'Pendiente' %}bi-hourglass-split
-                            {% elif item.estatus == 'Mezclando' %}bi-arrow-repeat
-                            {% elif item.estatus == 'Formando' %}bi-hand-index-thumb
-                            {% elif item.estatus == 'Horneando' %}bi-fire
-                            {% elif item.estatus == 'Enfriando' %}bi-snow
-                            {% elif item.estatus == 'Completado' %}bi-check-circle
-                            {% else %}bi-x-circle{% endif %}">
-                        </i> {{ item.estatus }}
-                        </span>
-                    </p>
-    
-                    <form method="post" action="{% url 'actualizar_estatus_lote' item.id_lote_galleta %}">
-                        {% csrf_token %}
-                        <div class="form-group mb-2">
-                            <label for="estatus" class="fw-bold"><i class="bi bi-pencil-square me-2"></i>Cambiar Estatus:</label>
-                            <select name="estatus" class="form-control border-0 shadow-sm" id="estatus">
-                                <option value="Pendiente" {% if item.estatus == 'Pendiente' %}selected{% endif %}>Pendiente</option>
-                                <option value="Mezclando" {% if item.estatus == 'Mezclando' %}selected{% endif %}>Mezclando</option>
-                                <option value="Formando" {% if item.estatus == 'Formando' %}selected{% endif %}>Formando</option>
-                                <option value="Horneando" {% if item.estatus == 'Horneando' %}selected{% endif %}>Horneando</option>
-                                <option value="Enfriando" {% if item.estatus == 'Enfriando' %}selected{% endif %}>Enfriando</option>
-                                <option value="Completado" {% if item.estatus == 'Completado' %}selected{% endif %}>Completado</option>
-                            </select>
-                        </div>
-                        <button type="submit" class="btn w-100 py-2" 
-                            style="background-color: #3498db; color: white; border: none; border-radius: 8px; font-weight: 500;">
-                            <i class="bi bi-check-lg me-2"></i>Guardar Estatus
-                        </button>
-                    </form>
-    
-                    <a href="{% url 'agregar_merma' item.id_lote_galleta %}" class="btn w-100 mt-2 py-2"
-                        style="background-color: #e74c3c; color: white; border: none; border-radius: 8px; font-weight: 500;">
-                        <i class="bi bi-x-circle me-2"></i>Agregar Merma
-                    </a>
+                {% if item.estatus != 'Caducado' %}
+                <div class="col">
+                    <div class="p-4 rounded-4 border">
+                        <h5 class="text-dark fw-bold">Lote #{{ item.id_lote_galleta }}</h5>
+                        <p class="text-muted"><i class="bi bi-cookie"></i> <strong>{{ item.id_galleta.nombre }}</strong></p>
+                        <p><i class="bi bi-box-seam"></i> Cantidad: <strong>{{ item.cantidad_galletas }}</strong></p>
+                        <p><i class="bi bi-calendar-check"></i> Fecha: <strong>{{ item.fecha_preparacion }}</strong></p>
+
+                        <p class="mb-3">
+                            <span class="badge px-3 py-2 fw-semibold
+                                {% if item.estatus == 'Pendiente' %}bg-secondary
+                                {% elif item.estatus == 'Mezclando' %}bg-primary
+                                {% elif item.estatus == 'Formando' %}bg-info text-dark
+                                {% elif item.estatus == 'Horneando' %}bg-warning text-dark
+                                {% elif item.estatus == 'Enfriando' %}bg-success
+                                {% elif item.estatus == 'Completado' %}bg-dark
+                                {% else %}bg-danger{% endif %}">
+                                <i class="bi 
+                                    {% if item.estatus == 'Pendiente' %}bi-hourglass-split
+                                    {% elif item.estatus == 'Mezclando' %}bi-arrow-repeat
+                                    {% elif item.estatus == 'Formando' %}bi-hand-index-thumb
+                                    {% elif item.estatus == 'Horneando' %}bi-fire
+                                    {% elif item.estatus == 'Enfriando' %}bi-snow
+                                    {% elif item.estatus == 'Completado' %}bi-check-circle
+                                    {% else %}bi-x-circle{% endif %}">
+                                </i> {{ item.estatus }}
+                            </span>
+                        </p>
+
+                        <!-- Mermas del lote -->
+                        <h6 class="text-muted">Mermas del lote:</h6>
+                        {% if item.mermas.exists %}
+                            <ul>
+                                {% for merma in item.mermas %}
+                                <li>{{ merma.cantidad }} galletas - Motivo: {{ merma.motivo }}</li>
+                                {% endfor %}
+                            </ul>
+                        {% else %}
+                            <p>No hay mermas registradas para este lote.</p>
+                        {% endif %}
+
+                        <form method="post" action="{% url 'actualizar_estatus_lote' item.id_lote_galleta %}">
+                            {% csrf_token %}
+                            <div class="form-group mb-2">
+                                <label for="estatus" class="fw-bold"><i class="bi bi-pencil-square me-2"></i>Cambiar Estatus:</label>
+                                <select name="estatus" class="form-control border-0 shadow-sm" id="estatus">
+                                    <option value="Pendiente" {% if item.estatus == 'Pendiente' %}selected{% endif %}>Pendiente</option>
+                                    <option value="Mezclando" {% if item.estatus == 'Mezclando' %}selected{% endif %}>Mezclando</option>
+                                    <option value="Formando" {% if item.estatus == 'Formando' %}selected{% endif %}>Formando</option>
+                                    <option value="Horneando" {% if item.estatus == 'Horneando' %}selected{% endif %}>Horneando</option>
+                                    <option value="Enfriando" {% if item.estatus == 'Enfriando' %}selected{% endif %}>Enfriando</option>
+                                    <option value="Completado" {% if item.estatus == 'Completado' %}selected{% endif %}>Completado</option>
+                                </select>
+                            </div>
+                            <button type="submit" class="btn w-100 py-2" 
+                                style="background-color: #3498db; color: white; border: none; border-radius: 8px; font-weight: 500;">
+                                <i class="bi bi-check-lg me-2"></i>Guardar Estatus
+                            </button>
+                        </form>
+
+                        <a href="{% url 'agregar_merma' item.id_lote_galleta %}" class="btn w-100 mt-2 py-2"
+                            style="background-color: #e74c3c; color: white; border: none; border-radius: 8px; font-weight: 500;">
+                            <i class="bi bi-x-circle me-2"></i>Agregar Merma
+                        </a>
+                    </div>
                 </div>
-            </div>
+                {% endif %}
             {% empty %}
             <div class="col-12 text-center text-muted">
                 <p>No hay lotes de producción pendientes.</p>
             </div>
             {% endfor %}
         </div>
+    </div>
 </div>
-</div>
+
+{% if messages %}
+    <div class="toast-container position-fixed top-0 end-0 p-3" style="z-index: 1100;">
+        {% for message in messages %}
+            <div id="toast{{ forloop.counter }}" class="toast align-items-center border-0 shadow-sm" 
+                role="alert" aria-live="assertive" aria-atomic="true" data-bs-delay="5000"
+                style="
+                    {% if message.tags == 'success' %}background-color: #d4edda; color: #155724;{% endif %}
+                    {% if message.tags == 'error' %}background-color: #f8d7da; color: #721c24;{% endif %}
+                    {% if message.tags == 'warning' %}background-color: #fff3cd; color: #856404;{% endif %}
+                    {% if message.tags == 'info' or not message.tags %}background-color: #d1ecf1; color: #0c5460;{% endif %}
+                ">
+                <div class="d-flex">
+                    <div class="toast-body">
+                        {% if message.tags == 'success' %}
+                            <i class="bi bi-check-circle-fill me-2"></i> 
+                        {% elif message.tags == 'error' %}
+                            <i class="bi bi-x-circle-fill me-2"></i>
+                        {% elif message.tags == 'warning' %}
+                            <i class="bi bi-exclamation-triangle-fill me-2"></i>
+                        {% elif message.tags == 'info' %}
+                            <i class="bi bi-info-circle-fill me-2"></i>
+                        {% endif %}
+                        {{ message }}
+                    </div>
+                    <button type="button" class="btn-close me-2 m-auto" data-bs-dismiss="toast" aria-label="Cerrar"></button>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+{% endif %}
 {% endblock %}
