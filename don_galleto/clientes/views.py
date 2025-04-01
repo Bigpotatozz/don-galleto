@@ -31,9 +31,11 @@ class AgregarAlCarrito(TemplateView):
         carrito = request.session.get('carrito', {})
 
         data = json.loads(request.body.decode('utf-8'))
-        presentacion = data.get('presentacion', 'Individual')  # Corregido para obtener la presentación desde JSON
+        presentacion = data.get('presentacion', 'Individual') 
+        cantidad = data.get('cantidad', 1)
 
         logging.debug(f"Presentación seleccionada: {presentacion}")
+        logging.debug(f"Cantidad seleccionada: {cantidad}")
 
         multiplicador = 1
         if presentacion == 'Caja':
@@ -41,13 +43,15 @@ class AgregarAlCarrito(TemplateView):
         elif presentacion == 'Bolsa':
             multiplicador = 15
 
+        cantidad_total = cantidad * multiplicador
+
         if str(id_galleta) in carrito:
-            carrito[str(id_galleta)]['cantidad'] += multiplicador
+            carrito[str(id_galleta)]['cantidad'] += cantidad_total
         else:
             carrito[str(id_galleta)] = {
                 'nombre': galleta.nombre,
                 'precio_venta': galleta.precio_venta,
-                'cantidad': multiplicador,
+                'cantidad': cantidad_total,
                 'presentacion': presentacion,
             }
 
@@ -109,6 +113,7 @@ class GuardarCarritoView(LoginRequiredMixin, TemplateView):
 class EliminarDelCarritoView(LoginRequiredMixin, View):
     def post(self, request, id_galleta):
         carrito = request.session.get('carrito', {})
+
         if str(id_galleta) in carrito:
             del carrito[str(id_galleta)]
             request.session['carrito'] = carrito
@@ -116,7 +121,7 @@ class EliminarDelCarritoView(LoginRequiredMixin, View):
         else:
             messages.error(request, 'Galleta no encontrada en el carrito.')
 
-        return redirect('detalle_compra')
+        return JsonResponse({'status': 'error', 'message': 'Galleta no encontrada en el carrito.'})
 
 class DetalleCompraView(LoginRequiredMixin, TemplateView):
     template_name = 'detalle_compra.html'
@@ -147,7 +152,7 @@ class FinalizarCompraView(LoginRequiredMixin, View):
         venta = Venta.objects.create(
             id_usuario=request.user,
             fecha_venta=now(),
-            estatus='En proceso',
+            estatus='Pendiente',
             tipo='pedido',
             total=total,
         )
@@ -179,7 +184,7 @@ class HistorialComprasView(LoginRequiredMixin, TemplateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        venta = Venta.objects.filter(id_usuario=self.request.user, estatus='Completada').order_by('-fecha_venta')
+        venta = Venta.objects.filter(id_usuario=self.request.user, estatus='Pendiente').order_by('-fecha_venta')
 
         ventas_con_totales = []
         for venta in venta:
@@ -190,3 +195,35 @@ class HistorialComprasView(LoginRequiredMixin, TemplateView):
             })
         context['ventas_con_totales'] = ventas_con_totales
         return context
+    
+class ActualizarCarritoView(LoginRequiredMixin, View):
+    def post(self, request, id_galleta):
+        carrito = request.session.get('carrito', {})
+        data = json.loads(request.body.decode('utf-8'))
+        accion = data.get('accion')
+
+        if str(id_galleta) in carrito:
+            if accion == 'aumentar':
+                carrito[str(id_galleta)]['cantidad'] += 1
+            elif accion == 'disminuir' and carrito[str(id_galleta)]['cantidad'] > 1:
+                carrito[str(id_galleta)]['cantidad'] -= 1
+            else:
+                return JsonResponse({'success': False, 'message': 'Acción no válida.'}, status=400)
+
+            request.session['carrito'] = carrito
+            return JsonResponse({'success': True, 'carrito': carrito})
+        else:
+            return JsonResponse({'success': False, 'message': 'Producto no encontrado en el carrito.'}, status=404)
+        
+class EliminarDelCarritoView(LoginRequiredMixin, View):
+    def post(self, request, id_galleta):
+        carrito = request.session.get('carrito', {})
+
+        if str(id_galleta) in carrito:
+            del carrito[str(id_galleta)]
+            request.session['carrito'] = carrito
+            messages.success(request, 'Galleta eliminada del carrito.')
+        else:
+            messages.error(request, 'Galleta no encontrada en el carrito.')
+
+        return JsonResponse({'status': 'error', 'message': 'Galleta no encontrada en el carrito.'})
