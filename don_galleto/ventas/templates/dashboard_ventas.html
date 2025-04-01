@@ -48,19 +48,12 @@
                 </thead>
                 <tbody>
                     {% for producto in productos_vendidos %}
-<tr>
-    <td>{{ producto.0 }}</td>  
-    <td>{{ producto.1 }}</td>  
-    <td>${{ producto.2|floatformat:2 }}</td>  
-</tr>
-{% endfor %}
-
-{% for presentacion in presentaciones_vendidas %}
-<tr>
-    <td>{{ presentacion.0 }}g</td>  
-    <td>{{ presentacion.1 }}</td>  
-</tr>
-{% endfor %}
+                    <tr>
+                        <td>{{ producto.id_galleta__nombre }}</td>
+                        <td>{{ producto.total_vendido }}</td>
+                        <td>${{ producto.total_ventas|floatformat:2 }}</td>
+                    </tr>
+                    {% endfor %}
                 </tbody>
             </table>
         </div>
@@ -75,14 +68,16 @@
             <table class="table mt-3">
                 <thead>
                     <tr>
-                        <th>Peso (g)</th>
+                        <th>Producto</th>
+                        <th>Presentación</th>
                         <th>Cantidad Vendida</th>
                     </tr>
                 </thead>
                 <tbody>
                     {% for presentacion in presentaciones_vendidas %}
                     <tr>
-                        <td>{{ presentacion.galleta__peso_unidad }}g</td>
+                        <td>{{ presentacion.id_galleta__nombre }}</td>
+                        <td>{{ presentacion.id_galleta__peso_unidad }}g</td>
                         <td>{{ presentacion.cantidad_vendida }}</td>
                     </tr>
                     {% endfor %}
@@ -113,7 +108,7 @@
     new Chart(productosCtx, {
         type: 'doughnut',
         data: {
-            labels: [{% for producto in productos_vendidos %}'{{ producto.galleta__nombre }}',{% endfor %}],
+            labels: [{% for producto in productos_vendidos %}'{{ producto.id_galleta__nombre }}',{% endfor %}],
             datasets: [{
                 data: [{% for producto in productos_vendidos %}{{ producto.total_vendido }},{% endfor %}],
                 backgroundColor: [
@@ -132,7 +127,7 @@
     new Chart(presentacionesCtx, {
         type: 'pie',
         data: {
-            labels: [{% for presentacion in presentaciones_vendidas %}'{{ presentacion.galleta__peso_unidad }}g',{% endfor %}],
+            labels: [{% for presentacion in presentaciones_vendidas %}'{{ presentacion.id_galleta__nombre }} - {{ presentacion.id_galleta__peso_unidad }}g',{% endfor %}],
             datasets: [{
                 data: [{% for presentacion in presentaciones_vendidas %}{{ presentacion.cantidad_vendida }},{% endfor %}],
                 backgroundColor: [

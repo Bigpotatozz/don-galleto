@@ -20,20 +20,21 @@ def dashboard_ventas(request):
         ventas_diarias = cursor.fetchall()
     
     productos_vendidos = Detalle_venta.objects.filter(
-        id_venta__fecha_venta__gte=fecha_limite  
+    id_venta__fecha_venta__gte=fecha_limite
     ).values(
-        'id_galleta__nombre'  
+    'id_galleta__nombre' 
     ).annotate(
-        total_vendido=Sum('cantidad'),
-        total_ventas=Sum('precio_galleta')  
+    total_vendido=Sum('cantidad'),
+    total_ventas=Sum('precio_galleta')
     ).order_by('-total_vendido')[:5]
     
     presentaciones_vendidas = Detalle_venta.objects.filter(
-        id_venta__fecha_venta__gte=fecha_limite
+    id_venta__fecha_venta__gte=fecha_limite
     ).values(
-        'id_galleta__peso_unidad'  
+    'id_galleta__nombre',  
+    'id_galleta__peso_unidad'  
     ).annotate(
-        cantidad_vendida=Sum('cantidad')
+    cantidad_vendida=Sum('cantidad')
     ).order_by('-cantidad_vendida')[:5]
     
     context = {
