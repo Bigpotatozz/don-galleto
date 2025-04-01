@@ -91,19 +91,19 @@
             <div class="mb-3">
 
                 <label class="form-label" style="color: #34495e; font-weight: 500;">
-                    <i  style="color: #95a5a6;"></i>{{ form.cantidad_por_lote.label }}
+                    <i  style="color: #95a5a6;"></i>{{ form.cantidad_receta.label }}
                   </label>
 
                 <div class="input-group">
                     <span class="input-group-text" style="background-color: #f5f7fa; border: 1px solid #ced4da; border-right: none;">
                       <i class="bi" style="color: #95a5a6;"></i>
                     </span>
-                    {{ form.cantidad_por_lote }}
+                    {{ form.cantidad_receta }}
                   </div>
 
                   {% if form.descripcion.errors %}
                   <div class="text-danger mt-2">
-                    <small><i class="bi bi-exclamation-circle me-1"></i>{{ form.cantidad_por_lote.errors.0 }}</small>
+                    <small><i class="bi bi-exclamation-circle me-1"></i>{{ form.cantidad_receta.errors.0 }}</small>
                   </div>
                 {% endif %}
             </div>
