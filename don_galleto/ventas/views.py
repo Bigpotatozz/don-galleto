@@ -16,12 +16,13 @@ class Lista_Ventas_View(TemplateView):
     
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
+        
         ventas = Venta.objects.all()
         detalles_por_venta = {venta.id_venta: [] for venta in ventas}
         totales_por_venta = {venta.id_venta: 0 for venta in ventas}
 
         with connection.cursor() as cursor:
-            cursor.execute("SELECT * FROM ticket")
+            cursor.execute("SELECT * FROM historial_ventas")
             columnas = [col[0] for col in cursor.description]
             for row in cursor.fetchall():
                 detalle = dict(zip(columnas, row))
@@ -34,19 +35,28 @@ class Lista_Ventas_View(TemplateView):
 
         context["ventas"] = ventas
         
+        pedidos = Venta.objects.filter(tipo__iexact='pedido')
+        totales_por_pedido = {pedido.id_venta: 0 for pedido in pedidos}
+
+        with connection.cursor() as cursor:
+            cursor.execute("SELECT id_venta, SUM(total) as total FROM ventas_pedido GROUP BY id_venta")
+            for row in cursor.fetchall():
+                totales_por_pedido[row[0]] = row[1]
+
+        for pedido in pedidos:
+            pedido.total = totales_por_pedido.get(pedido.id_venta, 0)
+
+        context["pedidos"] = pedidos
+        
         with connection.cursor() as cursor:
             cursor.execute("SELECT * FROM ventas_dia")
             columnas = [col[0] for col in cursor.description]
             context["ventas_dia"] = [dict(zip(columnas, row)) for row in cursor.fetchall()]
         
-        with connection.cursor() as cursor:
-            cursor.execute("SELECT * FROM ventas_pedido")
-            columnas = [col[0] for col in cursor.description]
-            context["ventas_pedido"] = [dict(zip(columnas, row)) for row in cursor.fetchall()]
-        
         return context
+
     
-class Generar_Venta_View(LoginRequiredMixin, FormView):
+class Generar_Venta_View(LoginRequiredMixin, FormView): 
     template_name = 'generar_venta.html'
     form_class = VentaRegistroForms
     success_url = reverse_lazy('lista_ventas')
@@ -54,21 +64,33 @@ class Generar_Venta_View(LoginRequiredMixin, FormView):
     def form_valid(self, form):
         venta = form.save(commit=False)
         venta.id_usuario = self.request.user
-        venta.estatus = 'activo'
+
+        if venta.tipo == 'fisica':
+            venta.estatus = 'confirmado'
+        elif venta.tipo == 'pedido':
+            venta.estatus = 'pendiente'
+        
         venta.save()
 
         galletas = self.request.POST.getlist('galletas')
         cantidades = self.request.POST.getlist('cantidad')
         presentaciones = self.request.POST.getlist('presentacion')
 
-
         for i in range(len(galletas)):
             if galletas[i] and cantidades[i] and presentaciones[i]:
                 galleta = Galleta.objects.get(id_galleta=galletas[i])
+                cantidad_vendida = float(cantidades[i])
+
+                if cantidad_vendida > galleta.cantidad:
+                    return redirect(self.success_url)  
+
+                galleta.cantidad -= cantidad_vendida
+                galleta.save()
+
                 Detalle_venta.objects.create(
                     id_venta=venta,
                     id_galleta=galleta,
-                    cantidad=cantidades[i],
+                    cantidad=cantidad_vendida,
                     precio_galleta=galleta.precio_venta,
                     presentacion=presentaciones[i]
                 )
@@ -79,6 +101,7 @@ class Generar_Venta_View(LoginRequiredMixin, FormView):
         context = super().get_context_data(**kwargs)
         context['galletas'] = Galleta.objects.all()
         return context
+
 
 def generar_ticket(request, id_venta):
     response = HttpResponse(content_type='application/pdf')
@@ -143,3 +166,15 @@ def generar_ticket(request, id_venta):
     buffer.seek(0)
     response.write(buffer.getvalue())
     return response
+
+def cambiar_estatus(request, venta_id, estatus):
+    venta = get_object_or_404(Venta, id_venta=venta_id)
+    
+    if estatus == 'confirmado':
+        venta.estatus = 'confirmado'
+    elif estatus == 'cancelado':
+        venta.estatus = 'cancelado'
+    
+    venta.save()
+
+    return redirect('lista_ventas')

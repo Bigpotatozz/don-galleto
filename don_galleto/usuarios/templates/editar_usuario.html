@@ -1,66 +1,118 @@
-{% extends "base.html" %} {% load static %} {% block content %}
-<div
-  class="container min-vh-100 d-flex align-items-center justify-content-center"
->
-  <div
-    class="card shadow-lg rounded-4 p-4"
-    style="max-width: 500px; width: 100%"
-  >
-    <h2 class="text-center mb-4">Registrar Producto</h2>
+{% extends "base.html" %}
+{% load static %}
 
-    <form method="post" enctype="multipart/form-data">
-      {% csrf_token %}
+{% block content %}
 
-      <div class="mb-3">
-        <label class="form-label">Nombre:</label>
-        {{ form.nombre }} {% if form.nombre.errors %}
-        <div class="alert alert-danger mt-2">{{ form.nombre.errors }}</div>
-        {% endif %}
+<div class="container py-5">
+  <div class="card shadow-sm rounded-3 mx-auto" style="max-width: 500px; border: none;">
+    <div class="card-body p-4">
+      <div class="text-center mb-4">
+        <h2 class="fw-bold text-dark">
+          <i class="bi bi-person-gear me-2"></i>Editar Usuario
+        </h2>
+        <p class="text-muted">Actualiza la información del usuario</p>
       </div>
 
-      <div class="mb-3">
-        <label class="form-label">telefono:</label>
-        {{ form.telefono }} {% if form.telefono.errors %}
-        <div class="alert alert-danger mt-2">{{ form.telefono.errors }}</div>
-        {% endif %}
-      </div>
+      <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
 
-      <div class="mb-3">
-        <label class="form-label">correo:</label>
-        {{ form.correo }} {% if form.correo.errors %}
-        <div class="alert alert-danger mt-2">{{ form.correo.errors }}</div>
-        {% endif %}
-      </div>
+        <div class="mb-3">
+          <label class="form-label fw-medium">Usuario</label>
+          <div class="input-group">
+            <span class="input-group-text bg-light">
+              <i class="bi bi-person text-secondary"></i>
+            </span>
+            {{ form.username }}
+          </div>
+          {% if form.username.errors %}
+            <div class="text-danger small mt-1">
+              <i class="bi bi-exclamation-circle me-1"></i>{{ form.username.errors.0 }}
+            </div>
+          {% endif %}
+        </div>
 
-      <div class="mb-3">
-        <label class="form-label">contrasenia:</label>
-        {{ form.contrasenia }} {% if form.contrasenia.errors %}
-        <div class="alert alert-danger mt-2">{{ form.contrasenia.errors }}</div>
-        {% endif %}
-      </div>
+        <div class="mb-3">
+          <label class="form-label fw-medium">Teléfono</label>
+          <div class="input-group">
+            <span class="input-group-text bg-light">
+              <i class="bi bi-telephone text-secondary"></i>
+            </span>
+            {{ form.telefono }}
+          </div>
+          {% if form.telefono.errors %}
+            <div class="text-danger small mt-1">
+              <i class="bi bi-exclamation-circle me-1"></i>{{ form.telefono.errors.0 }}
+            </div>
+          {% endif %}
+        </div>
 
-      <div class="mb-3">
-        <label class="form-label">rol:</label>
-        {{ form.rol }} {% if form.rol.errors %}
-        <div class="alert alert-danger mt-2">{{ form.rol.errors }}</div>
-        {% endif %}
-      </div>
+        <div class="mb-3">
+          <label class="form-label fw-medium">Correo electrónico</label>
+          <div class="input-group">
+            <span class="input-group-text bg-light">
+              <i class="bi bi-envelope text-secondary"></i>
+            </span>
+            {{ form.email }}
+          </div>
+          {% if form.email.errors %}
+            <div class="text-danger small mt-1">
+              <i class="bi bi-exclamation-circle me-1"></i>{{ form.email.errors.0 }}
+            </div>
+          {% endif %}
+        </div>
 
-      <button type="submit" class="btn btn-success btn-lg w-100">
-        Guardar
-      </button>
+        <div class="mb-3">
+          <label class="form-label fw-medium">Contraseña</label>
+          <div class="input-group">
+            <span class="input-group-text bg-light">
+              <i class="bi bi-lock text-secondary"></i>
+            </span>
+            {{ form.contrasenia }}
+          </div>
+          {% if form.contrasenia.errors %}
+            <div class="text-danger small mt-1">
+              <i class="bi bi-exclamation-circle me-1"></i>{{ form.contrasenia.errors.0 }}
+            </div>
+          {% endif %}
+        </div>
 
-      {% if form.errors %}
-      <div class="alert alert-danger">
-        <strong>Errores en el formulario:</strong>
-        <ul>
-          {% for field, errors in form.errors.items %} {% for error in errors %}
-          <li>{{ field }}: {{ error }}</li>
-          {% endfor %} {% endfor %}
-        </ul>
-      </div>
-      {% endif %}
-    </form>
+        <div class="mb-3">
+          <label class="form-label fw-medium">Rol</label>
+          <div class="input-group">
+            <span class="input-group-text bg-light">
+              <i class="bi bi-person-badge text-secondary"></i>
+            </span>
+            {{ form.rol }}
+          </div>
+          {% if form.rol.errors %}
+            <div class="text-danger small mt-1">
+              <i class="bi bi-exclamation-circle me-1"></i>{{ form.rol.errors.0 }}
+            </div>
+          {% endif %}
+        </div>
+
+
+        <div class="mb-4">
+          <label class="form-label fw-medium d-block">Estatus</label>
+          <div class="form-check form-switch ps-0">
+            {{ form.is_active }}
+            <label class="form-check-label ms-2" for="{{ form.is_active.id_for_label }}">
+              {% if form.is_active.value %}Activo{% else %}Inactivo{% endif %}
+            </label>
+          </div>
+          {% if form.is_active.errors %}
+            <div class="text-danger small mt-1">
+              <i class="bi bi-exclamation-circle me-1"></i>{{ form.is_active.errors.0 }}
+            </div>
+          {% endif %}
+        </div>
+
+        <button type="submit" class="btn btn-primary w-100 py-2 fw-medium">
+          <i class="bi bi-save me-2"></i>Guardar Cambios
+        </button>
+      </form>
+    </div>
   </div>
 </div>
+
 {% endblock %}

@@ -14,16 +14,10 @@ urlpatterns = [
     path('', views.IndexView.as_view(), name='home'),
     path('users/registro/', views.registro, name='registro'),
     path('users/', include("django.contrib.auth.urls")),
-    path('ventas/', include ('ventas.urls'), name = 'ventas'),
     path('usuarios/', include('usuarios.urls')),
-    
-    #path('inventario_insumos/'),
-    #path('overview/'),
-    #path('produccion/'),
-    #path('proovedores/'),
-    #path('recetas/'),
-    #path('tienda/'),
-    #path('usuarios/'),
-    #path('ventas/'),
-    #path('clientes/'),
+    path('proovedores/', include('proovedores.urls')),
+    path('inventario_insumos/', include('inventario_insumos.urls')),
+    path('galletas/', include('galletas.urls')),
+    path('ventas/', include ('ventas.urls'), name = 'ventas'),
+
 ]

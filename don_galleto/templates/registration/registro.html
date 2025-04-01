@@ -1,87 +1,110 @@
 {% extends "base.html" %}
+{% load static %}
 
 {% block content %}
-<div class="container min-vh-100 d-flex align-items-center justify-content-center">
-    <div class="card shadow-lg rounded-4 p-4" style="max-width: 500px; width: 100%;">
-        <h2 class="text-center mb-4">Registro de Usuario</h2>
+
+<div class="container min-vh-100 d-flex align-items-center justify-content-center" style="background-color: #f8f9fa;">
+    <div class="card p-4" style="width: 400px; border: none; border-radius: 12px; background-color: #ffffff; box-shadow: 0 4px 20px rgba(0,0,0,0.08);">
+        <div class="text-center mb-4">
+            <h2 style="color: #2c3e50; font-weight: 600;">Registro</h2>
+            <p style="color: #7f8c8d; margin-bottom: 0;">Completa tus datos para registrarte</p>
+        </div>
 
         <form method="POST">
             {% csrf_token %}
             
             <div class="mb-3">
-                <label class="form-label">{{ form.username.label }}</label>
-                {{ form.username }}
+                <label for="{{ form.username.id_for_label }}" class="form-label" style="color: #495057; font-weight: 500;">Usuario</label>
+                <div class="input-group">
+                    <span class="input-group-text" style="background-color: #f5f7fa; border: 1px solid #ced4da; border-right: none;">
+                        <i class="bi bi-person" style="color: #95a5a6;"></i>
+                    </span>
+                    <input type="text" name="{{ form.username.name }}" class="form-control" id="{{ form.username.id_for_label }}" 
+                           style="border: 1px solid #ced4da; border-left: none; border-radius: 0 8px 8px 0; padding: 10px; background-color: #f5f7fa;">
+                </div>
                 {% if form.username.errors %}
-                    <div class="text-danger">
-                        {% for error in form.username.errors %}
-                            <small>{{ error }}</small>
-                        {% endfor %}
+                    <div class="text-danger mt-2">
+                        <small><i class="bi bi-exclamation-circle me-1"></i> {{ form.username.errors.0 }}</small>
                     </div>
                 {% endif %}
             </div>
 
             <div class="mb-3">
-                <label class="form-label">{{ form.email.label }}</label>
-                {{ form.email }}
+                <label for="{{ form.email.id_for_label }}" class="form-label" style="color: #495057; font-weight: 500;">Email</label>
+                <div class="input-group">
+                    <span class="input-group-text" style="background-color: #f5f7fa; border: 1px solid #ced4da; border-right: none;">
+                        <i class="bi bi-envelope" style="color: #95a5a6;"></i>
+                    </span>
+                    <input type="email" name="{{ form.email.name }}" class="form-control" id="{{ form.email.id_for_label }}" 
+                           style="border: 1px solid #ced4da; border-left: none; border-radius: 0 8px 8px 0; padding: 10px; background-color: #f5f7fa;">
+                </div>
                 {% if form.email.errors %}
-                    <div class="text-danger">
-                        {% for error in form.email.errors %}
-                            <small>{{ error }}</small>
-                        {% endfor %}
+                    <div class="text-danger mt-2">
+                        <small><i class="bi bi-exclamation-circle me-1"></i> {{ form.email.errors.0 }}</small>
                     </div>
                 {% endif %}
             </div>
 
             <div class="mb-3">
-                <label class="form-label">{{ form.password1.label }}</label>
-                {{ form.password1 }}
+                <label for="{{ form.password1.id_for_label }}" class="form-label" style="color: #495057; font-weight: 500;">Contraseña</label>
+                <div class="input-group">
+                    <span class="input-group-text" style="background-color: #f5f7fa; border: 1px solid #ced4da; border-right: none;">
+                        <i class="bi bi-lock" style="color: #95a5a6;"></i>
+                    </span>
+                    <input type="password" name="{{ form.password1.name }}" class="form-control" id="{{ form.password1.id_for_label }}" 
+                           style="border: 1px solid #ced4da; border-left: none; border-radius: 0 8px 8px 0; padding: 10px; background-color: #f5f7fa;">
+                </div>
                 {% if form.password1.errors %}
-                    <div class="text-danger">
-                        {% for error in form.password1.errors %}
-                            <small>{{ error }}</small>
-                        {% endfor %}
+                    <div class="text-danger mt-2">
+                        <small><i class="bi bi-exclamation-circle me-1"></i> {{ form.password1.errors.0 }}</small>
                     </div>
                 {% endif %}
             </div>
 
             <div class="mb-3">
-                <label class="form-label">{{ form.password2.label }}</label>
-                {{ form.password2 }}
+                <label for="{{ form.password2.id_for_label }}" class="form-label" style="color: #495057; font-weight: 500;">Confirmar Contraseña</label>
+                <div class="input-group">
+                    <span class="input-group-text" style="background-color: #f5f7fa; border: 1px solid #ced4da; border-right: none;">
+                        <i class="bi bi-lock-fill" style="color: #95a5a6;"></i>
+                    </span>
+                    <input type="password" name="{{ form.password2.name }}" class="form-control" id="{{ form.password2.id_for_label }}" 
+                           style="border: 1px solid #ced4da; border-left: none; border-radius: 0 8px 8px 0; padding: 10px; background-color: #f5f7fa;">
+                </div>
                 {% if form.password2.errors %}
-                    <div class="text-danger">
-                        {% for error in form.password2.errors %}
-                            <small>{{ error }}</small>
-                        {% endfor %}
+                    <div class="text-danger mt-2">
+                        <small><i class="bi bi-exclamation-circle me-1"></i> {{ form.password2.errors.0 }}</small>
                     </div>
                 {% endif %}
             </div>
 
-            <div class="mb-3">
-                <label class="form-label">{{ form.telefono.label }}</label>
-                {{ form.telefono }}
+            <div class="mb-4">
+                <label for="{{ form.telefono.id_for_label }}" class="form-label" style="color: #495057; font-weight: 500;">Teléfono</label>
+                <div class="input-group">
+                    <span class="input-group-text" style="background-color: #f5f7fa; border: 1px solid #ced4da; border-right: none;">
+                        <i class="bi bi-telephone" style="color: #95a5a6;"></i>
+                    </span>
+                    <input type="text" name="{{ form.telefono.name }}" class="form-control" id="{{ form.telefono.id_for_label }}" 
+                           style="border: 1px solid #ced4da; border-left: none; border-radius: 0 8px 8px 0; padding: 10px; background-color: #f5f7fa;">
+                </div>
                 {% if form.telefono.errors %}
-                    <div class="text-danger">
-                        {% for error in form.telefono.errors %}
-                            <small>{{ error }}</small>
-                        {% endfor %}
+                    <div class="text-danger mt-2">
+                        <small><i class="bi bi-exclamation-circle me-1"></i> {{ form.telefono.errors.0 }}</small>
                     </div>
                 {% endif %}
             </div>
 
-            <div class="mb-3">
-                <label class="form-label">{{ form.rol.label }}</label>
-                {{ form.rol }}
-                {% if form.rol.errors %}
-                    <div class="text-danger">
-                        {% for error in form.rol.errors %}
-                            <small>{{ error }}</small>
-                        {% endfor %}
-                    </div>
-                {% endif %}
-            </div>
+            <button type="submit" class="btn w-100 py-2" 
+                    style="background-color: #3498db; color: white; border: none; border-radius: 8px; font-weight: 500;">
+                <i class="bi bi-person-plus me-2"></i> Registrarse
+            </button>
 
-            <button type="submit" class="btn btn-primary btn-lg w-100">Registrarse</button>
+            <div class="text-center mt-4 pt-3" style="border-top: 1px solid #ecf0f1;">
+                <p style="color: #bdc3c7; font-size: 0.85rem;">
+                    ¿Ya tienes cuenta? <a href="{% url 'login' %}" style="color: #3498db; text-decoration: none;">Inicia sesión</a>
+                </p>
+            </div>
         </form>
     </div>
 </div>
+
 {% endblock %}

@@ -31,12 +31,30 @@ function inicializarEventos() {
     $('.toggle-details').off('click').on('click', function() {
         const ventaId = $(this).data('venta-id');
         $(`#detalle-${ventaId}`).toggle();
-        const icon = $(this).find('i');
-        if (icon.hasClass('bi-chevron-down')) {
-            icon.removeClass('bi-chevron-down').addClass('bi-chevron-up');
-        } else {
-            icon.removeClass('bi-chevron-up').addClass('bi-chevron-down');
-        }
+        $(this).find('i').toggleClass('bi-chevron-down bi-chevron-up');
+    });
+
+    $('.confirmar-pedido').off('click').on('click', function() {
+        const $btn = $(this);
+        const ventaId = $btn.data('venta-id');
+        
+        $.ajax({
+            url: '/confirmar_pedido/' + ventaId + '/',
+            method: 'POST',
+            headers: {
+                'X-CSRFToken': $('input[name=csrfmiddlewaretoken]').val()
+            },
+            success: function() {
+                $btn.prop('disabled', true).text('Confirmado');
+                $btn.closest('tr').find('.badge')
+                    .removeClass('bg-warning bg-secondary')
+                    .addClass('bg-success')
+                    .text('completado');
+            },
+            error: function() {
+                alert('Error al confirmar el pedido');
+            }
+        });
     });
 
     $('#btnCorteCaja').off('click').on('click', function() {
@@ -57,19 +75,17 @@ function inicializarEventos() {
         
         $('#detalleCorte').empty();
         
-        // Llenar con los datos
         ventas.forEach(venta => {
-            $('#detalleCorte').append(`
-                <tr>
+            $('#detalleCorte').append(
+                `<tr>
                     <td>${venta.id}</td>
                     <td>${venta.fecha}</td>
                     <td class="text-end">$${venta.total.toFixed(2)}</td>
-                </tr>
-            `);
+                </tr>`
+            );
         });
         
         $('#totalGeneralCorte').text(`$${totalGeneral.toFixed(2)}`);
-        
         $('#corteCaja').show();
     });
 
@@ -90,9 +106,11 @@ function inicializarEventos() {
 
 /////////////
 
-
-const ajustarGramos = g => (Math.round(g/40) * 40);
-const convertirAGalletas = (cant, pres) => pres === 'gr' ? cant/40 : pres === 'paquete' ? cant*6 : cant;
+const convertirAGalletas = (cant, pres) => {
+    // Convertir a unidades y redondear a la unidad más cercana
+    let cantidad = pres === 'gr' ? cant / 40 : pres === 'paquete' ? cant * 6 : cant;
+    return Math.floor(cantidad);  // Redondeamos a la unidad más cercana
+};
 
 const mostrarAjuste = (orig, ajust) => orig !== ajust && Swal.fire({
     title: 'Ajustando peso',
@@ -101,13 +119,24 @@ const mostrarAjuste = (orig, ajust) => orig !== ajust && Swal.fire({
     confirmButtonText: 'Entendido'
 });
 
+const ajustarGramos = (cant, pesoUnidad) => {
+    const diferencia = Math.abs(cant - pesoUnidad);
+    if (diferencia >= 2) {
+        return Math.round(cant / pesoUnidad) * pesoUnidad;
+    } else {
+        return Math.floor(cant / pesoUnidad) * pesoUnidad;
+    }
+};
+
 const verificarUnidades = input => {
     const group = $(input).closest('.galleta-group');
     const pres = group.find('[name="presentacion"]').val();
     let cant = parseFloat($(input).val()) || 0;
-    
+
+    const pesoUnidad = parseFloat(group.find('[name="galletas"] option:selected').data('peso-unidad')) || 40;  // Usar 40 como valor por defecto
+
     if (pres === 'gr') {
-        const ajustado = ajustarGramos(cant);
+        const ajustado = ajustarGramos(cant, pesoUnidad);
         if (cant !== ajustado) {
             $(input).val(ajustado);
             mostrarAjuste(cant, ajustado);

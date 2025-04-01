@@ -46,9 +46,9 @@
                                     <select name="galletas" class="form-select" required>
                                         <option value="">Seleccione una galleta</option>
                                         {% for galleta in galletas %}
-                                            <option value="{{ galleta.id_galleta }}" data-price="{{ galleta.precio_venta }}">
-                                                {{ galleta.nombre }} - ${{ galleta.precio_venta }}
-                                            </option>
+                                        <option value="{{ galleta.id_galleta }}" data-price="{{ galleta.precio_venta }}" data-peso-unidad="{{ galleta.peso_unidad }}">
+                                            {{ galleta.nombre }} - ${{ galleta.precio_venta }}
+                                        </option>
                                         {% endfor %}
                                     </select>
                                 </div>
