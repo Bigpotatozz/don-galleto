@@ -11,7 +11,10 @@ from reportlab.pdfgen import canvas
 from reportlab.lib.pagesizes import letter
 from io import BytesIO
 
-class Lista_Ventas_View(TemplateView):
+class Lista_Ventas_View(PermissionRequiredMixin, TemplateView):
+    permission_required = 'usuarios.empleado'
+    def handle_no_permission(self):
+        return redirect('home')
     template_name = "lista_ventas.html"
     
     def get_context_data(self, **kwargs):
@@ -56,7 +59,11 @@ class Lista_Ventas_View(TemplateView):
         return context
 
     
-class Generar_Venta_View(LoginRequiredMixin, FormView): 
+class Generar_Venta_View(PermissionRequiredMixin, FormView):
+    permission_required = 'usuarios.empleado'
+    def handle_no_permission(self):
+        return redirect('home') 
+    
     template_name = 'generar_venta.html'
     form_class = VentaRegistroForms
     success_url = reverse_lazy('lista_ventas')
@@ -103,7 +110,7 @@ class Generar_Venta_View(LoginRequiredMixin, FormView):
         return context
 
 
-def generar_ticket(request, id_venta):
+def generar_ticket(id_venta):
     response = HttpResponse(content_type='application/pdf')
     response['Content-Disposition'] = f'inline; filename="ticket_{id_venta}.pdf"'
     buffer = BytesIO()
@@ -167,7 +174,7 @@ def generar_ticket(request, id_venta):
     response.write(buffer.getvalue())
     return response
 
-def cambiar_estatus(request, venta_id, estatus):
+def cambiar_estatus(venta_id, estatus):
     venta = get_object_or_404(Venta, id_venta=venta_id)
     
     if estatus == 'confirmado':
