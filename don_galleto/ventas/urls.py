@@ -4,5 +4,5 @@ from ventas.views import dashboard_ventas
 from django.contrib.auth.decorators import login_required
 
 urlpatterns = [
-    path('dashboard_generales/', dashboard_ventas, name='dashboard_ventas'),
+    path('dashboard_generales/', login_required(dashboard_ventas), name='dashboard_ventas'),
 ]
