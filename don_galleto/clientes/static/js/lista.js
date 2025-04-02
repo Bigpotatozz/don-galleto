@@ -139,6 +139,7 @@ function eliminarDelCarrito(galletaId) {
       if (data.success) {
         // Actualiza el carrito completo en el DOM
         actualizarCarrito(data.carrito);
+        
         Swal.fire({
           icon: 'success',
           title: 'Eliminado',
@@ -177,7 +178,7 @@ function actualizarCarrito(carrito) {
   listaCarrito.innerHTML = ""; // Limpia el contenido actual del carrito
   let total = 0;
 
-  if (carrito.length === 0) {
+  if (!carrito || carrito.length === 0) {
     listaCarrito.innerHTML = "<li class='list-group-item'>El carrito está vacío</li>";
     totalCarrito.textContent = "Total: $0.00";
     return;
