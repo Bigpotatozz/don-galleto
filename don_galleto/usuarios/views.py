@@ -9,7 +9,9 @@ from django.contrib.auth import logout
 from usuarios.models import Usuario, Logs
 from usuarios.utils import asignar_permisos, log
 from datetime import date
-        
+
+
+
 class Lista_usuarios_view(PermissionRequiredMixin, TemplateView):
     
     permission_required = 'usuarios.admin'
