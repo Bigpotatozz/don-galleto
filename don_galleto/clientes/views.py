@@ -58,6 +58,7 @@ class AgregarAlCarrito(TemplateView):
             carrito[str(id_galleta)]['cantidad'] += cantidad_total
         else:
             carrito[str(id_galleta)] = {
+                'id_galleta': galleta.id_galleta,
                 'nombre': galleta.nombre,
                 'precio_venta': galleta.precio_venta,
                 'cantidad': cantidad_total,
@@ -118,19 +119,6 @@ class GuardarCarritoView(LoginRequiredMixin, TemplateView):
         messages.success(request, 'Carrito actualizado correctamente.')
 
         return redirect('detalle_compra')  
-
-class EliminarDelCarritoView(LoginRequiredMixin, View):
-    def post(self, request, id_galleta):
-        carrito = request.session.get('carrito', {})
-
-        if str(id_galleta) in carrito:
-            del carrito[str(id_galleta)]
-            request.session['carrito'] = carrito
-            messages.success(request, 'Galleta eliminada del carrito.')
-        else:
-            messages.error(request, 'Galleta no encontrada en el carrito.')
-
-        return JsonResponse({'status': 'error', 'message': 'Galleta no encontrada en el carrito.'})
 
 class DetalleCompraView(LoginRequiredMixin, TemplateView):
     template_name = 'detalle_compra.html'
@@ -223,20 +211,22 @@ class ActualizarCarritoView(LoginRequiredMixin, View):
         else:
             return JsonResponse({'success': False, 'message': 'Producto no encontrado en el carrito.'}, status=404)
         
-class EliminarDelCarritoView(LoginRequiredMixin, View):
-    def post(self, request, id_galleta):
-        carrito = request.session.get('carrito', {})
-
-        if str(id_galleta) in carrito:
-            del carrito[str(id_galleta)]
-            request.session['carrito'] = carrito
-            messages.success(request, 'Galleta eliminada del carrito.')
-        else:
-            messages.error(request, 'Galleta no encontrada en el carrito.')
-
-        return JsonResponse({'status': 'error', 'message': 'Galleta no encontrada en el carrito.'})
 
 class ObtenerCarritoView(View):
     def get(self, request):
         carrito = request.session.get('carrito', {})
         return JsonResponse({"carrito": carrito})
+    
+class EliminarDelCarritoView(View):
+    def post(self, request, id_galleta):
+        carrito = request.session.get('carrito', {})
+        print(f"Carrito antes de eliminar: {carrito}")  # Log para depuración
+
+        if str(id_galleta) in carrito:
+            del carrito[str(id_galleta)]
+            request.session['carrito'] = carrito
+            total = sum(item['precio_venta'] * item['cantidad'] for item in carrito.values())
+            print(f"Carrito después de eliminar: {carrito}")  # Log para depuración
+            return JsonResponse({'success': True, 'total': total})
+
+        return JsonResponse({'success': False, 'message': 'Producto no encontrado en el carrito.'}, status=404)

@@ -33,13 +33,14 @@
     <h4>Carrito de Compras</h4>
     <ul id="lista-carrito">
       {% for item in carrito.values %}
-      <li
-        style="display: flex; justify-content: space-between; align-items: center; padding: 10px; background-color: #f8f9fa; border-radius: 8px; margin-bottom: 8px;">
-        <span>{{ item.nombre }} - ${{ item.precio_venta }} (x{{ item.cantidad }})</span>
+      <li class="item-carrito"
+          data-id="{{ item.id }}"
+          style="display: flex; justify-content: space-between; align-items: center; padding: 10px; background-color: #f8f9fa; border-radius: 8px; margin-bottom: 8px;">
+          <span>{{ item.id_galleta }} - {{ item.nombre }} - ${{ item.precio_venta }} (x{{ item.cantidad }})</span> 
+          <button class="btn btn-danger btn-sm eliminar-item" data-id="{{ item.id_galleta }}">Eliminar</button>
       </li>
       {% endfor %}
-    </ul>
-u
+    </ul>  
     <div id="total-carrito">Total: $0.00</div>
     <button id="btn-comprar" class="btn-dark" data-id="{{ id_venta }}">Comprar</button>
   </div>

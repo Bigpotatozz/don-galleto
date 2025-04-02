@@ -1,6 +1,5 @@
 document.addEventListener("DOMContentLoaded", function () {
   //Agregar al carrito
-  // Esta sección se encarga de manejar los eventos de agregar productos al carrito.
   document.querySelectorAll(".agregar-carrito").forEach(button => {
     button.addEventListener("click", function () {
       let galletaId = this.getAttribute("data-id");
@@ -40,22 +39,22 @@ document.addEventListener("DOMContentLoaded", function () {
   });
 
   //Aumentar, disminuir y eliminar del carrito
-  // Esta sección se encarga de manejar los eventos de aumentar, disminuir y eliminar productos del carrito.
   document.getElementById("lista-carrito").addEventListener("click", function (event) {
     let target = event.target;
+    console.log('Elemento clicado',target);
     let galletaId = target.getAttribute("data-id");
+    console.log(`ID de galleta: ${galletaId}`);
 
     if (target.classList.contains("aumentar-cantidad")) {
       actualizarCantidad(galletaId, "aumentar");
     } else if (target.classList.contains("disminuir-cantidad")) {
       actualizarCantidad(galletaId, "disminuir");
     } else if (target.classList.contains("eliminar-item")) {
-      eliminarItem(galletaId);
+      eliminarDelCarrito(galletaId);
     }
   });
 
   //Comprar
-  // Esta función se encarga de procesar la compra al hacer clic en el botón correspondiente.
   document.getElementById('btn-comprar').addEventListener('click', async function () {
     const btn = this;
     window.location.href = `/clientes/detalle_compra/`;
@@ -93,7 +92,6 @@ document.getElementById("btn-cerrar-carrito").addEventListener("click", function
 });
 
 //Actualizar cantidad de galletas en el carrito
-// Esta función se encarga de actualizar la cantidad de galletas en el carrito al hacer clic en los botones correspondientes.
 function actualizarCantidad(galletaId, accion) {
   fetch(`/clientes/actualizar/${galletaId}/`, {
     method: "POST",
@@ -118,29 +116,45 @@ function actualizarCantidad(galletaId, accion) {
     .catch(error => console.error("Error al actualizar la cantidad:", error));
 }
 
-//Eliminar item del carrito
-// Esta función se encarga de eliminar un producto del carrito de compras al hacer clic en el botón correspondiente.
-function eliminarItem(id) {
-  fetch(`/carrito/eliminar/${id}/`, {
-      method: "POST",
-      headers: {
-          "Content-Type": "application/json",
-          "X-CSRFToken": getCookie('csrftoken')
-      }
+//Eliminar producto del carrito
+function eliminarDelCarrito(galletaId) {
+  console.log(`Eliminando galleta con ID: ${galletaId}`);
+
+  fetch(`/clientes/eliminar/${galletaId}/`, {
+    method: "POST",
+    headers: {
+      "X-Requested-With": "XMLHttpRequest",
+      "Content-Type": "application/json",
+      "X-CSRFToken": getCookie('csrftoken')
+    }
   })
-      .then(response => response.json())
-      .then(data => {
-          if (data.success) {
-              location.reload();
-          } else {
-              alert(data.message || "Error al eliminar el producto.");
-          }
-      })
-      .catch(error => console.error("Error al eliminar producto:", error));
+    .then(response => {
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      return response.json();
+    })
+    .then(data => {
+      console.log('Respuesta del servidor:', data);
+      if (data.success) {
+        // Actualiza el carrito completo en el DOM
+        actualizarCarrito(data.carrito);
+        Swal.fire({
+          icon: 'success',
+          title: 'Eliminado',
+          text: `La galleta ha sido eliminada del carrito.`,
+          showConfirmButton: false,
+          timer: 1500
+        });
+        document.getElementById('total-carrito').textContent = `Total: $${data.total.toFixed(2)}`; // Actualiza el total
+      } else {
+        console.error('Error al eliminar el producto:', data.message);
+      }
+    })
+    .catch(error => console.error("Error al eliminar el producto:", error));
 }
 
 //Obtener el valor de una cookie por su nombre
-// Esta función se utiliza para obtener el valor de una cookie específica por su nombre.
 function getCookie(name) {
   let cookieValue = null;
   if (document.cookie && document.cookie !== '') {
@@ -157,18 +171,30 @@ function getCookie(name) {
 }
 
 //Actualizar el carrito en la interfaz
-// Esta función se encarga de actualizar la interfaz del carrito de compras con los elementos actuales del carrito.
 function actualizarCarrito(carrito) {
   let listaCarrito = document.getElementById("lista-carrito");
   let totalCarrito = document.getElementById("total-carrito");
-  listaCarrito.innerHTML = "";
+  listaCarrito.innerHTML = ""; // Limpia el contenido actual del carrito
   let total = 0;
+
+  if (carrito.length === 0) {
+    listaCarrito.innerHTML = "<li class='list-group-item'>El carrito está vacío</li>";
+    totalCarrito.textContent = "Total: $0.00";
+    return;
+  }
+
   carrito.forEach((item, index) => {
     let li = document.createElement("li");
-    li.textContent = `${item.nombre} - $${item.precio_venta} (x${item.cantidad})`;
+    li.className = "item-carrito";
+    li.dataset.id = item.id_galleta; 
+    li.innerHTML = `
+      <span>${item.nombre} - $${item.precio_venta} (x${item.cantidad})</span>
+      <button class="btn btn-danger btn-sm eliminar-item" data-id="${item.id_galleta}">Eliminar</button>
+    `;
     li.style.animationDelay = `${index * 0.1}s`;
     listaCarrito.appendChild(li);
     total += item.precio_venta * item.cantidad;
   });
+
   totalCarrito.textContent = `Total: $${total.toFixed(2)}`;
 }
