@@ -19,8 +19,6 @@ urlpatterns = [
     path('inventario_insumos/', include('inventario_insumos.urls')),
     path('produccion/', include('produccion.urls')),
     path('galletas/', include('galletas.urls')),
-    #path('tienda/'),
-    #path('usuarios/'),
-    #path('ventas/'),
-    #path('clientes/'),
+    path('ventas/', include ('ventas.urls'), name = 'ventas'),
+
 ]
