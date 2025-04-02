@@ -4,10 +4,159 @@
 {% block content %}
 <div class="container mt-5">
     {% if user.is_authenticated %}
-        <div class="alert alert-success text-center" role="alert">
-            <h4 class="alert-heading">Bienvenido, {{ user.username }}</h4>
+    {% load static %}
+    <div class="container-fluid">
+        <div class="container">
+            <!-- Encabezado limpio -->
+            <div class="text-center mb-5">
+                <h1 class="display-5 fw-bold text-dark mb-3">Bienvenido, {{ user.username }}</h1>
+                <p class="lead text-muted">Gestión integral para Galletas</p>
+            </div>
+    
+            <div class="row g-4 mb-5">
+                <div class="col-md-4">
+                    <div class="card h-100 border-0 shadow-sm rounded-3 overflow-hidden">
+                        <div class="card-header bg-light py-3 border-0">
+                            <div class="d-flex align-items-center justify-content-center">
+                                <i class="bi bi-compass text-success fs-1 me-3"></i>
+                                <h3 class="h4 mb-0 text- fw-bold">Misión</h3>
+                            </div>
+                        </div>
+                        <div class="card-body p-4">
+                            <p class="text-muted">
+                                Elaborar productos de repostería artesanal que conserven el auténtico sabor de la tradición familiar, 
+                                utilizando ingredientes naturales y procesos cuidadosos que garantizan calidad en cada bocado.
+                            </p>
+                            <hr class="my-3">
+                            <ul class="list-unstyled">
+                                <li class="mb-2"><i class="bi bi-check-circle-fill text-success me-2"></i> Calidad certificada</li>
+                                <li class="mb-2"><i class="bi bi-check-circle-fill text-success me-2"></i> Recetas tradicionales</li>
+                                <li><i class="bi bi-check-circle-fill text-success me-2"></i> Procesos artesanales</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+    
+                <div class="col-md-4">
+                    <div class="card h-100 border-0 shadow-sm rounded-3 overflow-hidden">
+                        <div class="card-header bg-light py-3 border-0">
+                            <div class="d-flex align-items-center justify-content-center">
+                                <i class="bi bi-eye text-primary fs-1 me-3"></i>
+                                <h3 class="h4 mb-0 text-dark fw-bold">Visión</h3>
+                            </div>
+                        </div>
+                        <div class="card-body p-4">
+                            <p class="text-muted">
+                                Convertirnos en la marca de referencia nacional en repostería artesanal, innovando con responsabilidad 
+                                y llevando nuestros productos a mercados internacionales sin perder nuestra esencia familiar.
+                            </p>
+                            <hr class="my-3">
+                            <div class="row g-2">
+                                <div class="col-6">
+                                    <div class="p-2 bg-light rounded text-center">
+                                        <i class="bi bi-globe text-dark fs-4"></i>
+                                        <p class="small mb-0">Expansión</p>
+                                    </div>
+                                </div>
+                                <div class="col-6">
+                                    <div class="p-2 bg-light rounded text-center">
+                                        <i class="bi bi-star text-dark fs-4"></i>
+                                        <p class="small mb-0">Excelencia</p>
+                                    </div>
+                                </div>
+                                <div class="col-6">
+                                    <div class="p-2 bg-light rounded text-center">
+                                        <i class="bi bi-people text-dark fs-4"></i>
+                                        <p class="small mb-0">Equipo</p>
+                                    </div>
+                                </div>
+                                <div class="col-6">
+                                    <div class="p-2 bg-light rounded text-center">
+                                        <i class="bi bi-lightbulb text-dark fs-4"></i>
+                                        <p class="small mb-0">Innovación</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+    
+                <div class="col-md-4">
+                    <div class="card h-100 border-0 shadow-sm rounded-3 overflow-hidden">
+                        <div class="card-header bg-light py-3 border-0">
+                            <div class="d-flex align-items-center justify-content-center">
+                                <i class="bi bi-heart text-danger fs-1 me-3"></i>
+                                <h3 class="h4 mb-0 text-dark fw-bold">Valores</h3>
+                            </div>
+                        </div>
+                        <div class="card-body p-4">
+                            <div class="row g-3">
+                                <div class="col-6">
+                                    <div class="text-center p-2">
+                                        <div class="icon-circle bg-light text-dark mb-2 mx-auto w-50 h-50" style="border-radius: 50%; width: 50px; height: 50px; display: flex; align-items: center; justify-content: center;">
+                                            <i class="bi bi-hand-thumbs-up fs-4"></i>
+                                        </div>
+                                        <h5 class="h6 fw-bold mb-0">Integridad</h5>
+                                        <p class="small text-muted">Honestidad en todo</p>
+                                    </div>
+                                </div>
+                                <div class="col-6">
+                                    <div class="text-center p-2">
+                                        <div class="icon-circle bg-light text-dark mb-2 mx-auto" style="border-radius: 50%; width: 50px; height: 50px; display: flex; align-items: center; justify-content: center;">
+                                            <i class="bi bi-people fs-4"></i>
+                                        </div>
+                                        <h5 class="h6 fw-bold mb-0">Tradición</h5>
+                                        <p class="small text-muted">Recetas familiares</p>
+                                    </div>
+                                </div>
+                                <div class="col-6">
+                                    <div class="text-center p-2">
+                                        <div class="icon-circle bg-light text-dark mb-2 mx-auto" style="border-radius: 50%; width: 50px; height: 50px; display: flex; align-items: center; justify-content: center;">
+                                            <i class="bi bi-lightbulb fs-4"></i>
+                                        </div>
+                                        <h5 class="h6 fw-bold mb-0">Innovación</h5>
+                                        <p class="small text-muted">Mejora continua</p>
+                                    </div>
+                                </div>
+                                <div class="col-6">
+                                    <div class="text-center p-2">
+                                        <div class="icon-circle bg-light text-dark mb-2 mx-auto">
+                                            <i class="bi bi-shield-check fs-4"></i>
+                                        </div>
+                                        <h5 class="h6 fw-bold mb-0">Calidad</h5>
+                                        <p class="small text-muted">Estándares altos</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+    
+            <div class="card border-0 bg-white rounded-lg shadow-sm mb-5">
+                <div class="card-body p-4">
+                    <div class="d-flex align-items-center">
+                        <div class="flex-shrink-0">
+                            <i class="bi bi-person-check fs-1 text-primary"></i>
+                        </div>
+                        <div class="flex-grow-1 ms-4">
+                            <h3 class="h5 fw-bold mb-1">Sesión activa</h3>
+                            <p class="text-muted mb-0">
+                                Autenticado como <strong>{{ user.username }}</strong> · 
+                                <small>{{ user.email }}</small>
+                            </p>
+                        </div>
+                        <div class="flex-shrink-0">
+                            <form id="logout-form" method="post" action="{% url 'logout' %}">
+                                {% csrf_token %}
+                                <button type="submit" class="btn btn-outline-secondary">Cerrar sesión</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
-
+    </div>
     {% else %}
         <div class="text-center">
             <h1 class="mb-4 text-primary">Bienvenido, Regístrate o inicia sesión</h1>
