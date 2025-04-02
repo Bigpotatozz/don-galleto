@@ -190,7 +190,7 @@ def dashboard_ventas(request):
     with connection.cursor() as cursor:
         cursor.execute("""
             SELECT DATE(fecha_venta) as fecha, 
-                   SUM(total) as total_ventas, 
+                    
                    COUNT(*) as cantidad_ventas
             FROM venta
             WHERE fecha_venta >= %s
