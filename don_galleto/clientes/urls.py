@@ -2,11 +2,11 @@ from django.urls import path
 from . import views
 from don_galleto.views import IndexView
 from django.contrib.auth.decorators import login_required
-from .views import  Lista_galletas_view, DetalleCompraView, AgregarAlCarrito, HistorialComprasView, EliminarDelCarritoView, ActualizarCarritoView, EliminarDelCarritoView
+from .views import  Lista_galletas_catalogo_view, DetalleCompraView, AgregarAlCarrito, HistorialComprasView, EliminarDelCarritoView, ActualizarCarritoView, EliminarDelCarritoView
 
 
 urlpatterns = [
-    path('listado_galletas/', login_required(Lista_galletas_view.as_view()), name='listado_galletas'),
+    path('catalogo_galletas/', login_required(Lista_galletas_catalogo_view.as_view()), name='catalogo_galletas'),
     path('agregar/<int:id_galleta>/', login_required(AgregarAlCarrito.as_view()), name='agregar_al_carrito'),
     path('detalle_compra/', login_required(DetalleCompraView.as_view()), name='detalle_compra'),
     path('finalizar_compra/', views.FinalizarCompraView.as_view(), name='finalizar_compra'),

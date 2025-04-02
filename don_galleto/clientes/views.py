@@ -16,7 +16,7 @@ import json
 import logging
 
 
-class Lista_galletas_view(TemplateView):
+class Lista_galletas_catalogo_view(TemplateView):
     template_name = 'lista_galletas.html'
     
     def get_context_data(self):
