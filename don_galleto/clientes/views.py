@@ -16,14 +16,23 @@ import json
 import logging
 
 
-class Lista_galletas_view(TemplateView):
-    template_name = 'lista_galletas.html'
+class Lista_galletas_catalogo_view(TemplateView):
+    template_name = 'catalogo_galletas.html'
     
     def get_context_data(self):
+        context = super().get_context_data()
         galletas = Galleta.objects.all()
-        return {
-            "galletas": galletas
-        }
+
+        carrito = self.request.session.get('carrito', {})
+        carrito_lista = list(carrito.values())
+        carrito_total = sum(item['precio_venta'] * item['cantidad'] for item in carrito_lista)
+
+        context.update ({
+            "galletas": galletas,
+            "carrito": carrito,
+            "total_carrito": carrito_total,
+        })
+        return context
     
 class AgregarAlCarrito(TemplateView):
     def post(self, request, id_galleta):
@@ -150,20 +159,19 @@ class FinalizarCompraView(LoginRequiredMixin, View):
         total = sum(item['precio_venta'] * item['cantidad'] for item in carrito.values())
 
         venta = Venta.objects.create(
-            id_usuario=request.user,
             fecha_venta=now(),
             estatus='Pendiente',
             tipo='pedido',
-            total=total,
+            id_usuario_id = request.user.id_usuario
         )
 
         for galleta_id, item in carrito.items():
             Detalle_venta.objects.create(
-                id_venta=venta,
-                id_galleta_id=galleta_id,
+                id_venta_id = venta.id_venta,
+                id_galleta_id = galleta_id,
                 cantidad=item['cantidad'],
                 precio_galleta=item['precio_venta'],
-                tipo_unidad=item['presentacion'],
+                presentacion = item['presentacion'],
             )
 
         galleta = Galleta.objects.get(id_galleta= galleta_id)
@@ -227,3 +235,8 @@ class EliminarDelCarritoView(LoginRequiredMixin, View):
             messages.error(request, 'Galleta no encontrada en el carrito.')
 
         return JsonResponse({'status': 'error', 'message': 'Galleta no encontrada en el carrito.'})
+
+class ObtenerCarritoView(View):
+    def get(self, request):
+        carrito = request.session.get('carrito', {})
+        return JsonResponse({"carrito": carrito})

@@ -23,4 +23,4 @@ class VentaRegistroForms(forms.ModelForm):
         widgets = {
             'fecha_venta': forms.DateInput(attrs={'class': 'form-control', 'type': 'date'}),
             'tipo': forms.Select(attrs={'class': 'form-control'}, choices=[('fisica', 'Física'), ('pedido', 'Pedido')]),
-            }
+        }
