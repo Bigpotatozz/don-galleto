@@ -1,0 +1,127 @@
+.table-responsive {
+    overflow-x: auto;
+}
+.table {
+    width: 100%;
+    margin-bottom: 1rem;
+    color: #212529;
+}
+.table th, .table td {
+    padding: 0.75rem;
+    vertical-align: top;
+    border-top: 1px solid #dee2e6;
+}
+.table thead th {
+    vertical-align: bottom;
+    border-bottom: 2px solid #dee2e6;
+}
+.table-bordered {
+    border: 1px solid #dee2e6;
+}
+.table-bordered th, .table-bordered td {
+    border: 1px solid #dee2e6;
+}
+.table-striped tbody tr:nth-of-type(odd) {
+    background-color: rgba(0, 0, 0, 0.05);
+}
+.table-dark {
+    color: #fff;
+    background-color: #343a40;
+}
+.table-dark th, .table-dark td, .table-dark thead th {
+    border-color: #454d55;
+}
+.shadow-sm {
+    box-shadow: 0 .125rem .25rem rgba(0,0,0,.075);
+}
+.bg-light {
+    background-color: #f8f9fa!important;
+}
+.table-secondary {
+    background-color: #d6d8db;
+}
+.alert {
+    position: relative;
+    padding: 0.75rem 1.25rem;
+    margin-bottom: 1rem;
+    border: 1px solid transparent;
+    border-radius: 0.25rem;
+}
+.alert-warning {
+    color: #856404;
+    background-color: #fff3cd;
+    border-color: #ffeeba;
+}
+.alert-info {
+    color: #0c5460;
+    background-color: #d1ecf1;
+    border-color: #bee5eb;
+}
+.table-sm th, .table-sm td {
+    padding: 0.3rem;
+}
+#corteCaja {
+    background-color: #f8f9fa;
+    border: 1px solid #dee2e6;
+}
+.btn-sm {
+    padding: 0.25rem 0.5rem;
+    font-size: 0.875rem;
+    line-height: 1.5;
+    border-radius: 0.2rem;
+}
+.bi {
+    margin-right: 5px;
+}
+.detalle-ticket {
+    background-color: #f8f9fa;
+    padding: 15px;
+    border-radius: 5px;
+    margin-top: 10px;
+}
+.btn-ticket {
+    margin-top: 10px;
+}
+
+.form-section {
+    background-color: #f8f9fa;
+    border-radius: 8px;
+    padding: 20px;
+    margin-bottom: 20px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+.galleta-group {
+    transition: all 0.3s ease;
+    position: relative;
+}
+.galleta-group:hover {
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+}
+.remove-galleta {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    cursor: pointer;
+    color: #dc3545;
+}
+.btn-confirm {
+    margin-bottom: 20px;
+}
+.total-display {
+    font-size: 1.2rem;
+    font-weight: bold;
+    padding: 10px;
+    background-color: #e9ecef;
+    border-radius: 5px;
+    margin-bottom: 20px;
+}
+.form-title {
+    color: #495057;
+    border-bottom: 2px solid #dee2e6;
+    padding-bottom: 10px;
+    margin-bottom: 20px;
+}
+.producto-confirmado {
+    background-color: #e8f5e9;
+    border-left: 4px solid #28a745;
+}
