@@ -42,7 +42,8 @@
                 {% endif %}
 
                 {% if perms.usuarios.cliente%}
-                    <li class="nav-item"><a class="nav-link" href="{% url 'catalogo_galletas' %}">catalogo</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{% url 'catalogo_galletas' %}">Catalogo</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{% url 'historial_compras' %}">Historial de compras</a></li>
                 {% endif %}
             {% endif %}
     </nav>

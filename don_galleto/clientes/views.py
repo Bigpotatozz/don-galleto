@@ -17,7 +17,7 @@ import logging
 
 
 class Lista_galletas_catalogo_view(TemplateView):
-    template_name = 'lista_galletas.html'
+    template_name = 'catalogo_galletas.html'
     
     def get_context_data(self):
         galletas = Galleta.objects.all()
@@ -150,20 +150,19 @@ class FinalizarCompraView(LoginRequiredMixin, View):
         total = sum(item['precio_venta'] * item['cantidad'] for item in carrito.values())
 
         venta = Venta.objects.create(
-            id_usuario=request.user,
             fecha_venta=now(),
             estatus='Pendiente',
             tipo='pedido',
-            total=total,
+            id_usuario_id = request.user.id_usuario
         )
 
         for galleta_id, item in carrito.items():
             Detalle_venta.objects.create(
-                id_venta=venta,
-                id_galleta_id=galleta_id,
+                id_venta_id = venta.id_venta,
+                id_galleta_id = galleta_id,
                 cantidad=item['cantidad'],
                 precio_galleta=item['precio_venta'],
-                tipo_unidad=item['presentacion'],
+                presentacion = item['presentacion'],
             )
 
         galleta = Galleta.objects.get(id_galleta= galleta_id)
