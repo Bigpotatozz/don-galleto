@@ -139,7 +139,7 @@ function eliminarDelCarrito(galletaId) {
       if (data.success) {
         // Actualiza el carrito completo en el DOM
         actualizarCarrito(data.carrito);
-        
+
         Swal.fire({
           icon: 'success',
           title: 'Eliminado',
@@ -199,3 +199,5 @@ function actualizarCarrito(carrito) {
 
   totalCarrito.textContent = `Total: $${total.toFixed(2)}`;
 }
+
+//Prueba para hacer push
