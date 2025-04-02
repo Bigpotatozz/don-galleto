@@ -18,7 +18,8 @@
             <option value="Bolsa">Bolsa</option>
             <option value="Caja">Caja</option>
           </select>
-          <input type="number" id="cantidad_{{ galleta.id_galleta }}" class="form-control" value="1" min="1" style="width: 60px; margin: 10px auto;">
+          <input type="number" id="cantidad_{{ galleta.id_galleta }}" class="form-control" value="1" min="1"
+            style="width: 60px; margin: 10px auto;">
           <button class="btn btn-dark rounded-pill agregar-carrito" data-id="{{ galleta.id_galleta }}">+</button>
         </div>
       </div>
@@ -31,12 +32,14 @@
     <button id="btn-cerrar-carrito" class="btn btn-danger">&times;</button>
     <h4>Carrito de Compras</h4>
     <ul id="lista-carrito">
-      {% for item in carrito %}
-      <li style="display: flex; justify-content: space-between; align-items: center; padding: 10px; background-color: #f8f9fa; border-radius: 8px; margin-bottom: 8px;">
+      {% for item in carrito.values %}
+      <li
+        style="display: flex; justify-content: space-between; align-items: center; padding: 10px; background-color: #f8f9fa; border-radius: 8px; margin-bottom: 8px;">
         <span>{{ item.nombre }} - ${{ item.precio_venta }} (x{{ item.cantidad }})</span>
       </li>
       {% endfor %}
     </ul>
+u
     <div id="total-carrito">Total: $0.00</div>
     <button id="btn-comprar" class="btn-dark" data-id="{{ id_venta }}">Comprar</button>
   </div>

@@ -172,5 +172,3 @@ function actualizarCarrito(carrito) {
   });
   totalCarrito.textContent = `Total: $${total.toFixed(2)}`;
 }
-
-
