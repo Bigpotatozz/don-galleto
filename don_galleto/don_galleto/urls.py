@@ -15,6 +15,7 @@ urlpatterns = [
     path('users/registro/', views.registro, name='registro'),
     path('users/', include("django.contrib.auth.urls")),
     path('usuarios/', include('usuarios.urls')),
+    path('clientes/', include('clientes.urls')),
     path('proovedores/', include('proovedores.urls')),
     path('inventario_insumos/', include('inventario_insumos.urls')),
     path('produccion/', include('produccion.urls')),

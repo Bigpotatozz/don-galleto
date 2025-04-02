@@ -47,7 +47,8 @@ INSTALLED_APPS = [
     'proovedores',
     'tienda',
     'usuarios',
-    'ventas'
+    'ventas',
+    'clientes',
 ]
 
 MIDDLEWARE = [
@@ -89,7 +90,7 @@ DATABASES = {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'pfdg3',
         'USER': 'root',
-        'PASSWORD': '1924',
+        'PASSWORD': 'admin',
         'HOST': 'localhost',
         'PORT': '3306',
     }
@@ -152,5 +153,5 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 LOGIN_URL = '/cuentas/login/'
 LOGIN_REDIRECT_URL = 'home'
-LOGOUT_REDIRECT_URL = 'home'
+LOGOUT_REDIRECT_URL = 'login'
 AUTH_USER_MODEL = 'usuarios.Usuario'
