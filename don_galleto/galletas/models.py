@@ -35,7 +35,7 @@ class Galleta(models.Model):
 class Detalle_receta(models.Model):
     id_detalle_receta = models.AutoField(primary_key=True)
     cantidad = models.FloatField(
-        validators=[MinValueValidator(1)]
+        validators=[MinValueValidator(0)]
     )
     id_insumo = models.ForeignKey(Insumo, on_delete=models.CASCADE, null=False, related_name='detalle_receta_insumo')
     id_galleta = models.ForeignKey(Galleta, on_delete=models.CASCADE, null=False, related_name='detalle_receta_galleta')

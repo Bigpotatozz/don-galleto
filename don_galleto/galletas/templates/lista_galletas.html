@@ -33,6 +33,9 @@
               <th style="color: #495057; font-weight: 500;">
                 <i class="bi bi-box-seam me-1"></i>Cantidad
               </th>
+              <th style="color: #495057; font-weight: 500;">
+                <i class="bi bi-gear me-1"></i>Acciones
+              </th>
             </tr>
           </thead>
           <tbody>
@@ -46,10 +49,15 @@
                   {{ galleta.cantidad }}
                 </span>
               </td>
+              <td>
+                <a href="#" class="btn btn-sm btn-outline-primary">
+                  <i class="bi bi-pencil-square me-1"></i>Editar
+                </a>
+              </td>
             </tr>
             {% empty %}
             <tr>
-              <td colspan="5" class="text-center py-4" style="color: #6c757d;">
+              <td colspan="6" class="text-center py-4" style="color: #6c757d;">
                 <i class="bi bi-exclamation-circle me-2"></i>No hay galletas registradas
               </td>
             </tr>
@@ -60,6 +68,4 @@
     </div>
   </div>
 </div>
-
-
 {% endblock %}

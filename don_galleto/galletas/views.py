@@ -52,7 +52,4 @@ class Registrar_galleta_view(PermissionRequiredMixin, FormView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         
-        contador = [1, 2, 3, 4, 5, 6, 7, 8]
-        context['contador'] = contador
-        
         return context
