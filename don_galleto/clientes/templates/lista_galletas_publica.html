@@ -1,0 +1,46 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container mt-4">
+    <h2 class="mb-4">Nuestras Deliciosas Galletas</h2>
+    
+    <div class="row">
+        {% for galleta in galletas %}
+        <div class="col-md-4 mb-4">
+            <div class="card h-100">
+                <div class="card-body">
+                    <h5 class="card-title">{{ galleta.nombre }}</h5>
+                    <p class="card-text">{{ galleta.descripcion }}</p>
+                    <ul class="list-group list-group-flush">
+                        <li class="list-group-item">
+                            <strong>Precio:</strong> ${{ galleta.precio_venta }}
+                        </li>
+                        <li class="list-group-item">
+                            <strong>Disponibles:</strong> {{ galleta.cantidad }}
+                        </li>
+                        <li class="list-group-item">
+                            <strong>Peso por unidad:</strong> {{ galleta.peso_unidad }}g
+                        </li>
+                    </ul>
+                </div>
+                <div class="card-footer bg-white">
+                    {% if user.is_authenticated and perms.usuarios.cliente %}
+                        <a href="{% url 'agregar_al_carrito' galleta.id_galleta %}" class="btn btn-primary">
+                            Agregar al carrito
+                        </a>
+                    {% elif not user.is_authenticated %}
+                        <a href="{% url 'login' %}?next={% url 'galletas_disponibles' %}" class="btn btn-outline-primary">
+                            Inicia sesión para comprar
+                        </a>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        {% empty %}
+        <div class="col-12">
+            <div class="alert alert-info">No hay galletas disponibles en este momento.</div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

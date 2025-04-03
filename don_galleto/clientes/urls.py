@@ -1,16 +1,12 @@
 from django.urls import path
-from . import views
-from don_galleto.views import IndexView
+from .views import (GalletasPublicasView,CarritoView,AgregarAlCarritoView,EliminarDelCarritoView,ConfirmarPedidoView,HistorialPedidosView)
 from django.contrib.auth.decorators import login_required
-from .views import  Lista_galletas_catalogo_view, DetalleCompraView, AgregarAlCarrito, HistorialComprasView, EliminarDelCarritoView, ActualizarCarritoView, EliminarDelCarritoView
-
 
 urlpatterns = [
-    path('catalogo_galletas/', login_required(Lista_galletas_catalogo_view.as_view()), name='catalogo_galletas'),
-    path('agregar/<int:id_galleta>/', login_required(AgregarAlCarrito.as_view()), name='agregar_al_carrito'),
-    path('detalle_compra/', login_required(DetalleCompraView.as_view()), name='detalle_compra'),
-    path('finalizar_compra/', views.FinalizarCompraView.as_view(), name='finalizar_compra'),
-    path('historial_compras/', login_required(HistorialComprasView.as_view()), name='historial_compras'),
-    path('actualizar/<int:id_galleta>/', login_required(ActualizarCarritoView.as_view()), name='actualizar_carrito'),
-    path('eliminar/<int:id_galleta>/', EliminarDelCarritoView.as_view(), name='eliminar_carrito'),
+        path('galletas/', GalletasPublicasView.as_view(), name='galletas_disponibles'),
+    path('carrito/', login_required(CarritoView.as_view()), name='ver_carrito'),
+    path('agregar/<int:galleta_id>/', login_required(AgregarAlCarritoView.as_view()), name='agregar_al_carrito'),
+    path('eliminar/<int:pk>/', login_required(EliminarDelCarritoView.as_view()), name='eliminar_del_carrito'),
+    path('confirmar-pedido/', login_required(ConfirmarPedidoView.as_view()), name='confirmar_pedido'),
+    path('historial/', login_required(HistorialPedidosView.as_view()), name='historial_pedidos'),
 ]

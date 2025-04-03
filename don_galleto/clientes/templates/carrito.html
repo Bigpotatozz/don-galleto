@@ -1,0 +1,51 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h2>Tu Carrito de Compras</h2>
+{% if object.items.all %}
+<table class="table">
+    <thead>
+        <tr>
+            <th>Galleta</th>
+            <th>Cantidad</th>
+            <th>Presentación</th>
+            <th>Precio Unitario</th>
+            <th>Total</th>
+            <th>Fecha Recoger</th>
+            <th>Acciones</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for item in object.items.all %}
+        <tr>
+            <td>{{ item.galleta.nombre }}</td>
+            <td>{{ item.cantidad }}</td>
+            <td>{{ item.get_presentacion_display }}</td>
+            <td>${{ item.galleta.precio_venta }}</td>
+            <td>${{ item.galleta.precio_venta|mul:item.cantidad }}</td>
+            <td>{{ item.fecha_recoger }}</td>
+            <td>
+                <a href="{% url 'eliminar_del_carrito' item.id %}" class="btn btn-danger btn-sm">Eliminar</a>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+    <tfoot>
+        <tr>
+            <td colspan="4"><strong>Total</strong></td>
+            <td><strong>${{ total }}</strong></td>
+            <td></td>
+        </tr>
+    </tfoot>
+</table>
+
+<form method="post" action="{% url 'confirmar_pedido' %}">
+    {% csrf_token %}
+    {{ confirmar_form.as_p }}
+    <button type="submit" class="btn btn-success">Confirmar Pedido</button>
+</form>
+{% else %}
+<p>Tu carrito está vacío.</p>
+<a href="{% url 'lista_galletas' %}" class="btn btn-primary">Ver Galletas</a>
+{% endif %}
+{% endblock %}

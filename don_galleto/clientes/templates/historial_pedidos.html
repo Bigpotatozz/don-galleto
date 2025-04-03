@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h2>Historial de Pedidos</h2>
+<table class="table">
+    <thead>
+        <tr>
+            <th>N° Pedido</th>
+            <th>Fecha Pedido</th>
+            <th>Fecha Recoger</th>
+            <th>Estado</th>
+            <th>Total</th>
+            <th>Acciones</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for pedido in pedidos %}
+        <tr>
+            <td>{{ pedido.id_pedido }}</td>
+            <td>{{ pedido.fecha_pedido }}</td>
+            <td>{{ pedido.fecha_recoger }}</td>
+            <td>{{ pedido.get_estado_display }}</td>
+            <td>${{ pedido.total }}</td>
+            <td>
+                <a href="{% url 'detalle_pedido' pedido.id %}" class="btn btn-info btn-sm">Ver Detalle</a>
+            </td>
+        </tr>
+        {% empty %}
+        <tr>
+            <td colspan="6">No tienes pedidos registrados.</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

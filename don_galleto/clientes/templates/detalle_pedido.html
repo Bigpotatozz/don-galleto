@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h2>Detalle del Pedido #{{ pedido.id_pedido }}</h2>
+<p><strong>Estado:</strong> {{ pedido.get_estado_display }}</p>
+<p><strong>Fecha del pedido:</strong> {{ pedido.fecha_pedido }}</p>
+<p><strong>Fecha de recogida:</strong> {{ pedido.fecha_recoger }}</p>
+<p><strong>Total:</strong> ${{ pedido.total }}</p>
+
+<h3>Productos</h3>
+<table class="table">
+    <thead>
+        <tr>
+            <th>Galleta</th>
+            <th>Cantidad</th>
+            <th>Presentación</th>
+            <th>Precio Unitario</th>
+            <th>Total</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for item in pedido.carrito.items.all %}
+        <tr>
+            <td>{{ item.galleta.nombre }}</td>
+            <td>{{ item.cantidad }}</td>
+            <td>{{ item.get_presentacion_display }}</td>
+            <td>${{ item.galleta.precio_venta }}</td>
+            <td>${{ item.galleta.precio_venta|mul:item.cantidad }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+<a href="{% url 'historial_pedidos' %}" class="btn btn-secondary">Volver al historial</a>
+{% endblock %}
