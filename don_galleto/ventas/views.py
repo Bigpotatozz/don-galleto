@@ -43,9 +43,9 @@ class Lista_Ventas_View(PermissionRequiredMixin, TemplateView):
         totales_por_pedido = {pedido.id_venta: 0 for pedido in pedidos}
 
         with connection.cursor() as cursor:
-            cursor.execute("SELECT id_venta, fecha_venta, SUM(total) as total FROM ventas_pedido GROUP BY id_venta")
+            cursor.execute("SELECT id_venta, SUM(total) as total FROM ventas_pedido GROUP BY id_venta")
             for row in cursor.fetchall():
-                totales_por_pedido[row[0]] = row[1]
+                totales_por_pedido[row[0]] = row[1]  # row[0] = id_venta, row[1] = total
 
         for pedido in pedidos:
             pedido.total = totales_por_pedido.get(pedido.id_venta, 0)
