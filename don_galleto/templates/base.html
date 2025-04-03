@@ -5,6 +5,10 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}" />
+    <link rel="stylesheet" href = "{% static 'css/index.css' %}">
+    <link rel="stylesheet" href = "{% static 'css/editar_usuario.css' %}">
+    <link rel="stylesheet" href = "{% static 'css/agregar_usuario.css' %}">
+  
   
     
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
@@ -39,7 +43,6 @@
                 {% endif %}
 
                 {% if perms.usuarios.cliente%}
-                    <li class="nav-item"><a class="nav-link" href="{% url 'listado_galletas' %}">Catalogo</a></li>
                     <li class="nav-item"><a class="nav-link" href="{% url 'historial_pedidos' %}">Historial de compras</a></li>
                 {% endif %}
             {% endif %}
@@ -47,5 +50,6 @@
     <div class="content">
         {% block content %} {% endblock content %}
     </div>
+    <script src="{% static '/js/bootstrap.min.js'%}"></script>
 </body>
 </html>
