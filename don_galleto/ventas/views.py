@@ -6,6 +6,7 @@ from ventas.models import Venta, Galleta, Detalle_venta
 from ventas.forms import VentaRegistroForms 
 from django.db import connection
 import datetime
+from datetime import timedelta
 from django.http import HttpResponse
 from reportlab.pdfgen import canvas
 from reportlab.lib.pagesizes import letter
@@ -57,13 +58,13 @@ class Lista_Ventas_View(PermissionRequiredMixin, TemplateView):
             context["ventas_dia"] = [dict(zip(columnas, row)) for row in cursor.fetchall()]
         
         return context
-
     
 class Generar_Venta_View(PermissionRequiredMixin, FormView):
     permission_required = 'usuarios.empleado'
+
     def handle_no_permission(self):
-        return redirect('home') 
-    
+        return redirect('home')
+
     template_name = 'generar_venta.html'
     form_class = VentaRegistroForms
     success_url = reverse_lazy('lista_ventas')
@@ -76,20 +77,35 @@ class Generar_Venta_View(PermissionRequiredMixin, FormView):
             venta.estatus = 'confirmado'
         elif venta.tipo == 'pedido':
             venta.estatus = 'pendiente'
-        
-        venta.save()
 
         galletas = self.request.POST.getlist('galletas')
         cantidades = self.request.POST.getlist('cantidad')
-        presentaciones = self.request.POST.getlist('presentacion')
 
         for i in range(len(galletas)):
-            if galletas[i] and cantidades[i] and presentaciones[i]:
+            if galletas[i] and cantidades[i]:
+                try:
+                    cantidad_vendida = float(cantidades[i])
+                    if cantidad_vendida <= 0:
+                        form.add_error(None, f"La cantidad de {Galleta.objects.get(id_galleta=galletas[i]).nombre} debe ser mayor a 0.")
+                        return self.form_invalid(form)
+                except ValueError:
+                    form.add_error(None, "Cantidad inválida ingresada.")
+                    return self.form_invalid(form)
+
+        for i in range(len(galletas)):
+            if galletas[i] and cantidades[i]:
                 galleta = Galleta.objects.get(id_galleta=galletas[i])
                 cantidad_vendida = float(cantidades[i])
 
                 if cantidad_vendida > galleta.cantidad:
-                    return redirect(self.success_url)  
+                    form.add_error(None, f"No hay suficiente inventario para {galleta.nombre}. Solo quedan {galleta.cantidad} unidades.")
+                    return self.form_invalid(form)
+
+        venta.save()
+        for i in range(len(galletas)):
+            if galletas[i] and cantidades[i]:
+                galleta = Galleta.objects.get(id_galleta=galletas[i])
+                cantidad_vendida = float(cantidades[i])
 
                 galleta.cantidad -= cantidad_vendida
                 galleta.save()
@@ -98,8 +114,7 @@ class Generar_Venta_View(PermissionRequiredMixin, FormView):
                     id_venta=venta,
                     id_galleta=galleta,
                     cantidad=cantidad_vendida,
-                    precio_galleta=galleta.precio_venta,
-                    presentacion=presentaciones[i]
+                    precio_galleta=galleta.precio_venta
                 )
 
         return super().form_valid(form)
@@ -109,8 +124,7 @@ class Generar_Venta_View(PermissionRequiredMixin, FormView):
         context['galletas'] = Galleta.objects.all()
         return context
 
-
-def generar_ticket(id_venta):
+def generar_ticket(request, id_venta):
     response = HttpResponse(content_type='application/pdf')
     response['Content-Disposition'] = f'inline; filename="ticket_{id_venta}.pdf"'
     buffer = BytesIO()
@@ -174,7 +188,7 @@ def generar_ticket(id_venta):
     response.write(buffer.getvalue())
     return response
 
-def cambiar_estatus(venta_id, estatus):
+def cambiar_estatus(request, venta_id, estatus):
     venta = get_object_or_404(Venta, id_venta=venta_id)
     
     if estatus == 'confirmado':
@@ -183,5 +197,52 @@ def cambiar_estatus(venta_id, estatus):
         venta.estatus = 'cancelado'
     
     venta.save()
-
     return redirect('lista_ventas')
+
+from django.shortcuts import render
+from django.db import connection
+from django.db.models import Sum, Count
+#from datetime import datetime, timedelta
+from .models import Venta, Detalle_venta, Galleta
+
+def dashboard_ventas(request):
+    fecha_limite = datetime.now() - timedelta(days=7)
+    
+    with connection.cursor() as cursor:
+        cursor.execute("""
+            SELECT DATE(v.fecha_venta) as fecha, 
+                   SUM(dv.cantidad * dv.precio_galleta) as total_ventas, 
+                   COUNT(DISTINCT v.id_venta) as cantidad_ventas
+            FROM venta v
+            JOIN detalle_venta dv ON v.id_venta = dv.id_venta_id
+            WHERE v.fecha_venta >= %s
+            GROUP BY DATE(v.fecha_venta)
+            ORDER BY fecha DESC
+        """, [fecha_limite])
+        ventas_diarias = cursor.fetchall()
+    
+    productos_vendidos = Detalle_venta.objects.filter(
+        id_venta__fecha_venta__gte=fecha_limite
+    ).values(
+        'id_galleta__nombre' 
+    ).annotate(
+        total_vendido=Sum('cantidad'),
+        total_ventas=Sum('precio_galleta')
+    ).order_by('-total_vendido')[:5]
+    
+    presentaciones_vendidas = Detalle_venta.objects.filter(
+        id_venta__fecha_venta__gte=fecha_limite
+    ).values(
+        'id_galleta__nombre',  
+        'id_galleta__peso_unidad'  
+    ).annotate(
+        cantidad_vendida=Sum('cantidad')
+    ).order_by('-cantidad_vendida')[:5]
+    
+    context = {
+        'ventas_diarias': ventas_diarias,
+        'productos_vendidos': productos_vendidos,
+        'presentaciones_vendidas': presentaciones_vendidas,
+    }
+    
+    return render(request, 'dashboard_ventas.html', context)

@@ -1,0 +1,97 @@
+{% extends "base.html" %}
+
+{% block content %}
+<style>
+.registro-container {
+    max-width: 500px;
+    margin: 3rem auto;
+    background: linear-gradient(135deg, #f3f4f6, #ffffff);
+    padding: 2rem;
+    border-radius: 1rem;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    animation: fadeIn 0.8s ease-in-out;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(-10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.registro-container h1 {
+    color: #35424a;
+    margin-bottom: 1rem;
+    font-size: 2rem;
+    font-weight: bold;
+    text-transform: uppercase;
+}
+
+.registro-container form {
+    display: flex;
+    flex-direction: column;
+    gap: 1.2rem;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    text-align: left;
+    transition: all 0.3s ease;
+}
+
+.form-group label {
+    font-weight: bold;
+    margin-bottom: 0.5rem;
+    color: #35424a;
+    font-size: 1rem;
+}
+
+.form-group input {
+    padding: 0.8rem;
+    border-radius: 0.5rem;
+    border: 1px solid #ced4da;
+    font-size: 1rem;
+    outline: none;
+    transition: all 0.3s ease;
+    box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.form-group input:focus {
+    border-color: #35424a;
+    box-shadow: 0 0 8px rgba(53, 66, 74, 0.2);
+}
+
+.registro-container button {
+    background: linear-gradient(135deg, #35424a, #1f2a30);
+    color: #fff;
+    border: none;
+    padding: 0.8rem;
+    border-radius: 0.5rem;
+    font-size: 1.1rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-weight: bold;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.registro-container button:hover {
+    background: linear-gradient(135deg, #1f2a30, #0e161b);
+    transform: scale(1.05);
+    box-shadow: 0 6px 14px rgba(0, 0, 0, 0.15);
+}
+</style>
+
+<div class="registro-container">
+    <h1>Agregar Cliente</h1>
+    <form method="post">
+        {% csrf_token %}
+        {% for field in form %}
+            <div class="form-group">
+                {{ field.label_tag }}
+                {{ field }}
+            </div>
+        {% endfor %}
+        <button type="submit">Agregar</button>
+    </form>
+</div>
+{% endblock %}

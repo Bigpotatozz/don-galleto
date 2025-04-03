@@ -1,0 +1,62 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="text-center mb-4">
+        <h3 class="text-dark font-weight-bold"><i class="bi bi-cookie"></i> {{ galleta.nombre }}</h3>
+        <p class="text-muted">{{ galleta.descripcion }}</p>
+    </div>
+
+    <div class="row">
+        <div class="col-lg-4 col-md-6 mb-4">
+            <div class="card border shadow-sm rounded-4">
+                <div class="card-body p-4">
+                    <div class="mb-3">
+                        <strong class="text-dark"><i class="bi bi-cash-coin"></i> Precio:</strong> 
+                        <span class="text-muted">${{ galleta.precio_venta|floatformat:2 }}</span>
+                    </div>
+                    <div class="mb-3">
+                        <strong class="text-dark"><i class="bi bi-box"></i> Cantidad por receta:</strong> 
+                        <span class="text-muted">{{ galleta.cantidad_receta }} galletas</span>
+                    </div>
+                    <div class="mb-3">
+                        <strong class="text-dark"><i class="bi bi-boxes"></i> Peso:</strong> 
+                        <span class="text-muted">{{ galleta.peso_unidad }}g</span>
+                    </div>
+                    <div class="mb-3">
+                        <strong class="text-dark"><i class="bi bi-clock"></i> Duración:</strong> 
+                        <span class="text-muted">{{ galleta.duracion_promedio }} días</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-8 col-md-6 mb-4">
+            <div class="card border shadow-sm rounded-4">
+                <div class="card-body p-4">
+                    <h5 class="text-dark"><i class="bi bi-list-check"></i> Insumos</h5>
+                    {% if galleta.detalle_receta_galleta.all %}
+                    <ul class="list-group list-group-flush">
+                        {% for detalle in galleta.detalle_receta_galleta.all %}
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                            <span class="text-muted"><i class="bi bi-gear"></i> {{ detalle.id_insumo.nombre }}</span>
+                            <span class="badge bg-light text-dark">{{ detalle.cantidad }} {{ detalle.id_insumo.tipo_medida }}</span>
+                        </li>
+                        {% endfor %}
+                    </ul>
+                    {% else %}
+                    <p class="text-muted">No hay insumos registrados para esta galleta.</p>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="text-center mt-4">
+        <a href="{% url 'lista_galletas_receta' %}" class="btn btn-outline-dark rounded-pill">
+            <i class="bi bi-arrow-left-circle"></i> Volver a la lista
+        </a>
+        <a href="{% url 'editar_galleta_receta' id_galleta=galleta.id_galleta %}" class="btn btn-outline-warning rounded-pill">Editar galleta</a>
+    </div>
+</div>
+{% endblock %}

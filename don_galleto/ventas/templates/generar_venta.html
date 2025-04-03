@@ -17,6 +17,11 @@
         <div class="card-body">
             <form method="post" id="ventaForm">
                 {% csrf_token %}
+                {% if form.non_field_errors %}
+                <div class="alert alert-danger">
+                    {{ form.non_field_errors }}
+                </div>
+            {% endif %}
                 
                 <div class="form-section">
                     <h4 class="form-title"><i class="bi bi-list-check"></i></i> Datos de la Venta</h4>
@@ -60,14 +65,15 @@
                                     <label class="form-label fw-bold">Presentación</label>
                                     <select name="presentacion" class="form-select">
                                         <option value="gr">Gramos</option>
-                                        <option value="unidad">Unidad</option>
-                                        <option value="paquete">Paquete</option>
+                                        <option value="unidad">Piezas</option>
+                                        <option value="paquete">Paquete(6)</option>
                                     </select>
                                 </div>
                                 <div class="col-md-1 mb-3 d-flex align-items-end">
                                     <div class="form-control-plaintext fw-bold">$<span class="item-total">0.00</span></div>
                                 </div>
                             </div>
+                            <div class="equivalencia-texto text-muted mt-2"></div>
                         </div>
                     </div>
                     

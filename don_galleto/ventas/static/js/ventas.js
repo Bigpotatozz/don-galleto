@@ -107,9 +107,8 @@ function inicializarEventos() {
 /////////////
 
 const convertirAGalletas = (cant, pres) => {
-    // Convertir a unidades y redondear a la unidad más cercana
     let cantidad = pres === 'gr' ? cant / 40 : pres === 'paquete' ? cant * 6 : cant;
-    return Math.floor(cantidad);  // Redondeamos a la unidad más cercana
+    return Math.floor(cantidad); 
 };
 
 const mostrarAjuste = (orig, ajust) => orig !== ajust && Swal.fire({
@@ -129,13 +128,14 @@ const ajustarGramos = (cant, pesoUnidad) => {
 };
 
 const verificarUnidades = input => {
+    if ($(input).is(':focus')) return parseFloat($(input).val()) || 0;
+    
     const group = $(input).closest('.galleta-group');
     const pres = group.find('[name="presentacion"]').val();
-    let cant = parseFloat($(input).val()) || 0;
-
-    const pesoUnidad = parseFloat(group.find('[name="galletas"] option:selected').data('peso-unidad')) || 40;  // Usar 40 como valor por defecto
+    const cant = parseFloat($(input).val()) || 0;
 
     if (pres === 'gr') {
+        const pesoUnidad = parseFloat(group.find('[name="galletas"] option:selected').data('peso-unidad')) || 40;
         const ajustado = ajustarGramos(cant, pesoUnidad);
         if (cant !== ajustado) {
             $(input).val(ajustado);
@@ -186,7 +186,7 @@ const agregarProducto = () => {
                     <label class="form-label fw-bold">Presentación</label>
                     <select name="presentacion" class="form-select">
                         <option value="gr">Gramos</option>
-                        <option value="unidad">Unidad</option>
+                        <option value="unidad">Piezas</option>
                         <option value="paquete">Paquete</option>
                     </select>
                 </div>
@@ -194,20 +194,27 @@ const agregarProducto = () => {
                     <div class="form-control-plaintext fw-bold">$<span class="item-total">0.00</span></div>
                 </div>
             </div>
+            <div class="equivalencia-texto text-muted mt-2"></div>
         </div>
     `);
-
+    
     $('#galletas-container').append(newGroup);
     $('.galleta-group .remove-galleta').not(':first').show();
     
-    newGroup.find('[name="cantidad"]').on('change', function() {
+    newGroup.find('[name="cantidad"]').off('input change').on('change', function() {
         verificarUnidades(this);
         calcularTotal(newGroup);
+        actualizarEquivalencia(newGroup);
     });
     
-    newGroup.find('[name="presentacion"], [name="galletas"]').on('change', () => calcularTotal(newGroup));
+    newGroup.find('[name="presentacion"], [name="galletas"]').on('change', function() {
+        calcularTotal(newGroup);
+        actualizarEquivalencia(newGroup);
+    });
+    
     newGroup.find('.remove-galleta').click(() => removeGalleta(newGroup));
     
+    actualizarEquivalencia(newGroup);
     $('html, body').animate({scrollTop: newGroup.offset().top}, 500);
 };
 
@@ -219,29 +226,42 @@ const removeGalleta = group => {
 };
 
 $(document).ready(() => {
-    $('.galleta-group').on('change', '[name="cantidad"]', function() {
+    $(document).on('change', '[name="cantidad"]', function() {
         verificarUnidades(this);
         calcularTotal($(this).closest('.galleta-group'));
+        actualizarEquivalencia($(this).closest('.galleta-group'));
     }).on('change', '[name="presentacion"], [name="galletas"]', function() {
         calcularTotal($(this).closest('.galleta-group'));
+        actualizarEquivalencia($(this).closest('.galleta-group'));
     });
 
     $('.galleta-group .remove-galleta').not(':first').show();
     $('[name="galletas"]').first().focus();
-
-    $('#ventaForm').submit(function(e) {
-        e.preventDefault();
-        
-        if (!$('[name="galletas"]').filter((_, el) => $(el).val()).length) {
-            Swal.fire({title: 'Error', text: 'Debe seleccionar al menos una galleta', icon: 'error'});
-            return;
-        }
-
-        $('.galleta-group').each(function() {
-            const input = $(this).find('[name="cantidad"]');
-            input.val(convertirAGalletas(parseFloat(input.val()) || 0, 
-                     $(this).find('[name="presentacion"]').val()).toFixed(2));
-        });
-        this.submit();
-    });
+    
+    actualizarEquivalencia($('.galleta-group').first());
 });
+
+const actualizarEquivalencia = (group) => {
+    const pres = group.find('[name="presentacion"]').val();
+    const cant = parseFloat(group.find('[name="cantidad"]').val()) || 0;
+    const galletaSelect = group.find('[name="galletas"]');
+    const galletaNombre = galletaSelect.val() ? 
+        galletaSelect.find('option:selected').text().split('-')[0].trim() : '';
+    const pesoUnidad = parseFloat(galletaSelect.find('option:selected').data('peso-unidad')) || 40;
+
+    if (!galletaNombre || cant <= 0) {
+        group.find('.equivalencia-texto').text('');
+        return;
+    }
+
+    let unidades = convertirAGalletas(cant, pres);
+    let mensaje = '';
+    
+    if (pres === 'gr') {
+        mensaje = `${cant}g aproximadamente ${unidades} ${unidades === 1 ? 'pieza' : 'piezas'} (${pesoUnidad}g c/u)`;
+    } else if (pres === 'paquete') {
+        mensaje = `${cant} ${cant === 1 ? 'paquete' : 'paquetes'} son ${unidades} piezas`;
+    }
+
+    group.find('.equivalencia-texto').text(mensaje);
+};

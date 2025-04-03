@@ -1,0 +1,113 @@
+/* Estilo General */
+.container {
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 30px;
+    font-family: 'Poppins', sans-serif;
+    background-color: #f4f6f6; /* Fondo suave para el contenedor */
+    border-radius: 12px;
+}
+
+.title {
+    font-size: 2.5rem;
+    text-align: center;
+    color: #2d3436; /* Color oscuro para el título */
+    font-weight: 600;
+    margin-bottom: 40px;
+    letter-spacing: 2px;
+}
+
+/* Tabla */
+.table-wrapper {
+    overflow-x: auto;
+    margin-top: 20px;
+}
+
+.purchase-table {
+    width: 100%;
+    border-collapse: collapse;
+    background-color: #fff;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    border-radius: 12px;
+    overflow: hidden;
+    text-align: center;
+}
+
+.purchase-table thead {
+    background-color: #fff; /* Color de fondo oscuro para encabezado */
+    color: #fff;
+    font-size: 1.1rem;
+    font-weight: 700;
+}
+
+.purchase-table th,
+.purchase-table td {
+    padding: 16px;
+    border-bottom: 1px solid #e0e0e0;
+    color: #333;
+    font-size: 1rem;
+}
+
+.purchase-table tbody tr {
+    transition: all 0.3s ease;
+    border-radius: 10px;
+}
+
+.purchase-table tbody tr:hover {
+    background-color: #e0e0e0; /* Resaltar fila al pasar el mouse */
+    transform: scale(1.03);
+}
+
+/* Efecto de Hover en la tabla */
+.purchase-table td {
+    transition: background-color 0.3s, color 0.3s;
+}
+
+.purchase-table td:hover {
+    background-color: #d5dbdb; /* Color de hover suave */
+    color: #2d3436; /* Mantener el color oscuro en hover */
+}
+
+/* Mensaje "Sin Compras" */
+.no-purchases {
+    background-color: #2d3436; /* Fondo oscuro */
+    color: #fff; /* Texto blanco */
+    padding: 20px;
+    text-align: center;
+    font-size: 1.2rem;
+    font-weight: 500;
+    border-radius: 12px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+    margin-top: 40px;
+    border: 1px solid #3a4346;
+}
+
+.no-purchases:hover {
+    background-color: #3a4346; /* Cambio de fondo al pasar el mouse */
+    cursor: pointer;
+}
+
+/* Totales */
+.purchase-table td:last-child {
+    font-weight: bold;
+    color: #2d3436; /* Color oscuro para los totales */
+}
+
+.purchase-table td:last-child:hover {
+    color: #1c2324; /* Color más oscuro al pasar el mouse */
+}
+
+/* Responsividad */
+@media (max-width: 768px) {
+    .purchase-table th,
+    .purchase-table td {
+        padding: 12px;
+        font-size: 0.9rem;
+    }
+    .purchase-table {
+        font-size: 0.85rem;
+    }
+    .title {
+        font-size: 2rem;
+    }
+}

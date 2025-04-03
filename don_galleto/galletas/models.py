@@ -16,7 +16,7 @@ class Galleta(models.Model):
     cantidad = models.IntegerField(
         validators=[MinValueValidator(0)]
     )
-    cantidad_por_lote = models.IntegerField(
+    cantidad_receta = models.IntegerField(
         validators=[MinValueValidator(0)]
     )
     peso_unidad = models.FloatField(

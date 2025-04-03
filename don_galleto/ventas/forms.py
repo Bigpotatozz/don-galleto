@@ -6,11 +6,6 @@ class SelectGalletas(forms.ModelMultipleChoiceField):
         return f"{obj.nombre} - ${obj.precio_venta}"
 
 class DetalleVentaForm(forms.Form):
-    galletas = SelectGalletas(
-        queryset=Galleta.objects.all(),
-        label="Galletas",
-        widget=forms.SelectMultiple(attrs={'class': 'form-control'})
-    )
     cantidad = forms.FloatField(
         label="Cantidad",
         widget=forms.NumberInput(attrs={'class': 'form-control'})
