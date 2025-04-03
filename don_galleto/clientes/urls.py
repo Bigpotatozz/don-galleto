@@ -3,7 +3,7 @@ from .views import (GalletasPublicasView,CarritoView,AgregarAlCarritoView,Elimin
 from django.contrib.auth.decorators import login_required
 
 urlpatterns = [
-        path('galletas/', GalletasPublicasView.as_view(), name='galletas_disponibles'),
+    path('galletas/', GalletasPublicasView.as_view(), name='galletas_disponibles'),
     path('carrito/', login_required(CarritoView.as_view()), name='ver_carrito'),
     path('agregar/<int:galleta_id>/', login_required(AgregarAlCarritoView.as_view()), name='agregar_al_carrito'),
     path('eliminar/<int:pk>/', login_required(EliminarDelCarritoView.as_view()), name='eliminar_del_carrito'),
