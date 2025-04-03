@@ -47,7 +47,8 @@ INSTALLED_APPS = [
     'proovedores',
     'tienda',
     'usuarios',
-    'ventas'
+    'ventas',
+    'clientes',
 ]
 
 MIDDLEWARE = [
@@ -87,7 +88,7 @@ WSGI_APPLICATION = 'don_galleto.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'pfdg',
+        'NAME': 'pfdg3',
         'USER': 'root',
         'PASSWORD': 'root',
         'HOST': 'localhost',
@@ -152,5 +153,5 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 LOGIN_URL = '/cuentas/login/'
 LOGIN_REDIRECT_URL = 'home'
-LOGOUT_REDIRECT_URL = 'home'
+LOGOUT_REDIRECT_URL = 'login'
 AUTH_USER_MODEL = 'usuarios.Usuario'

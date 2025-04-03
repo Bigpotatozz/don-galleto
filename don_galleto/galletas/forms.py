@@ -12,7 +12,7 @@ class Registro_galleta_form(forms.ModelForm):
     descripcion = forms.CharField(max_length=100)
     peso_unidad = forms.FloatField()
     duracion_promedio = forms.IntegerField()
-    cantidad_por_lote = forms.IntegerField()
+    cantidad_receta = forms.IntegerField()
     
     ingrediente1 = forms.ModelChoiceField(
         queryset = Insumo.objects.filter(estatus = 'disponible'),
@@ -95,7 +95,7 @@ class Registro_galleta_form(forms.ModelForm):
         descripcion = self.cleaned_data['descripcion']
         peso_unidad = self.cleaned_data['peso_unidad']
         duracion_promedio = self.cleaned_data['duracion_promedio']
-        cantidad_por_lote = self.cleaned_data['cantidad_por_lote']
+        cantidad_receta = self.cleaned_data['cantidad_receta']
         ingredientes = [self.cleaned_data['ingrediente1'],
                         self.cleaned_data['ingrediente2'],
                         self.cleaned_data['ingrediente3'],
@@ -120,7 +120,7 @@ class Registro_galleta_form(forms.ModelForm):
                               descripcion = descripcion,
                               precio_venta = 0,
                               cantidad = 0,
-                              cantidad_por_lote = cantidad_por_lote,
+                              cantidad_receta = cantidad_receta,
                               peso_unidad = peso_unidad,
                               duracion_promedio = duracion_promedio,
                               costo = 0)
@@ -140,10 +140,8 @@ class Registro_galleta_form(forms.ModelForm):
                 contador += 1
         
             segunda_request = Galleta.objects.get(id_galleta = id_galleta)
-            segunda_request.costo = costo / cantidad_por_lote
-            segunda_request.precio_venta = costo / cantidad_por_lote * 2
+            segunda_request.costo = costo / cantidad_receta
+            segunda_request.precio_venta = costo / cantidad_receta * 2
             
             
             segunda_request.save()
-
-

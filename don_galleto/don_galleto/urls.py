@@ -15,17 +15,11 @@ urlpatterns = [
     path('users/registro/', views.registro, name='registro'),
     path('users/', include("django.contrib.auth.urls")),
     path('usuarios/', include('usuarios.urls')),
+    path('clientes/', include('clientes.urls')),
     path('proovedores/', include('proovedores.urls')),
-    path('inventario_insumos/', include('inventario_insumos.urls')),
-
-    #path('inventario_insumos/'),
-    #path('overview/'),
+    path('inventario_insumos/', include('inventario_insumos.urls')), 
     path('produccion/', include('produccion.urls')),
     path('recetas/', include('galletas.urls')),
-    #path('tienda/'),
-    #path('usuarios/'),
-    #path('ventas/'),
-    #path('clientes/'),
     path('galletas/', include('galletas.urls')),
-
+    path('ventas/', include ('ventas.urls'), name = 'ventas'),
 ]

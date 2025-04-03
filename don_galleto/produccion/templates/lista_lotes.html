@@ -1,0 +1,172 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block content %}
+<div class="container py-5">
+  <div class="card shadow-lg rounded-3">
+    <div class="card-header bg-white border-0 pt-4">
+      <div class="d-flex justify-content-between align-items-center">
+        <h2 class="mb-0" style="color: #2c3e50; font-weight: 600;">
+            <i class="bi bi-list-task"></i>Historial de Lotes
+        </h2>
+      </div>
+    </div>
+
+    <div class="card-body px-4">
+      <div class="table-responsive">
+        <h3 class="text-danger mt-3 mb-3">
+          <i class="bi bi-exclamation-circle me-2"></i>Lotes Caducados
+        </h3>
+        <table class="table table-hover align-middle">
+          <thead class="table-light">
+            <tr>
+              <th style="color: #495057; font-weight: 500;">
+                <i class="bi bi-tag me-1"></i>ID Lote
+              </th>
+              <th style="color: #495057; font-weight: 500;">
+                <i class="bi bi-cookie me-1"></i>Nombre de Galleta
+              </th>
+              <th style="color: #495057; font-weight: 500;">
+                <i class="bi bi-currency-dollar me-1"></i>Cantidad
+              </th>
+              <th style="color: #495057; font-weight: 500;">
+                <i class="bi bi-calendar me-1"></i>Fecha de Preparación
+              </th>
+              <th style="color: #495057; font-weight: 500;">
+                <i class="bi bi-calendar-x me-1"></i>Fecha de Caducidad
+              </th>
+              <th style="color: #495057; font-weight: 500;">
+                <i class="bi bi-stop-circle me-1"></i>Estado
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for lote in lotes %}
+              {% if lote.estatus == 'Caducado' %}
+                <tr>
+                  <td>{{ lote.id_lote_galleta }}</td>
+                  <td>{{ lote.id_galleta.nombre }}</td>
+                  <td>{{ lote.cantidad_galletas }}</td>
+                  <td>{{ lote.fecha_preparacion }}</td>
+                  <td>{{ lote.caducidad_lote }}</td>
+                  <td>
+                    <span class="badge bg-danger">
+                      <i class="fas fa-times-circle"></i> Caducado
+                    </span>
+                  </td>
+                </tr>
+              {% endif %}
+            {% empty %}
+              <tr>
+                <td colspan="6" class="text-center py-4" style="color: #6c757d;">
+                  <i class="bi bi-exclamation-circle me-2"></i>No hay lotes caducados
+                </td>
+              </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+
+        <h3 class="text-success mt-5 mb-3">
+          <i class="bi bi-check-circle me-2"></i>Lotes Activos
+        </h3>
+        <table class="table table-hover align-middle">
+          <thead class="table-light">
+            <tr>
+              <th style="color: #495057; font-weight: 500;">
+                <i class="bi bi-tag me-1"></i>ID Lote
+              </th>
+              <th style="color: #495057; font-weight: 500;">
+                <i class="bi bi-cookie me-1"></i>Nombre de Galleta
+              </th>
+              <th style="color: #495057; font-weight: 500;">
+                <i class="bi bi-currency-dollar me-1"></i>Cantidad
+              </th>
+              <th style="color: #495057; font-weight: 500;">
+                <i class="bi bi-calendar me-1"></i>Fecha de Preparación
+              </th>
+              <th style="color: #495057; font-weight: 500;">
+                <i class="bi bi-calendar-x me-1"></i>Fecha de Caducidad
+              </th>
+              <th style="color: #495057; font-weight: 500;">
+                <i class="bi bi-stop-circle me-1"></i>Estado
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for lote in lotes %}
+              {% if lote.estatus != 'Caducado' %}
+                <tr>
+                  <td>{{ lote.id_lote_galleta }}</td>
+                  <td>{{ lote.id_galleta.nombre }}</td>
+                  <td>{{ lote.cantidad_galletas }}</td>
+                  <td>{{ lote.fecha_preparacion }}</td>
+                  <td>{{ lote.caducidad_lote }}</td>
+                  <td>
+                    {% if lote.estatus %}
+                        {% with estado=lote.estatus %}
+                            {% if estado == "Pendiente" %}
+                                <span class="badge bg-secondary"><i class="bi bi-hourglass-split"></i> Pendiente</span>
+                            {% elif estado == "Mezclando" %}
+                                <span class="badge bg-primary"><i class="bi bi-arrow-repeat"></i> Mezclando</span>
+                            {% elif estado == "Formando" %}
+                                <span class="badge bg-info text-dark"><i class="bi bi-hand-index-thumb"></i> Formando</span>
+                            {% elif estado == "Horneando" %}
+                                <span class="badge bg-warning text-dark"><i class="bi bi-fire"></i> Horneando</span>
+                            {% elif estado == "Enfriando" %}
+                                <span class="badge bg-success"><i class="bi bi-snow"></i> Enfriando</span>
+                            {% elif estado == "Completado" %}
+                                <span class="badge bg-dark"><i class="bi bi-check-circle"></i> Completado</span>
+                            {% elif estado == "Caducado" %}
+                                <span class="badge bg-danger"><i class="bi bi-x-circle"></i> Caducado</span>
+                            {% endif %}
+                        {% endwith %}
+                    {% else %}
+                        <span class="badge bg-danger"><i class="bi bi-x-circle"></i> No producido</span>
+                    {% endif %}
+                  </td>
+                </tr>
+              {% endif %}
+            {% empty %}
+              <tr>
+                <td colspan="6" class="text-center py-4" style="color: #6c757d;">
+                  <i class="bi bi-exclamation-circle me-2"></i>No hay lotes activos
+                </td>
+              </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+{% if messages %}
+    <div class="toast-container position-fixed top-0 end-0 p-3" style="z-index: 1100;">
+        {% for message in messages %}
+            <div id="toast{{ forloop.counter }}" class="toast align-items-center border-0 shadow-sm" 
+                role="alert" aria-live="assertive" aria-atomic="true" data-bs-delay="5000"
+                style="
+                    {% if message.tags == 'success' %}background-color: #d4edda; color: #155724;{% endif %}
+                    {% if message.tags == 'error' %}background-color: #f8d7da; color: #721c24;{% endif %}
+                    {% if message.tags == 'warning' %}background-color: #fff3cd; color: #856404;{% endif %}
+                    {% if message.tags == 'info' or not message.tags %}background-color: #d1ecf1; color: #0c5460;{% endif %}
+                ">
+                <div class="d-flex">
+                    <div class="toast-body">
+                        {% if message.tags == 'success' %}
+                            <i class="bi bi-check-circle-fill me-2"></i> 
+                        {% elif message.tags == 'error' %}
+                            <i class="bi bi-x-circle-fill me-2"></i>
+                        {% elif message.tags == 'warning' %}
+                            <i class="bi bi-exclamation-triangle-fill me-2"></i>
+                        {% elif message.tags == 'info' %}
+                            <i class="bi bi-info-circle-fill me-2"></i>
+                        {% endif %}
+                        {{ message }}
+                    </div>
+                    <button type="button" class="btn-close me-2 m-auto" data-bs-dismiss="toast" aria-label="Cerrar"></button>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+{% endif %}
+{% endblock %}

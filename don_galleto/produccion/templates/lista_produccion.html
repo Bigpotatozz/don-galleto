@@ -46,14 +46,26 @@
                         <!-- Mermas del lote -->
                         <h6 class="text-muted">Mermas del lote:</h6>
                         {% if item.mermas.exists %}
-                            <ul>
-                                {% for merma in item.mermas %}
-                                <li>{{ merma.cantidad }} galletas - Motivo: {{ merma.motivo }}</li>
-                                {% endfor %}
-                            </ul>
+                            <table class="table table-sm table-bordered">
+                                <thead>
+                                    <tr>
+                                        <th>Cantidad</th>
+                                        <th>Motivo</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for merma in item.mermas %}
+                                        <tr>
+                                            <td>{{ merma.cantidad }} galletas</td>
+                                            <td>{{ merma.motivo }}</td>
+                                        </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
                         {% else %}
                             <p>No hay mermas registradas para este lote.</p>
                         {% endif %}
+                        
 
                         <form method="post" action="{% url 'actualizar_estatus_lote' item.id_lote_galleta %}">
                             {% csrf_token %}
@@ -120,4 +132,5 @@
         {% endfor %}
     </div>
 {% endif %}
+
 {% endblock %}

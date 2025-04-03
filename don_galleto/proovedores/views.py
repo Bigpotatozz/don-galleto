@@ -6,6 +6,7 @@ from . import forms
 from django.urls import reverse_lazy
 from django.contrib.auth.mixins import PermissionRequiredMixin
 from django.shortcuts import redirect
+from usuarios.utils import log
 
 # Create your views here.
 class CrearProovedorView(PermissionRequiredMixin,FormView):
@@ -22,6 +23,10 @@ class CrearProovedorView(PermissionRequiredMixin,FormView):
     def form_valid(self, form):
         form.save()
         return super().form_valid(form)
+    
+    def form_invalid(self, form):    
+        log(self, form, "Error registro proveedor")
+        return super().form_invalid(form)
 
 class ListaProovedorView(TemplateView):
     
@@ -56,3 +61,6 @@ class EditarProovedorView(FormView):
     def form_valid(self, form):
         form.save()
         return super().form_valid(form)
+    def form_invalid(self, form):    
+        log(self, form, "Error edicion proveedor")
+        return super().form_invalid(form)

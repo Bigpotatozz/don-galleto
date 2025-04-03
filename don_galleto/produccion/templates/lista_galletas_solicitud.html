@@ -27,25 +27,25 @@
                                 <i class="bi bi-box-seam" style="font-size: 1.2rem;"></i> {{ item.cantidad }} galletas disponibles
                             </p>
                             <p class="mb-0">
-                                {% if item.ultimo_lote_galleta %}
+                                {% if item.ultimo_lote %}
                                     <span class="badge px-3 py-2 fw-semibold
-                                        {% if item.ultimo_lote_galleta.estatus == 'Pendiente' %}bg-secondary
-                                        {% elif item.ultimo_lote_galleta.estatus == 'Mezclando' %}bg-primary
-                                        {% elif item.ultimo_lote_galleta.estatus == 'Formando' %}bg-info text-dark
-                                        {% elif item.ultimo_lote_galleta.estatus == 'Horneando' %}bg-warning text-dark
-                                        {% elif item.ultimo_lote_galleta.estatus == 'Enfriando' %}bg-success
-                                        {% elif item.ultimo_lote_galleta.estatus == 'Completado' %}bg-dark
+                                        {% if item.ultimo_lote.estatus == 'Pendiente' %}bg-secondary
+                                        {% elif item.ultimo_lote.estatus == 'Mezclando' %}bg-primary
+                                        {% elif item.ultimo_lote.estatus == 'Formando' %}bg-info text-dark
+                                        {% elif item.ultimo_lote.estatus == 'Horneando' %}bg-warning text-dark
+                                        {% elif item.ultimo_lote.estatus == 'Enfriando' %}bg-success
+                                        {% elif item.ultimo_lote.estatus == 'Completado' %}bg-dark
                                         {% else %}bg-danger{% endif %}
                                     ">
                                         <i class="bi 
-                                            {% if item.ultimo_lote_galleta.estatus == 'Pendiente' %}bi-hourglass-split
-                                            {% elif item.ultimo_lote_galleta.estatus == 'Mezclando' %}bi-arrow-repeat
-                                            {% elif item.ultimo_lote_galleta.estatus == 'Formando' %}bi-hand-index-thumb
-                                            {% elif item.ultimo_lote_galleta.estatus == 'Horneando' %}bi-fire
-                                            {% elif item.ultimo_lote_galleta.estatus == 'Enfriando' %}bi-snow
-                                            {% elif item.ultimo_lote_galleta.estatus == 'Completado' %}bi-check-circle
+                                            {% if item.ultimo_lote.estatus == 'Pendiente' %}bi-hourglass-split
+                                            {% elif item.ultimo_lote.estatus == 'Mezclando' %}bi-arrow-repeat
+                                            {% elif item.ultimo_lote.estatus == 'Formando' %}bi-hand-index-thumb
+                                            {% elif item.ultimo_lote.estatus == 'Horneando' %}bi-fire
+                                            {% elif item.ultimo_lote.estatus == 'Enfriando' %}bi-snow
+                                            {% elif item.ultimo_lote.estatus == 'Completado' %}bi-check-circle
                                             {% else %}bi-x-circle{% endif %}
-                                        "></i> {{ item.ultimo_lote_galleta.estatus }}
+                                        "></i> {{ item.ultimo_lote.estatus }}
                                     </span>
                                 {% else %}
                                     <span class="badge bg-danger"><i class="bi bi-x-circle"></i> No producido</span>
