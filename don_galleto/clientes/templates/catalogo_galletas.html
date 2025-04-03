@@ -38,7 +38,7 @@
           <li class="item-carrito" data-id="{{ item.id }}"
             style="display: flex; justify-content: space-between; align-items: center; padding: 10px; background-color: #f8f9fa; border-radius: 8px; margin-bottom: 8px;">
             <span>{{ item.nombre }}
-              <br>Precio individual: ${{ item.precio_venta }}
+              <br>Precio individual: ${{ item.precio_venta|floatformat:2 }}
               <br><span>cantidad:{{ item.cantidad }} pieza(s)</span>
               <br><span>Subtotal: ${{ item.subtotal|floatformat:2 }}</span>
               <br><button class="btn btn-danger btn-sm eliminar-item" data-id="{{ item.id_galleta }}">Eliminar</button>
