@@ -88,7 +88,7 @@ WSGI_APPLICATION = 'don_galleto.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'pfdg3',
+        'NAME': 'pfdg',
         'USER': 'root',
         'PASSWORD': '1924',
         'HOST': 'localhost',

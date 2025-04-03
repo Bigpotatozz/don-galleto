@@ -8,7 +8,6 @@ from django.db import transaction
 from django.core.validators import MinValueValidator
 
 class Registro_galleta_form(forms.ModelForm):
-    # Definición de los campos del formulario
     nombre = forms.CharField(max_length=30)
     descripcion = forms.CharField(max_length=100)
     peso_unidad = forms.FloatField(validators=[MinValueValidator(1)])
@@ -22,10 +21,10 @@ class Registro_galleta_form(forms.ModelForm):
         insumos = Insumo.objects.all()
         
         for insumo in insumos:
-            # Crear dinámicamente los campos para cada insumo
+    
             self.fields[f'insumo_{insumo.id_insumo}'] = forms.IntegerField(
                 label=insumo.nombre,
-                required=False,  # Cambiar esto si lo necesitas
+                required=False, 
                 widget=forms.NumberInput(attrs={'placeholder': 'Cantidad de insumo'}),
                 initial = 0
             )
@@ -49,22 +48,20 @@ class Registro_galleta_form(forms.ModelForm):
         precio_venta = self.cleaned_data['precio_venta']
 
         with transaction.atomic():
-            # Crear la galleta
             galleta = Galleta(
                 nombre=nombre,
                 descripcion=descripcion,
                 precio_venta=precio_venta,
-                cantidad=0,  # Ajustar según lo que sea necesario
+                cantidad=0,  
                 cantidad_receta=cantidad_receta,
                 peso_unidad=peso_unidad,
                 duracion_promedio=duracion_promedio,
-                costo=0  # Ajustar según lo que sea necesario
+                costo=0  
             )
             galleta.save()
 
-            # Guardar los detalles de la receta
-            for insumo in Insumo.objects.all():  # Iterar sobre los insumos disponibles
-                field_name = f'insumo_{insumo.id_insumo}'  # Nombre del campo en el formulario
+            for insumo in Insumo.objects.all():  
+                field_name = f'insumo_{insumo.id_insumo}'  
                 cantidad = self.cleaned_data.get(field_name, 0)
 
                 if cantidad > 0:
