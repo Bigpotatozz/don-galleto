@@ -8,22 +8,22 @@ class Galleta(models.Model):
     nombre = models.CharField(max_length=30)
     descripcion = models.CharField(max_length=100)
     costo = models.FloatField(
-        validators=[MinValueValidator(0)]
+        validators=[MinValueValidator(1)]
     )
     precio_venta = models.FloatField(
-        validators=[MinValueValidator(0)]
+        validators=[MinValueValidator(1)]
     )
     cantidad = models.IntegerField(
-        validators=[MinValueValidator(0)]
+        validators=[MinValueValidator(1)]
     )
     cantidad_receta = models.IntegerField(
-        validators=[MinValueValidator(0)]
+        validators=[MinValueValidator(1)]
     )
     peso_unidad = models.FloatField(
-        validators=[MinValueValidator(0)]
+        validators=[MinValueValidator(1)]
     )
     duracion_promedio = models.IntegerField(
-        validators=[MinValueValidator(0)]
+        validators=[MinValueValidator(1)]
     )
     
     class Meta: 
@@ -35,7 +35,7 @@ class Galleta(models.Model):
 class Detalle_receta(models.Model):
     id_detalle_receta = models.AutoField(primary_key=True)
     cantidad = models.FloatField(
-        validators=[MinValueValidator(0)]
+        validators=[MinValueValidator(1)]
     )
     id_insumo = models.ForeignKey(Insumo, on_delete=models.CASCADE, null=False, related_name='detalle_receta_insumo')
     id_galleta = models.ForeignKey(Galleta, on_delete=models.CASCADE, null=False, related_name='detalle_receta_galleta')

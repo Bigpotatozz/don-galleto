@@ -5,64 +5,93 @@ from galletas.models import Galleta, Detalle_receta
 from django.utils.timezone import now
 from django.contrib.auth import get_user_model
 from django.db import transaction
+from django.core.validators import MinValueValidator
 
 class Registro_galleta_form(forms.ModelForm):
     
     nombre = forms.CharField(max_length=30)
     descripcion = forms.CharField(max_length=100)
-    peso_unidad = forms.FloatField()
-    duracion_promedio = forms.IntegerField()
-    cantidad_receta = forms.IntegerField()
+    peso_unidad = forms.FloatField(
+        validators=[MinValueValidator(1)]
+    )
+    duracion_promedio = forms.IntegerField(
+        validators=[MinValueValidator(1)]
+    )
+    cantidad_receta = forms.IntegerField(
+        validators=[MinValueValidator(1)]
+    )
+    
+    precio_venta = forms.FloatField(
+        validators=[MinValueValidator(1)]
+    )
     
     ingrediente1 = forms.ModelChoiceField(
         queryset = Insumo.objects.filter(estatus = 'disponible'),
         label = "Ingrediente",
-        to_field_name = "id_insumo"
+        to_field_name = "id_insumo",
+  
     )
-    cantidad1 = forms.FloatField()
+    cantidad1 = forms.FloatField(
+        validators=[MinValueValidator(0)]
+    )
     
     ingrediente2 = forms.ModelChoiceField(
         queryset = Insumo.objects.filter(estatus = 'disponible'),
         label = "Ingrediente",
-        to_field_name = "id_insumo"
+        to_field_name = "id_insumo",
+        
     )
-    cantidad2 = forms.FloatField()
+    cantidad2 = forms.FloatField(
+        validators=[MinValueValidator(0)]
+    )
     ingrediente3 = forms.ModelChoiceField(
         queryset = Insumo.objects.filter(estatus = 'disponible'),
         label = "Ingrediente",
         to_field_name = "id_insumo"
     )
-    cantidad3 = forms.FloatField()
+    cantidad3 = forms.FloatField(
+        validators=[MinValueValidator(0)]
+    )
     ingrediente4 = forms.ModelChoiceField(
         queryset = Insumo.objects.filter(estatus = 'disponible'),
         label = "Ingrediente",
         to_field_name = "id_insumo"
     )
-    cantidad4 = forms.FloatField()
+    cantidad4 = forms.FloatField(
+        validators=[MinValueValidator(0)]
+    )
     ingrediente5 = forms.ModelChoiceField(
         queryset = Insumo.objects.filter(estatus = 'disponible'),
         label = "Ingrediente",
         to_field_name = "id_insumo"
     )
-    cantidad5 = forms.FloatField()
+    cantidad5 = forms.FloatField(
+        validators=[MinValueValidator(0)]
+    )
     ingrediente6 = forms.ModelChoiceField(
         queryset = Insumo.objects.filter(estatus = 'disponible'),
         label = "Ingrediente",
         to_field_name = "id_insumo"
     )
-    cantidad6 = forms.FloatField()
+    cantidad6 = forms.FloatField(
+        validators=[MinValueValidator(0)]
+    )
     ingrediente7 = forms.ModelChoiceField(
         queryset = Insumo.objects.filter(estatus = 'disponible'),
         label = "Ingrediente",
         to_field_name = "id_insumo"
     )
-    cantidad7 = forms.FloatField()
+    cantidad7 = forms.FloatField(
+        validators=[MinValueValidator(0)]
+    )
     ingrediente8 = forms.ModelChoiceField(
         queryset = Insumo.objects.filter(estatus = 'disponible'),
         label = "Ingrediente",
         to_field_name = "id_insumo"
     )
-    cantidad8 = forms.FloatField()
+    cantidad8 = forms.FloatField(
+        validators=[MinValueValidator(0)]
+    )
     
     class Meta:
         model = Galleta
@@ -71,6 +100,7 @@ class Registro_galleta_form(forms.ModelForm):
             'descripcion', 
             'peso_unidad', 
             'duracion_promedio', 
+            'precio_venta',
             'ingrediente1', 
             'ingrediente2', 
             'ingrediente3', 
@@ -96,6 +126,7 @@ class Registro_galleta_form(forms.ModelForm):
         peso_unidad = self.cleaned_data['peso_unidad']
         duracion_promedio = self.cleaned_data['duracion_promedio']
         cantidad_receta = self.cleaned_data['cantidad_receta']
+        precio_venta = self.cleaned_data['precio_venta']
         ingredientes = [self.cleaned_data['ingrediente1'],
                         self.cleaned_data['ingrediente2'],
                         self.cleaned_data['ingrediente3'],
@@ -118,7 +149,7 @@ class Registro_galleta_form(forms.ModelForm):
             
             galleta = Galleta(nombre = nombre,
                               descripcion = descripcion,
-                              precio_venta = 0,
+                              precio_venta = precio_venta,
                               cantidad = 0,
                               cantidad_receta = cantidad_receta,
                               peso_unidad = peso_unidad,
@@ -141,7 +172,6 @@ class Registro_galleta_form(forms.ModelForm):
         
             segunda_request = Galleta.objects.get(id_galleta = id_galleta)
             segunda_request.costo = costo / cantidad_receta
-            segunda_request.precio_venta = costo / cantidad_receta * 2
             
             
             segunda_request.save()

@@ -51,7 +51,7 @@
             <div class="mb-3">
 
                 <label class="form-label" style="color: #34495e; font-weight: 500;">
-                    <i  style="color: #95a5a6;"></i>{{ form.peso_unidad.label }}
+                    <i  style="color: #95a5a6;"></i>Peso por unidad (gr)
                   </label>
 
                 <div class="input-group">
@@ -71,7 +71,7 @@
             <div class="mb-3">
 
                 <label class="form-label" style="color: #34495e; font-weight: 500;">
-                    <i  style="color: #95a5a6;"></i>{{ form.duracion_promedio.label }}
+                    <i  style="color: #95a5a6;"></i>Duracion promedio (dias)
                   </label>
 
                 <div class="input-group">
@@ -81,7 +81,7 @@
                     {{ form.duracion_promedio }}
                   </div>
 
-                  {% if form.descripcion.errors %}
+                  {% if form.duracion_promedio.errors %}
                   <div class="text-danger mt-2">
                     <small><i class="bi bi-exclamation-circle me-1"></i>{{ form.duracion_promedio.errors.0 }}</small>
                   </div>
@@ -91,7 +91,7 @@
             <div class="mb-3">
 
                 <label class="form-label" style="color: #34495e; font-weight: 500;">
-                    <i  style="color: #95a5a6;"></i>{{ form.cantidad_receta.label }}
+                    <i  style="color: #95a5a6;"></i>Cantidad de galletas por receta
                   </label>
 
                 <div class="input-group">
@@ -101,12 +101,32 @@
                     {{ form.cantidad_receta }}
                   </div>
 
-                  {% if form.descripcion.errors %}
+                  {% if form.cantidad_receta.errors %}
                   <div class="text-danger mt-2">
                     <small><i class="bi bi-exclamation-circle me-1"></i>{{ form.cantidad_receta.errors.0 }}</small>
                   </div>
                 {% endif %}
             </div>
+
+            <div class="mb-3">
+
+              <label class="form-label" style="color: #34495e; font-weight: 500;">
+                  <i  style="color: #95a5a6;"></i>Precio de venta
+                </label>
+
+              <div class="input-group">
+                  <span class="input-group-text" style="background-color: #f5f7fa; border: 1px solid #ced4da; border-right: none;">
+                    <i  style="color: #95a5a6;"></i>
+                  </span>
+                  {{ form.precio_venta }}
+                </div>
+
+                {% if form.precio_venta.errors %}
+                <div class="text-danger mt-2">
+                  <small><i class="bi bi-exclamation-circle me-1"></i>{{ form.precio_venta.errors.0 }}</small>
+                </div>
+              {% endif %}
+          </div>
             
             <div class="mb-3 row">
                 <div class="col-6">
