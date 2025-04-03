@@ -3,6 +3,7 @@ from django.http import JsonResponse, HttpResponseRedirect
 from django.views.generic.base import TemplateView
 from django.urls import reverse_lazy, reverse
 from django.contrib.auth.mixins import PermissionRequiredMixin
+from django.contrib.auth.decorators import login_required
 from django.views.generic import FormView, DetailView, ListView
 from django.contrib.auth import logout
 from django.views import View
@@ -14,6 +15,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.utils.timezone import now
 import json
 import logging
+from django.utils.decorators import method_decorator
 
 
 class Lista_galletas_catalogo_view(TemplateView):
@@ -25,6 +27,10 @@ class Lista_galletas_catalogo_view(TemplateView):
 
         carrito = self.request.session.get('carrito', {})
         carrito_lista = list(carrito.values())
+
+        for item in carrito_lista:
+            item['subtotal'] = item['precio_venta'] * item['cantidad']
+
         carrito_total = sum(item['precio_venta'] * item['cantidad'] for item in carrito_lista)
 
         context.update ({
@@ -34,6 +40,7 @@ class Lista_galletas_catalogo_view(TemplateView):
         })
         return context
     
+@method_decorator(login_required, name='dispatch')
 class AgregarAlCarrito(TemplateView):
     def post(self, request, id_galleta):
         galleta = get_object_or_404(Galleta, id_galleta=id_galleta)
@@ -42,6 +49,9 @@ class AgregarAlCarrito(TemplateView):
         data = json.loads(request.body.decode('utf-8'))
         presentacion = data.get('presentacion', 'Individual') 
         cantidad = data.get('cantidad', 1)
+
+        if cantidad < 1:
+            return JsonResponse({'error': 'La cantidad debe ser al menos 1.'}, status=400)
 
         logging.debug(f"Presentación seleccionada: {presentacion}")
         logging.debug(f"Cantidad seleccionada: {cantidad}")
@@ -54,6 +64,10 @@ class AgregarAlCarrito(TemplateView):
 
         cantidad_total = cantidad * multiplicador
 
+        if galleta.cantidad < cantidad_total:
+            return JsonResponse({'error': 'No hay suficiente stock para completar la compra.'}, status=400)
+
+        # Si el producto ya está en el carrito, actualizamos la cantidad
         if str(id_galleta) in carrito:
             carrito[str(id_galleta)]['cantidad'] += cantidad_total
         else:
@@ -65,11 +79,15 @@ class AgregarAlCarrito(TemplateView):
                 'presentacion': presentacion,
             }
 
+        # 🔥 **Siempre recalculamos los subtotales para todos los productos** 🔥
+        for item in carrito.values():
+            item['subtotal'] = item['precio_venta'] * item['cantidad']
+
         request.session['carrito'] = carrito
 
         carrito_lista = list(carrito.values())
-        carrito_total = sum(item['precio_venta'] * item['cantidad'] for item in carrito_lista)
-        
+        carrito_total = sum(item['subtotal'] for item in carrito.values())
+
         historial_compras = request.session.get('historial_compras', [])
         compra = {
             'productos': carrito_lista,
@@ -79,7 +97,8 @@ class AgregarAlCarrito(TemplateView):
         historial_compras.append(compra)
         request.session['historial_compras'] = historial_compras
 
-        return JsonResponse({'galleta': list(carrito.values()), 'carrito_total': carrito_total})
+        return JsonResponse({'galleta': carrito_lista, 'carrito_total': carrito_total})
+
 
 class GuardarCarritoView(LoginRequiredMixin, TemplateView):
     template_name = 'guardar_carrito.html'
@@ -141,8 +160,8 @@ class FinalizarCompraView(LoginRequiredMixin, View):
     def post(self, request, *args, **kwargs):
         carrito = request.session.get('carrito', {})
         if not carrito:
-            messages.error(request, 'El carrito está vacío.')
-            return redirect('lista_galletas')
+            messages.error(request, 'No puedes realizar una compra sin seleccionar un producto.')
+            return redirect('detalle_compra')
         
         total = sum(item['precio_venta'] * item['cantidad'] for item in carrito.values())
 
@@ -171,25 +190,33 @@ class FinalizarCompraView(LoginRequiredMixin, View):
             return redirect('detalle_compra')
 
         request.session['carrito'] = {}
-
-        messages.success(request, 'Compra finalizada con éxito.')
-        return redirect('listado_galletas')  
+        return redirect('historial_compras')  
 
 class HistorialComprasView(LoginRequiredMixin, TemplateView):
     template_name = 'historial_compras.html'
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        venta = Venta.objects.filter(id_usuario=self.request.user, estatus='Pendiente').order_by('-fecha_venta')
+        ventas = Venta.objects.filter(id_usuario=self.request.user).order_by('-fecha_venta')
 
-        ventas_con_totales = []
-        for venta in venta:
-            total = sum(detalle.precio_galleta * detalle.cantidad for detalle in venta.detalle_venta_venta.all())
-            ventas_con_totales.append({
+        ventas_con_detalles = []
+        for venta in ventas:
+            detalles = []
+            for detalle in venta.detalle_venta_venta.all():
+                detalles.append({
+                    'id_galleta': detalle.id_galleta,
+                    'cantidad': detalle.cantidad,
+                    'precio_galleta': detalle.precio_galleta,
+                    'total': detalle.cantidad * detalle.precio_galleta,  
+                })
+            total_venta = sum(detalle['total'] for detalle in detalles)
+            ventas_con_detalles.append({
                 'venta': venta,
-                'total': total,
+                'detalles': detalles,
+                'total': total_venta,
             })
-        context['ventas_con_totales'] = ventas_con_totales
+
+        context['ventas_con_detalles'] = ventas_con_detalles
         return context
     
 class ActualizarCarritoView(LoginRequiredMixin, View):
@@ -215,18 +242,20 @@ class ActualizarCarritoView(LoginRequiredMixin, View):
 class ObtenerCarritoView(View):
     def get(self, request):
         carrito = request.session.get('carrito', {})
+        for item in carrito.values():
+            item['subtotal'] = item['precio_venta'] * item['cantidad']
         return JsonResponse({"carrito": carrito})
     
 class EliminarDelCarritoView(View):
     def post(self, request, id_galleta):
         carrito = request.session.get('carrito', {})
-        print(f"Carrito antes de eliminar: {carrito}")  # Log para depuración
+        print(f"Carrito antes de eliminar: {carrito}")  
 
         if str(id_galleta) in carrito:
             del carrito[str(id_galleta)]
             request.session['carrito'] = carrito
             total = sum(item['precio_venta'] * item['cantidad'] for item in carrito.values())
-            print(f"Carrito después de eliminar: {carrito}")  # Log para depuración
-            return JsonResponse({'success': True, 'total': total})
+            print(f"Carrito después de eliminar: {carrito}")  
+            return JsonResponse({'success': True, 'total': total, 'carrito': carrito})
 
         return JsonResponse({'success': False, 'message': 'Producto no encontrado en el carrito.'}, status=404)

@@ -1,7 +1,29 @@
 document.addEventListener("DOMContentLoaded", function () {
+
+const loginUrl = document.body.getAttribute("data-login-url");
+const isAuthenticated = document.body.getAttribute("data-is-authenticated") === "True";
+
   //Agregar al carrito
   document.querySelectorAll(".agregar-carrito").forEach(button => {
     button.addEventListener("click", function () {
+
+      if (!isAuthenticated) {
+        Swal.fire({
+          icon: 'error',
+          title: 'Error',
+          text: 'Debes iniciar sesión para agregar productos al carrito.',
+          showConfirmButton: true,
+          confirmButtonText: 'Iniciar sesión',
+          confirmButtonColor: '#d33',
+          allowOutsideClick: false,
+        }).then((result) => {
+          if (result.isConfirmed) {
+            window.location.href = loginUrl;
+          }
+        });
+        return;
+      }
+      
       let galletaId = this.getAttribute("data-id");
       let presentacionSelect = document.getElementById(`presentacion_${galletaId}`);
       let cantidadInput = document.getElementById(`cantidad_${galletaId}`);
@@ -9,6 +31,7 @@ document.addEventListener("DOMContentLoaded", function () {
       console.log(`ID de galleta: ${galletaId}`);
       let presentacion = presentacionSelect ? presentacionSelect.value : 'Individual';
       console.log(`Presentación seleccionada: ${presentacion}`);
+      
       fetch(`/clientes/agregar/${galletaId}/`, {
         method: "POST",
         headers: {
@@ -17,24 +40,37 @@ document.addEventListener("DOMContentLoaded", function () {
           "X-CSRFToken": getCookie('csrftoken')
         },
         body: JSON.stringify({
-          presentacion: presentacion,
           cantidad: cantidad,
+          presentacion: presentacion,
         })
       })
-        .then(response => response.json())
+        .then(response => {
+          if (!response.ok) {
+            return response.json().then(data => {
+              throw new Error(data.error || 'Error al agregar al carrito.');
+            });
+          }
+          return response.json();
+        })
         .then(data => {
           console.log('Respuesta del servidor:', data);
-          actualizarCarrito(data.galleta);
+          actualizarCarrito(data.galleta); // Actualiza el carrito dinámicamente
           Swal.fire({
             icon: 'success',
             title: 'Agregado al carrito',
-            text: `La galleta ha sido agregado al carrito.`,
+            text: `El producto ha sido agregado al carrito.`,
             showConfirmButton: false,
             timer: 1500
           });
-          this.innerHTML = '<i class="fas fa-check"></i>';
         })
-        .catch(error => console.error("Error al agregar al carrito:", error));
+        .catch(error => {
+          Swal.fire({
+            icon: 'error',
+            title: 'Error',
+            text: error.message,
+            showConfirmButton: true,
+          });
+        });
     });
   });
 
@@ -58,8 +94,6 @@ document.addEventListener("DOMContentLoaded", function () {
   document.getElementById('btn-comprar').addEventListener('click', async function () {
     const btn = this;
     window.location.href = `/clientes/detalle_compra/`;
-    btn.disabled = true;
-    btn.innerHTML = '<span class="spinner-border spinner-border-sm" role="status"></span> Procesando...';
 
     try {
       const items = document.querySelectorAll('.item-carrito');
@@ -85,10 +119,17 @@ document.addEventListener("DOMContentLoaded", function () {
 //Abrir y cerrar carrito
 document.getElementById("abrir-carrito").addEventListener("click", function () {
   document.getElementById("carrito").classList.add("mostrar");
+  document.getElementById("carrito-overlay").style.display = "block";
 });
 
 document.getElementById("btn-cerrar-carrito").addEventListener("click", function () {
   document.getElementById("carrito").classList.remove("mostrar");
+  document.getElementById("carrito-overlay").style.display = "none";
+});
+
+document.getElementById("carrito-overlay").addEventListener("click", function () {
+  document.getElementById("carrito").classList.remove("mostrar");
+  this.style.display = "none";
 });
 
 //Actualizar cantidad de galletas en el carrito
@@ -106,7 +147,7 @@ function actualizarCantidad(galletaId, accion) {
   })
     .then(response => response.json())
     .then(data => {
-      console.log('Respuesta del servidor:', data);
+      console.log('Respuesta del servidor:', data); // 👀 Verificar si el subtotal llega correcto
       if (data.success) {
         actualizarCarrito(data.galleta);
       } else {
@@ -147,7 +188,9 @@ function eliminarDelCarrito(galletaId) {
           showConfirmButton: false,
           timer: 1500
         });
-        document.getElementById('total-carrito').textContent = `Total: $${data.total.toFixed(2)}`; // Actualiza el total
+
+        // Actualiza el total en el DOM
+        document.getElementById('total-carrito').textContent = `Total: $${data.total.toFixed(2)}`;
       } else {
         console.error('Error al eliminar el producto:', data.message);
       }
@@ -178,26 +221,55 @@ function actualizarCarrito(carrito) {
   listaCarrito.innerHTML = ""; // Limpia el contenido actual del carrito
   let total = 0;
 
-  if (!carrito || carrito.length === 0) {
+  if (!carrito || Object.keys(carrito).length === 0) {
     listaCarrito.innerHTML = "<li class='list-group-item'>El carrito está vacío</li>";
     totalCarrito.textContent = "Total: $0.00";
     return;
   }
 
-  carrito.forEach((item, index) => {
+  Object.values(carrito).forEach((item, index) => {
     let li = document.createElement("li");
     li.className = "item-carrito";
     li.dataset.id = item.id_galleta; 
     li.innerHTML = `
-      <span>${item.nombre} - $${item.precio_venta} (x${item.cantidad})</span>
+      <span>${item.nombre} 
+      <br>$${item.precio_venta} 
+      <br>Cantidad: ${item.cantidad} pieza(s)</span>
+      <br><span>Subtotal: $${item.subtotal.toFixed(2)}</span>
       <button class="btn btn-danger btn-sm eliminar-item" data-id="${item.id_galleta}">Eliminar</button>
     `;
     li.style.animationDelay = `${index * 0.1}s`;
     listaCarrito.appendChild(li);
-    total += item.precio_venta * item.cantidad;
+    total += item.subtotal;
   });
 
   totalCarrito.textContent = `Total: $${total.toFixed(2)}`;
 }
 
 //Prueba para hacer push
+
+  function validarCantidad(input) {
+    if (input.value < 1) {
+      input.value = 1; 
+    }
+  }
+
+  document.getElementById('btn-comprar').addEventListener('click', function (event) {
+    const listaCarrito = document.getElementById("lista-carrito");
+  
+    // Verifica si el carrito está vacío
+    if (!listaCarrito.children.length || listaCarrito.innerHTML.includes("El carrito está vacío")) {
+      event.preventDefault(); // Evita la acción predeterminada del botón
+      Swal.fire({
+        icon: 'error',
+        title: 'Carrito vacío',
+        text: 'No puedes realizar una compra sin productos en el carrito.',
+        confirmButtonText: 'Aceptar',
+        confirmButtonColor: '#d33',
+      });
+      return;
+    }
+  
+    window.location.href = `/clientes/detalle_compra/`;
+  });
+

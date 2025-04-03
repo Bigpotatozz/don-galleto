@@ -6,7 +6,7 @@ from .views import  Lista_galletas_catalogo_view, DetalleCompraView, AgregarAlCa
 
 
 urlpatterns = [
-    path('catalogo_galletas/', login_required(Lista_galletas_catalogo_view.as_view()), name='catalogo_galletas'),
+    path('catalogo_galletas/', Lista_galletas_catalogo_view.as_view(), name='catalogo_galletas'),
     path('agregar/<int:id_galleta>/', login_required(AgregarAlCarrito.as_view()), name='agregar_al_carrito'),
     path('detalle_compra/', login_required(DetalleCompraView.as_view()), name='detalle_compra'),
     path('finalizar_compra/', views.FinalizarCompraView.as_view(), name='finalizar_compra'),
