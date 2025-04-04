@@ -58,10 +58,10 @@
 }
 
 .producto-imagen {
-  width: 80px;
-  height: 80px;
+  width: 130px;
+  height: auto;
   object-fit: cover;
-  border-radius: 8px;
+  border-radius: 10px;
   border: 2px solid #e0e0e0;
 }
 
@@ -76,14 +76,31 @@
 }
 
 .precio-cantidad {
-  text-align: center;
+  text-align: left;
   color: #34495e;
+  font-size: 1em;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.precio-cantidad .precio {
+  font-weight: bold;
   font-size: 1.1em;
 }
+
+.precio-cantidad .cantidad {
+  color: #7f8c8d;
+  font-size: 1.1em;
+}
+
 
 .subtotal {
   font-weight: bold;
   color: #27ae60;
+  font-size: 1.2em;
+  margin-top: 10px;
+  text-align: right;
 }
 
 .resumen-compra {

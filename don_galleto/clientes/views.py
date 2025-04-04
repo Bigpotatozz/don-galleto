@@ -29,7 +29,11 @@ class Lista_galletas_catalogo_view(TemplateView):
         carrito_lista = list(carrito.values())
 
         for item in carrito_lista:
-            item['subtotal'] = item['precio_venta'] * item['cantidad']
+             if 'imagen' in item and item['imagen'] and not item['imagen'].startswith('/media/'):
+                galleta = Galleta.objects.filter(id_galleta=item['id_galleta']).first()
+                if galleta and galleta.imagen:
+                    item['imagen'] = galleta.imagen.url
+                    item['subtotal'] = item['precio_venta'] * item['cantidad']
 
         carrito_total = sum(item['precio_venta'] * item['cantidad'] for item in carrito_lista)
 
@@ -77,6 +81,7 @@ class AgregarAlCarrito(TemplateView):
                 'precio_venta': galleta.precio_venta,
                 'cantidad': cantidad_total,
                 'presentacion': presentacion,
+                'imagen': galleta.imagen.url if galleta.imagen else None,
             }
 
         # 🔥 **Siempre recalculamos los subtotales para todos los productos** 🔥
@@ -193,7 +198,8 @@ class FinalizarCompraView(LoginRequiredMixin, View):
         return redirect('gracias')  
 
 class HistorialComprasView(PermissionRequiredMixin, LoginRequiredMixin, TemplateView):
-    permission_required = "usuarios.cliente"
+    permission_required = 'usuarios.cliente'
+
     template_name = 'historial_compras.html'
 
     def get_context_data(self, **kwargs):

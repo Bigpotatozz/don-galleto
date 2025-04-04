@@ -7,6 +7,7 @@ class Galleta(models.Model):
     id_galleta = models.AutoField(primary_key=True)
     nombre = models.CharField(max_length=30)
     descripcion = models.CharField(max_length=100)
+    imagen = models.ImageField(upload_to='galleta/', null=True, blank=True)
     costo = models.FloatField(
         validators=[MinValueValidator(0)]
     )
@@ -30,7 +31,7 @@ class Galleta(models.Model):
         db_table = 'galleta'
     
     def __str__(self):
-           return f" {self.nombre} - {self.descripcion} - {self.precio_venta} - {self.cantidad} - {self.peso_unidad} - {self.duracion_promedio}"
+           return f" {self.nombre} - {self.descripcion} - {self.precio_venta} - {self.cantidad} - {self.peso_unidad} - {self.duracion_promedio} - {self.imagen}"
     
 class Detalle_receta(models.Model):
     id_detalle_receta = models.AutoField(primary_key=True)

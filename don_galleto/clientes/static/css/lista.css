@@ -18,27 +18,132 @@ body {
 }
 
 .dashboard-header {
-  text-align: center;
-  color: #2d3436;
-  margin-bottom: 2rem;
-  font-size: 2.5rem;
-  font-weight: 700;
-  letter-spacing: 1px;
-  text-transform: uppercase;
+  font-size: 24px;
+  font-weight: bold;
+  margin-bottom: 20px;
 }
 
-/* Card Styles */
-.card {
-  background: #ffffff;
-  border-radius: 16px;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
-  padding: 20px;
-  text-align: center;
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
+.galletas-container {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 30px;
+  padding: 10px;
+}
+
+.galleta-item {
   display: flex;
   flex-direction: column;
   align-items: center;
+  transition: transform 0.2s;
+}
+
+.galleta-item:hover {
+  transform: translateY(-5px);
+}
+
+.galleta-imagen-container {
+  width: 110%;
+  height: 250px;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #f8f9fa;
+  border-radius: 8px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.galleta-imagen {
+  width: 100%;
   height: 100%;
+  object-fit: cover;
+  transition: transform 0.3s;
+}
+
+.galleta-imagen:hover {
+  transform: scale(1.05);
+}
+
+.galleta-sin-imagen {
+  color: #6c757d;
+  padding: 20px;
+}
+
+.galleta-detalles {
+  width: 100%;
+  padding: 15px 0;
+  text-align: left;
+  font-weight: bold;
+}
+
+.galleta-nombre {
+  font-size: 18px;
+  margin: 10px 0 5px;
+  color: #333;
+  font-weight: bold;
+}
+
+.galleta-precio {
+  font-size: 16px;
+  font-weight: bold;
+  color: #2d3436;
+  margin-bottom: 10px;
+}
+
+.galleta-select {
+  width: 100%;
+  padding: 8px;
+  margin-bottom: 10px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 14px;
+  background: #f9fafb;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.galleta-select:focus {
+  border-color: #27ae60;
+  box-shadow: 0 0 5px rgba(39, 174, 96, 0.5);
+}
+
+.galleta-cantidad-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.galleta-cantidad {
+  width: 60px;
+  padding: 8px;
+  text-align: center;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.galleta-boton-agregar {
+  background-color: #2d3436;
+  color: white;
+  border: none;
+  width: 40px;
+  height: 40px;
+  font-size: 20px;
+  cursor: pointer;
+  transition: background-color 0.2s, transform 0.2s;
+}
+
+.galleta-boton-agregar:hover {
+  background-color: #2d3436;
+  transform: scale(1.1);
+}
+
+
+.card img {
+  width: 500px;
+  height: auto;
+  border-radius: 16px;
+  margin-bottom: 15px;
 }
 
 .card:hover {
@@ -225,7 +330,6 @@ body {
 #overlay.mostrar {
   display: block;
 }
-
 
 /* Animations */
 @keyframes fadeIn {

@@ -22,21 +22,27 @@
 
   <form method="post" action="{% url 'finalizar_compra' %}">
     {% csrf_token %}
-    
+
     <div class="detalle-list-container">
       <div class="productos-lista">
         <ul class="detalle-list">
           {% for item in carrito %}
           <li class="detalle-item">
             <div class="producto-info">
-              <img src="{{ item.imagen.url }}" alt="{{ item.nombre }}" class="producto-imagen">
+              <div class="imagen">
+                {% if item.imagen %}
+                <img src="{{ item.imagen }}" class="producto-imagen">
+                {% else %}
+                <div class="galleta-sin-imagen">No disponible</div>
+                {% endif %}
+              </div>
               <div>
                 <h5 class="producto-nombre">{{ item.nombre }}</h5>
                 <p class="producto-descripcion">{{ item.descripcion }}</p>
               </div>
             </div>
             <div class="precio-cantidad">
-              <span class="precio">${{ item.precio_venta }}</span>
+              <span class="precio">${{ item.precio_venta|floatformat:2 }}</span>
               <br><span class="cantidad">{{ item.cantidad }} Pieza(s)</span>
             </div>
             <div class="subtotal">
@@ -50,7 +56,7 @@
       <div class="resumen-compra">
         <div class="totales">
           <div class="total">
-            <span>Total de la Compra:</span>
+            <span>Total:</span>
             <span>$ {{ total|floatformat:2 }}</span>
           </div>
         </div>

@@ -5,7 +5,7 @@
     <div class="card shadow-lg rounded-4 p-4" style="max-width: 500px; width: 100%;">
         <h2 class="text-center mb-4">Registro de Galleta</h2>
 
-        <form method="POST">
+        <form method="POST" enctype="multipart/form-data">
             {% csrf_token %}
             
             <div class="mb-3">
@@ -24,6 +24,23 @@
                   <div class="text-danger mt-2">
                     <small><i class="bi bi-exclamation-circle me-1"></i>{{ form.username.errors.0 }}</small>
                   </div>
+                {% endif %}
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label" style="color: #34495e; font-weight: 500;">
+                    {{ form.imagen.label }}
+                </label>
+                <div class="input-group">
+                    <span class="input-group-text" style="background-color: #f5f7fa; border: 1px solid #ced4da; border-right: none;">
+                        <i class="bi bi-image" style="color: #95a5a6;"></i>
+                    </span>
+                    {{ form.imagen }}
+                </div>
+                {% if form.imagen.errors %}
+                <div class="text-danger mt-2">
+                    <small><i class="bi bi-exclamation-circle me-1"></i>{{ form.imagen.errors.0 }}</small>
+                </div>
                 {% endif %}
             </div>
 

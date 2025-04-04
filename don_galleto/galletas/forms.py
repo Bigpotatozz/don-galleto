@@ -11,6 +11,7 @@ class Registro_galleta_form(forms.ModelForm):
     nombre = forms.CharField(max_length=30)
     descripcion = forms.CharField(max_length=100)
     peso_unidad = forms.FloatField()
+    imagen = forms.ImageField(required=False)
     duracion_promedio = forms.IntegerField()
     cantidad_receta = forms.IntegerField()
     
@@ -94,6 +95,7 @@ class Registro_galleta_form(forms.ModelForm):
         nombre = self.cleaned_data['nombre']
         descripcion = self.cleaned_data['descripcion']
         peso_unidad = self.cleaned_data['peso_unidad']
+        imagen = self.cleaned_data['imagen']
         duracion_promedio = self.cleaned_data['duracion_promedio']
         cantidad_receta = self.cleaned_data['cantidad_receta']
         ingredientes = [self.cleaned_data['ingrediente1'],
@@ -122,6 +124,7 @@ class Registro_galleta_form(forms.ModelForm):
                               cantidad = 0,
                               cantidad_receta = cantidad_receta,
                               peso_unidad = peso_unidad,
+                              imagen = imagen,
                               duracion_promedio = duracion_promedio,
                               costo = 0)
 
