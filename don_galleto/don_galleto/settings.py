@@ -49,6 +49,7 @@ INSTALLED_APPS = [
     'usuarios',
     'ventas',
     'clientes',
+    'django_recaptcha',
 ]
 
 MIDDLEWARE = [
@@ -88,7 +89,7 @@ WSGI_APPLICATION = 'don_galleto.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'pfdg3',
+        'NAME': 'pfdg',
         'USER': 'root',
         'PASSWORD': '1924',
         'HOST': 'localhost',
@@ -151,7 +152,20 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
-LOGIN_URL = '/cuentas/login/'
-LOGIN_REDIRECT_URL = 'home'
+LOGIN_URL = 'login'
+LOGIN_REDIRECT_URL = 'codigo_verificacion'
 LOGOUT_REDIRECT_URL = 'login'
 AUTH_USER_MODEL = 'usuarios.Usuario'
+
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+EMAIL_HOST_USER = 'oscarmancilla227@gmail.com'
+EMAIL_HOST_PASSWORD = 'gspr lsxu hzxd ahqi'
+
+SESSION_COOKIE_DOMAIN = None 
+SESSION_SAVE_EVERY_REQUEST = True
+
+RECAPTCHA_PUBLIC_KEY = '6LdtWQorAAAAAPVDZv1cyCAOPrXl20v4UeJuWz90'
+RECAPTCHA_PRIVATE_KEY = '6LdtWQorAAAAAIo0Z02NpvJ4R77o7D2925VG721_'
