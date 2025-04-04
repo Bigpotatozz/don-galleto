@@ -57,6 +57,12 @@ class ListaProduccionView(PermissionRequiredMixin, TemplateView):
 
 #Crear un nuevo lote
 class CrearLoteView(PermissionRequiredMixin, View):
+
+    permission_required = 'usuarios.empleado'
+
+    def handle_no_permission(self):
+        return redirect('lista_galletas_solicitud')
+    
     def get(self, request, id_galleta):
         galleta = get_object_or_404(Galleta, id_galleta=id_galleta)
         form = LoteGalletaForm(galleta=galleta)  # Pasamos solo la galleta
