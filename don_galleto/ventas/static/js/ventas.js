@@ -153,11 +153,18 @@ const calcularTotal = group => {
     
     if (!group.find('[name="galletas"]').val()) {
         group.find('.item-total').text('0.00');
+        group.find('.unidades-convertidas').text(''); // Limpiar mensaje si no hay galleta seleccionada
         return;
     }
 
     const cantUnidades = convertirAGalletas(cant, pres);
     group.find('.item-total').text((precio * cantUnidades).toFixed(2));
+    
+    if (!group.find('.unidades-convertidas').length) {
+        group.append(`<div class="unidades-convertidas text-muted small mt-2"></div>`);
+    }
+    group.find('.unidades-convertidas').text(`Equivalente a ${cantUnidades} unidades de galleta`);
+    
     updateVentaTotal();
 };
 

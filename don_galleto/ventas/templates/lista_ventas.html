@@ -13,7 +13,7 @@
 <div class="container mt-4">
     <div class="d-flex justify-content-between align-items-center mb-4">
         <div class="d-flex align-items-center">
-            <h1 class="me-3 mb-0">Ventas</h1>
+            <h1 class="me-3 mb-0"><i class="bi bi-coin"></i>Ventas</h1>
             <select id="selectorVista" class="form-select" style="width: 200px;">
                 <option value="historial">Historial de Ventas</option>
                 <option value="dia">Ventas del Día</option>
@@ -28,24 +28,32 @@
 <div id="historial-ventas" class="vista-contenido">
     {% if ventas %}
     <div class="table-responsive">
-        <table class="table table-bordered table-striped shadow-sm">
-            <thead class="table-dark">
+        <table class="table table-hover align-middle shadow-sm">
+            <thead class="table-light">
                 <tr>
-                    <th>ID Venta</th>
-                    <th>Fecha de Venta</th>
-                    <th>Tipo de Venta</th>
-                    <th>Estatus</th>
-                    <th>Total</th>
+                    <th style="color: #495057; font-weight: 500;">
+                        <i class="bi bi-layout-text-sidebar-reverse"></i> ID Venta
+                    </th>
+                    <th style="color: #495057; font-weight: 500;">
+                        <i class="bi bi-calendar"></i> Fecha de Venta
+                        <th style="color: #495057; font-weight: 500;">
+                            <i class="bi bi-shop-window"></i> Tipo de Venta
+                        </th>
+                    <th style="color: #495057; font-weight: 500;">
+                        <i class="bi bi-clipboard2"></i></i> Estatus
+                    </th>
+                    <th style="color: #495057; font-weight: 500;">
+                        <i class="bi bi-cash-coin"></i></i> Total
                 </tr>
             </thead>
             <tbody>
                 {% for venta in ventas %}
                     <tr>
                         <td>{{ venta.id_venta }}</td>
-                        <td>{{ venta.fecha_venta }}</td>
+                        <td>{{ venta.fecha_venta|date:"d/m/Y" }}</td>
                         <td>{{ venta.tipo }}</td>
                         <td>
-                            <span class="badge bg-{% if venta.estatus == 'activo' %}success{% else %}secondary{% endif %}">
+                            <span class="badge bg-{% if venta.estatus == 'confirmado' %}success{% elif venta.estatus == 'pendiente' %}warning{% elif venta.estatus == 'cancelado' %}danger{% else %}secondary{% endif %}">
                                 {{ venta.estatus }}
                             </span>
                         </td>
@@ -62,10 +70,18 @@
                                 <table class="table table-sm table-bordered mb-3">
                                     <thead>
                                         <tr class="table-secondary">
-                                            <th>Cantidad</th>
-                                            <th>Descripción</th>
-                                            <th>Precio Unitario</th>
-                                            <th>Total</th>
+                                            <th style="color: #495057; font-weight: 500;">
+                                                <i class="bi bi-123"></i> Cantidad
+                                            </th>
+                                            <th style="color: #495057; font-weight: 500;">
+                                                <i class="bi bi-card-text"></i> Descripción
+                                            </th>
+                                            <th style="color: #495057; font-weight: 500;">
+                                                <i class="bi bi-tag"></i> Precio Unitario
+                                            </th>
+                                            <th style="color: #495057; font-weight: 500;">
+                                                <i class="bi bi-cash-stack"></i> Total
+                                            </th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -102,24 +118,34 @@
         <div id="ventas-dia" class="vista-contenido" style="display: none;">
             {% if ventas_dia %}
             <div class="table-responsive">
-                <table class="table table-bordered table-striped bg-white shadow-sm">
-                    <thead class="table-dark">
+                <table class="table table-hover align-middle shadow-sm">
+                    <thead class="table-light">
                         <tr>
-                            <th>ID Venta</th>
-                            <th>Fecha de Venta</th>
-                            <th>Tipo de Venta</th>
-                            <th>Estatus</th>
-                            <th>Total</th>
+                            <th style="color: #495057; font-weight: 500;">
+                                <i class="bi bi-layout-text-sidebar-reverse"></i> ID Venta
+                            </th>
+                            <th style="color: #495057; font-weight: 500;">
+                                <i class="bi bi-calendar"></i> Fecha de Venta
+                            </th>
+                            <th style="color: #495057; font-weight: 500;">
+                                <i class="bi bi-shop-window"></i> Tipo de Venta
+                            </th>
+                            <th style="color: #495057; font-weight: 500;">
+                                <i class="bi bi-clipboard2"></i> Estatus
+                            </th>
+                            <th style="color: #495057; font-weight: 500;">
+                                <i class="bi bi-cash-coin"></i> Total
+                            </th>
                         </tr>
                     </thead>
                     <tbody>
                         {% for venta in ventas_dia %}
                             <tr>
                                 <td>{{ venta.id_venta }}</td>
-                                <td>{{ venta.fecha_venta }}</td>
+                                <td>{{ venta.fecha_venta|date:"d/m/Y" }}</td>
                                 <td>{{ venta.tipo }}</td>
                                 <td>
-                                    <span class="badge bg-{% if venta.estatus == 'activo' %}success{% else %}secondary{% endif %}">
+                                    <span class="badge bg-{% if venta.estatus == 'confirmado' %}success{% elif venta.estatus == 'pendiente' %}warning{% elif venta.estatus == 'cancelado' %}danger{% else %}secondary{% endif %}">
                                         {{ venta.estatus }}
                                     </span>
                                 </td>
@@ -177,21 +203,31 @@
         <div id="lista-pedidos" class="vista-contenido" style="display: none;">
             {% if pedidos %}
             <div class="table-responsive">
-                <table class="table table-bordered table-striped shadow-sm">
-                    <thead class="table-dark">
+                <table class="table table-hover align-middle shadow-sm">
+                    <thead class="table-light">
                         <tr>
-                            <th>ID Venta</th>
-                            <th>Fecha</th>
-                            <th>Estatus</th>
-                            <th>Total</th>
-                            <th>Acciones</th>
+                            <th style="color: #495057; font-weight: 500;">
+                                <i class="bi bi-layout-text-sidebar-reverse"></i> ID Venta
+                            </th>
+                            <th style="color: #495057; font-weight: 500;">
+                                <i class="bi bi-calendar"></i> Fecha
+                            </th>
+                            <th style="color: #495057; font-weight: 500;">
+                                <i class="bi bi-clipboard2-check"></i> Estatus
+                            </th>
+                            <th style="color: #495057; font-weight: 500;">
+                                <i class="bi bi-cash-coin"></i> Total
+                            </th>
+                            <th style="color: #495057; font-weight: 500;">
+                                <i class="bi bi-gear"></i> Acciones
+                            </th>
                         </tr>
                     </thead>
                     <tbody>
                         {% for pedido in pedidos %}
                         <tr>
                             <td>{{ pedido.id_venta }}</td>
-                            <td>{{ pedido.fecha_venta}}</td>
+                            <td>{{ pedido.fecha_venta|date:"d/m/Y" }}</td>
                             <td>
                                 <span class="badge bg-{% if pedido.estatus == 'completado' %}success{% elif pedido.estatus == 'pendiente' %}warning{% elif pedido.estatus == 'cancelado' %}danger{% else %}secondary{% endif %}">
                                     {{ pedido.estatus }}
