@@ -32,8 +32,6 @@ class ListaGalletasView(PermissionRequiredMixin, TemplateView):
             "lista": lista
         }
 
-
-
 #Lista de produccion
 class ListaProduccionView(PermissionRequiredMixin, TemplateView):
     permission_required = 'usuarios.empleado'
@@ -57,9 +55,8 @@ class ListaProduccionView(PermissionRequiredMixin, TemplateView):
         context["lista"] = lotes
         return context
 
-
 #Crear un nuevo lote
-class CrearLoteView(View):
+class CrearLoteView(PermissionRequiredMixin, View):
     def get(self, request, id_galleta):
         galleta = get_object_or_404(Galleta, id_galleta=id_galleta)
         form = LoteGalletaForm(galleta=galleta)  # Pasamos solo la galleta
@@ -81,9 +78,8 @@ class CrearLoteView(View):
 
             return redirect('lista_galletas_solicitud')
 
-
-    
-class ListaLotesView(TemplateView):
+#Historial de lotes
+class ListaLotesView(PermissionRequiredMixin, TemplateView):
     permission_required = 'usuarios.empleado'
         
     def handle_no_permission(self):
@@ -132,15 +128,10 @@ class ListaLotesView(TemplateView):
             mensaje = "Los siguientes lotes han caducado:\n" + "\n".join(lotes_caducados_detalle)
             messages.warning(self.request, mensaje)
 
-        # Obtener todos los lotes, incluyendo su estatus
         lotes = Lote_galleta.objects.all()
-
-        # Pasar los lotes caducados y no caducados al contexto
         context = super().get_context_data(**kwargs)
-        context["lotes"] = lotes  # Esto lo pasamos como 'lotes' al template
+        context["lotes"] = lotes
         return context
-    
-    
     
 # Cambiar estatus de un lote
 class CambiarEstatusLote(PermissionRequiredMixin, View):
@@ -169,7 +160,6 @@ class CambiarEstatusLote(PermissionRequiredMixin, View):
         
         return redirect('lista_produccion')
 
-
 #Agregar Merma
 class AgregarMermaView(PermissionRequiredMixin, FormView):
     permission_required = 'usuarios.empleado'
@@ -194,7 +184,6 @@ class AgregarMermaView(PermissionRequiredMixin, FormView):
         merma.id_lote_galleta = lote
         merma.save()
         
-        # Descontar la merma de galletas del lote
         lote.cantidad_galletas -= merma.cantidad
         lote.save()
 
