@@ -190,9 +190,10 @@ class FinalizarCompraView(LoginRequiredMixin, View):
             return redirect('detalle_compra')
 
         request.session['carrito'] = {}
-        return redirect('historial_compras')  
+        return redirect('gracias')  
 
-class HistorialComprasView(LoginRequiredMixin, TemplateView):
+class HistorialComprasView(PermissionRequiredMixin, LoginRequiredMixin, TemplateView):
+    permission_required = "usuarios.cliente"
     template_name = 'historial_compras.html'
 
     def get_context_data(self, **kwargs):
@@ -259,3 +260,13 @@ class EliminarDelCarritoView(View):
             return JsonResponse({'success': True, 'total': total, 'carrito': carrito})
 
         return JsonResponse({'success': False, 'message': 'Producto no encontrado en el carrito.'}, status=404)
+    
+class GraciasView(TemplateView):
+    template_name = 'gracias.html'
+
+    def get(self, request, *args, **kwargs):
+        request.session['carrito'] = {}
+        return super().get(request, *args, **kwargs)
+
+
+    

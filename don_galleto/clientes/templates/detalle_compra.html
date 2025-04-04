@@ -37,7 +37,7 @@
             </div>
             <div class="precio-cantidad">
               <span class="precio">${{ item.precio_venta }}</span>
-              <span class="cantidad">(x{{ item.cantidad }})</span>
+              <br><span class="cantidad">{{ item.cantidad }} Pieza(s)</span>
             </div>
             <div class="subtotal">
               <span>Subtotal: ${{ item.subtotal|floatformat:2 }}</span>
@@ -51,7 +51,7 @@
         <div class="totales">
           <div class="total">
             <span>Total de la Compra:</span>
-            <br><span>$ {{ total|floatformat:2 }}</span>
+            <span>$ {{ total|floatformat:2 }}</span>
           </div>
         </div>
         <button type="submit" class="btn-finalizar">Finalizar Compra</button>
