@@ -3,324 +3,138 @@
 
 {% block content %}
 <style>
-    :root {
-        --primary-color: #4361ee;
-        --secondary-color: #3f37c9;
-        --accent-color: #4895ef;
-        --light-color: #f8f9fa;
-        --dark-color: #212529;
+    .compact-card {
+        margin-bottom: 0.5rem;
     }
-    
-    .dashboard-container {
-        padding: 20px;
-        background-color: #f5f7fb;
-        min-height: 100vh;
+    .compact-card .card-header {
+        padding: 0.5rem 1rem;
     }
-    
-    .dashboard-header {
-        margin-bottom: 30px;
-        text-align: center;
+    .compact-card .card-header h2 {
+        font-size: 1.2rem;
+        margin-bottom: 0;
     }
-    
+    .compact-card .card-body {
+        padding: 0.75rem;
+    }
+    .compact-table {
+        font-size: 0.85rem;
+    }
+    .compact-table th, .compact-table td {
+        padding: 0.3rem 0.5rem;
+    }
+    .small-chart {
+        height: 160px !important;
+        margin-bottom: 0.5rem;
+    }
     .dashboard-title {
-        color: var(--dark-color);
-        font-weight: 600;
-        margin-bottom: 10px;
-    }
-    
-    .dashboard-subtitle {
-        color: #6c757d;
-        font-size: 1rem;
-    }
-    
-    .stat-card {
-        background: white;
-        border-radius: 10px;
-        padding: 20px;
-        box-shadow: 0 4px 6px rgba(0,0,0,0.05);
-        margin-bottom: 20px;
-        border-left: 4px solid var(--primary-color);
-        transition: transform 0.3s ease;
-    }
-    
-    .stat-card:hover {
-        transform: translateY(-5px);
-    }
-    
-    .stat-card h3 {
-        font-size: 14px;
-        color: #6c757d;
-        margin-bottom: 10px;
-    }
-    
-    .stat-card h2 {
-        font-size: 24px;
-        font-weight: 600;
-        color: var(--dark-color);
-    }
-    
-    .trend-up {
-        color: #28a745;
-    }
-    
-    .trend-down {
-        color: #dc3545;
-    }
-    
-    .trend-neutral {
-        color: #ffc107;
-    }
-    
-    .chart-card {
-        background: white;
-        border-radius: 10px;
-        padding: 20px;
-        box-shadow: 0 4px 6px rgba(0,0,0,0.05);
-        margin-bottom: 20px;
-    }
-    
-    .chart-card-header {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        margin-bottom: 15px;
-    }
-    
-    .chart-card-title {
-        font-weight: 600;
-        color: var(--dark-color);
-    }
-    
-    .chart-container {
-        position: relative;
-        height: 250px;
-    }
-    
-    .table-card {
-        background: white;
-        border-radius: 10px;
-        padding: 20px;
-        box-shadow: 0 4px 6px rgba(0,0,0,0.05);
-    }
-    
-    .table-card-header {
-        margin-bottom: 15px;
-    }
-    
-    .table-card-title {
-        font-weight: 600;
-        color: var(--dark-color);
-    }
-    
-    .table-responsive {
-        border-radius: 8px;
-        overflow: hidden;
-    }
-    
-    .table th {
-        background-color: var(--light-color);
-        font-weight: 600;
-        color: var(--dark-color);
-    }
-    
-    .badge {
-        padding: 5px 10px;
-        border-radius: 20px;
-        font-size: 12px;
-        font-weight: 500;
-    }
-    
-    .badge-success {
-        background-color: rgba(40, 167, 69, 0.1);
-        color: #28a745;
-    }
-    
-    .badge-warning {
-        background-color: rgba(255, 193, 7, 0.1);
-        color: #ffc107;
+        font-size: 1.4rem;
+        margin-bottom: 0.5rem;
     }
 </style>
 
-<div class="dashboard-container">
-    <div class="dashboard-header">
-        <h1 class="dashboard-title">Dashboard de Ventas</h1>
-        <p class="dashboard-subtitle">Resumen de las métricas clave de tu negocio</p>
-    </div>
+<div class="container-fluid py-1" style="max-height: 96vh; overflow-y: auto;">
+    <h1 class="dashboard-title text-center">Dashboard de Ventas</h1>
     
-    <!-- Stats Row -->
-    <div class="row">
-        <div class="col-md-4">
-            <div class="stat-card">
-                <h3>Ventas Totales</h3>
-                <h2>$12,345</h2>
-                <div class="trend-up">↑ 12% desde ayer</div>
-            </div>
+    <div class="card compact-card shadow-sm">
+        <div class="card-header bg-light">
+            <h2>Ventas Diarias (7 días)</h2>
         </div>
-        <div class="col-md-4">
-            <div class="stat-card">
-                <h3>Órdenes</h3>
-                <h2>1,234</h2>
-                <div class="trend-up">↑ 5% desde ayer</div>
+        <div class="card-body p-1">
+            <div class="small-chart">
+                <canvas id="ventasChart"></canvas>
             </div>
-        </div>
-        <div class="col-md-4">
-            <div class="stat-card">
-                <h3>Productos Vendidos</h3>
-                <h2>3,567</h2>
-                <div class="trend-neutral">→ Igual que ayer</div>
-            </div>
-        </div>
-    </div>
-    
-    <!-- Main Chart Row -->
-    <div class="row">
-        <div class="col-md-8">
-            <div class="chart-card">
-                <div class="chart-card-header">
-                    <h3 class="chart-card-title">Ventas Diarias (7 días)</h3>
-                </div>
-                <div class="chart-container">
-                    <canvas id="ventasChart"></canvas>
-                </div>
-            </div>
-        </div>
-        <div class="col-md-4">
-            <div class="chart-card">
-                <div class="chart-card-header">
-                    <h3 class="chart-card-title">Productos Más Vendidos</h3>
-                </div>
-                <div class="chart-container">
-                    <canvas id="productosChart"></canvas>
-                </div>
+            <div style="max-height: 180px; overflow-y: auto;">
+                <table class="table compact-table table-sm table-hover">
+                    <thead class="thead-light">
+                        <tr>
+                            <th>Fecha</th>
+                            <th>Total</th>
+                            <th># Ventas</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for venta in ventas_diarias %}
+                        <tr>
+                            <td>{{ venta.0 }}</td>
+                            <td>${{ venta.1|floatformat:2 }}</td>
+                            <td>{{ venta.2 }}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
             </div>
         </div>
     </div>
+    <br>
+    <br>
     
-    <!-- Second Row -->
-    <div class="row">
-        <div class="col-md-6">
-            <div class="chart-card">
-                <div class="chart-card-header">
-                    <h3 class="chart-card-title">Presentaciones Más Vendidas</h3>
-                </div>
-                <div class="chart-container">
-                    <canvas id="presentacionesChart"></canvas>
-                </div>
-            </div>
+    <div class="card compact-card shadow-sm">
+        <div class="card-header bg-light">
+            <h2>Productos Más Vendidos</h2>
         </div>
-        <div class="col-md-6">
-            <div class="table-card">
-                <div class="table-card-header">
-                    <h3 class="table-card-title">Últimas Transacciones</h3>
-                </div>
-                <div class="table-responsive">
-                    <table class="table table-hover">
-                        <thead>
-                            <tr>
-                                <th>ID</th>
-                                <th>Total</th>
-                                <th>Fecha</th>
-                                <th>Estado</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td>#382</td>
-                                <td>$125.00</td>
-                                <td>2023-05-15</td>
-                                <td><span class="badge badge-success">Completado</span></td>
-                            </tr>
-                            <tr>
-                                <td>#1784</td>
-                                <td>$89.50</td>
-                                <td>2023-05-14</td>
-                                <td><span class="badge badge-success">Completado</span></td>
-                            </tr>
-                            <tr>
-                                <td>#78X</td>
-                                <td>$210.00</td>
-                                <td>2023-05-14</td>
-                                <td><span class="badge badge-warning">Pendiente</span></td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
+        <div class="card-body p-1">
+            <div class="small-chart">
+                <canvas id="productosChart"></canvas>
+            </div>
+            <div style="max-height: 180px; overflow-y: auto;">
+                <table class="table compact-table table-sm table-hover">
+                    <thead class="thead-light">
+                        <tr>
+                            <th>Producto</th>
+                            <th>Cantidad</th>
+                            <th>Total</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for producto in productos_vendidos %}
+                        <tr>
+                            <td>{{ producto.id_galleta__nombre }}</td>
+                            <td>{{ producto.total_vendido }}</td>
+                            <td>${{ producto.total_ventas|floatformat:2 }}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
             </div>
         </div>
     </div>
+    <br>
+    <br>
     
-    <!-- Data Tables Row -->
-    <div class="row">
-        <div class="col-md-6">
-            <div class="table-card">
-                <div class="table-card-header">
-                    <h3 class="table-card-title">Detalle de Ventas Diarias</h3>
-                </div>
-                <div class="table-responsive">
-                    <table class="table table-hover">
-                        <thead>
-                            <tr>
-                                <th>Fecha</th>
-                                <th>Total</th>
-                                <th># Ventas</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {% for venta in ventas_diarias %}
-                            <tr>
-                                <td>{{ venta.0 }}</td>
-                                <td>${{ venta.1|floatformat:2 }}</td>
-                                <td>{{ venta.2 }}</td>
-                            </tr>
-                            {% endfor %}
-                        </tbody>
-                    </table>
-                </div>
-            </div>
+    <div class="card compact-card shadow-sm">
+        <div class="card-header bg-light">
+            <h2>Presentaciones Más Vendidas</h2>
         </div>
-        <div class="col-md-6">
-            <div class="table-card">
-                <div class="table-card-header">
-                    <h3 class="table-card-title">Productos Más Vendidos</h3>
-                </div>
-                <div class="table-responsive">
-                    <table class="table table-hover">
-                        <thead>
-                            <tr>
-                                <th>Producto</th>
-                                <th>Cantidad</th>
-                                <th>Total</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {% for producto in productos_vendidos %}
-                            <tr>
-                                <td>{{ producto.id_galleta__nombre }}</td>
-                                <td>{{ producto.total_vendido }}</td>
-                                <td>${{ producto.total_ventas|floatformat:2 }}</td>
-                            </tr>
-                            {% endfor %}
-                        </tbody>
-                    </table>
-                </div>
+        <div class="card-body p-1">
+            <div class="small-chart">
+                <canvas id="presentacionesChart"></canvas>
+            </div>
+            <div style="max-height: 180px; overflow-y: auto;">
+                <table class="table compact-table table-sm table-hover">
+                    <thead class="thead-light">
+                        <tr>
+                            <th>Producto</th>
+                            <th>Presentación</th>
+                            <th>Cantidad</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for presentacion in presentaciones_vendidas %}
+                        <tr>
+                            <td>{{ presentacion.id_galleta__nombre }}</td>
+                            <td>{{ presentacion.id_galleta__peso_unidad }}g</td>
+                            <td>{{ presentacion.cantidad_vendida }}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
             </div>
         </div>
     </div>
 </div>
 
-<!-- Chart.js -->
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
-    // Colores personalizados
-    const colors = {
-        primary: '#4361ee',
-        secondary: '#3f37c9',
-        accent: '#4895ef',
-        success: '#28a745',
-        warning: '#ffc107',
-        danger: '#dc3545'
-    };
-
     const chartOptions = {
         responsive: true,
         maintainAspectRatio: false,
@@ -328,66 +142,46 @@
             legend: {
                 position: 'bottom',
                 labels: {
-                    boxWidth: 12,
-                    padding: 20,
+                    boxWidth: 10,
                     font: {
-                        size: 12
-                    }
+                        size: 10
+                    },
+                    padding: 5
                 }
-            },
-            tooltip: {
-                backgroundColor: 'rgba(0,0,0,0.8)',
-                titleFont: {
-                    size: 14
-                },
-                bodyFont: {
-                    size: 12
-                },
-                padding: 12,
-                cornerRadius: 4
             }
         }
     };
 
-    // Ventas diarias chart
     new Chart(
         document.getElementById('ventasChart').getContext('2d'),
         {
-            type: 'line',
+            type: 'bar',
             data: {
                 labels: [{% for venta in ventas_diarias %}'{{ venta.0 }}',{% endfor %}],
                 datasets: [{
-                    label: 'Total Ventas',
+                    label: 'Total Ventas $',
                     data: [{% for venta in ventas_diarias %}{{ venta.1 }},{% endfor %}],
-                    backgroundColor: 'rgba(67, 97, 238, 0.1)',
-                    borderColor: colors.primary,
-                    borderWidth: 2,
-                    tension: 0.3,
-                    fill: true,
-                    pointBackgroundColor: 'white',
-                    pointBorderColor: colors.primary,
-                    pointBorderWidth: 2,
-                    pointRadius: 4,
-                    pointHoverRadius: 6
+                    backgroundColor: 'rgba(54, 162, 235, 0.5)',
+                    borderColor: 'rgba(54, 162, 235, 1)',
+                    borderWidth: 1
                 }]
             },
             options: {
                 ...chartOptions,
                 scales: {
                     y: {
-                        beginAtZero: false,
+                        beginAtZero: true,
                         ticks: {
-                            callback: function(value) {
-                                return '$' + value;
+                            font: {
+                                size: 9
                             }
-                        },
-                        grid: {
-                            drawBorder: false
                         }
                     },
                     x: {
-                        grid: {
-                            display: false
+                        ticks: {
+                            font: {
+                                size: 9
+                            }
                         }
                     }
                 }
@@ -395,7 +189,6 @@
         }
     );
     
-    // Productos más vendidos chart
     new Chart(
         document.getElementById('productosChart').getContext('2d'),
         {
@@ -405,53 +198,38 @@
                 datasets: [{
                     data: [{% for producto in productos_vendidos %}{{ producto.total_vendido }},{% endfor %}],
                     backgroundColor: [
-                        colors.primary,
-                        colors.secondary,
-                        colors.accent,
-                        colors.success,
-                        colors.warning
+                        'rgba(255, 99, 132, 0.5)',
+                        'rgba(54, 162, 235, 0.5)',
+                        'rgba(255, 206, 86, 0.5)',
+                        'rgba(75, 192, 192, 0.5)',
+                        'rgba(153, 102, 255, 0.5)'
                     ],
-                    borderWidth: 0,
-                    hoverOffset: 10
+                    borderWidth: 1
                 }]
             },
-            options: {
-                ...chartOptions,
-                cutout: '70%'
-            }
+            options: chartOptions
         }
     );
     
-    // Presentaciones más vendidas chart
     new Chart(
         document.getElementById('presentacionesChart').getContext('2d'),
         {
-            type: 'bar',
+            type: 'pie',
             data: {
                 labels: [{% for presentacion in presentaciones_vendidas %}'{{ presentacion.id_galleta__nombre|truncatechars:15 }} - {{ presentacion.id_galleta__peso_unidad }}g',{% endfor %}],
                 datasets: [{
-                    label: 'Cantidad Vendida',
                     data: [{% for presentacion in presentaciones_vendidas %}{{ presentacion.cantidad_vendida }},{% endfor %}],
-                    backgroundColor: colors.accent,
-                    borderRadius: 4
+                    backgroundColor: [
+                        'rgba(255, 99, 132, 0.5)',
+                        'rgba(54, 162, 235, 0.5)',
+                        'rgba(255, 206, 86, 0.5)',
+                        'rgba(75, 192, 192, 0.5)',
+                        'rgba(153, 102, 255, 0.5)'
+                    ],
+                    borderWidth: 1
                 }]
             },
-            options: {
-                ...chartOptions,
-                scales: {
-                    y: {
-                        beginAtZero: true,
-                        grid: {
-                            drawBorder: false
-                        }
-                    },
-                    x: {
-                        grid: {
-                            display: false
-                        }
-                    }
-                }
-            }
+            options: chartOptions
         }
     );
 </script>
