@@ -9,7 +9,7 @@ from django.contrib.auth import logout
 from usuarios.models import Usuario, Logs
 from usuarios.utils import asignar_permisos, log
 from datetime import date
-
+import random
 
 
 class Lista_usuarios_view(PermissionRequiredMixin, TemplateView):
@@ -106,3 +106,40 @@ def eliminar_usuario(request, id):
         )
     
     return redirect('listado_usuarios')
+
+
+class Login_view(FormView):
+    template_name = 'login.html'
+    form_class = forms.Login_form
+    success_url = reverse_lazy('home')
+    
+    def form_valid(self, form):
+        user = form.auth()
+        
+        if user:
+            self.request.session['usuario_id'] = user.id_usuario
+            self.request.session['usuario_nombre'] = user.username
+            
+            codigo = random.randint(1000, 9999)
+            try:
+                usuario = Usuario.objects.get(username=user.username)
+                usuario.codigo_verificacion = codigo
+                usuario.save()
+                
+                return redirect('codigo_verificacion')
+            except Exception as e:
+                print(f"ERROR AL GUARDAR CÓDIGO: {str(e)}")
+
+            self.request.session.modified = True
+            
+            self.request.session.save()
+        else:
+            print("USUARIO NO AUTENTICADO")
+        return super().form_valid(form)
+        
+class Codigo_verificacion_view(FormView):
+    
+    template_name = 'codigo_verificacion.html'
+    form_class = forms.Verification_form
+    success_url = reverse_lazy('home')
+    

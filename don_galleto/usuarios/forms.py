@@ -2,7 +2,10 @@ from django import forms
 from django.shortcuts import redirect
 from usuarios.models import Usuario
 from django.contrib.auth.forms import UserCreationForm
-
+from django.contrib.auth import authenticate
+from django.contrib.auth import login
+from django.contrib import messages
+from django.contrib.auth.views import LoginView
 
 class Registro_admin_form(UserCreationForm):
         
@@ -45,3 +48,39 @@ class Edicion_usuario_form(forms.ModelForm):
         
         usuario.save()
         return usuario
+
+
+class Login_form(forms.Form):
+    
+    username = forms.CharField(max_length=100)
+    password = forms.CharField(max_length=100, widget=forms.PasswordInput)
+        
+    def auth(self):                                         
+        usuario = self.cleaned_data['username']
+        contrasenia = self.cleaned_data['password']
+        
+        user_auth = authenticate(username=usuario, password=contrasenia)
+        
+        print(user_auth)
+        
+        if user_auth is not None:   
+            
+            return user_auth
+        return None 
+        
+        
+class Verification_form(forms.ModelForm):
+    
+    codigo = forms.CharField(max_length=6, label="Código de verificación")
+    
+    class Meta:
+        model = Usuario
+        fields = ['codigo']
+        
+    def clean_codigo(self):
+        codigo = self.cleaned_data.get('codigo_verificacion')
+        
+        if len(codigo) != 6:
+            raise forms.ValidationError("El código de verificación debe tener 6 dígitos.")
+        
+        return codigo
