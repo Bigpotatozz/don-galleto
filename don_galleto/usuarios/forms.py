@@ -6,6 +6,7 @@ from django.contrib.auth import authenticate
 from django.contrib.auth import login
 from django.contrib import messages
 from django.contrib.auth.views import LoginView
+from django.core.exceptions import ValidationError, MultipleObjectsReturned
 
 class Registro_admin_form(UserCreationForm):
         
@@ -69,18 +70,43 @@ class Login_form(forms.Form):
         return None 
         
         
-class Verification_form(forms.ModelForm):
-    
-    codigo = forms.CharField(max_length=6, label="Código de verificación")
-    
-    class Meta:
-        model = Usuario
-        fields = ['codigo']
+class Verification_form(forms.Form):
+    codigo = forms.IntegerField(
+        label="Código de verificación",
+        widget=forms.NumberInput(attrs={
+            'class': 'form-control',
+            'placeholder': 'Ingrese el código de 4 dígitos',
+            'autocomplete': 'off',
+            'inputmode': 'numeric'
+        }),
+        min_value=1000,
+        max_value=9999,
+        error_messages={
+            'required': 'Por favor ingrese el código de verificación',
+            'invalid': 'Debe ser un número entre 1000 y 9999',
+            'min_value': 'El código debe tener 4 dígitos',
+            'max_value': 'El código debe tener 4 dígitos'
+        }
+    )
         
-    def clean_codigo(self):
-        codigo = self.cleaned_data.get('codigo_verificacion')
+    def verificar_codigo(self):
+        codigo = self.cleaned_data.get('codigo')
         
-        if len(codigo) != 6:
-            raise forms.ValidationError("El código de verificación debe tener 6 dígitos.")
+        try:
+            usuario = Usuario.objects.get(codigo_verificacion=codigo)
+            usuario.codigo_verificacion = None
+            usuario.save()
+            
+            return usuario
+            
+        except Usuario.DoesNotExist:
+            raise ValidationError(
+                "Código incorrecto o expirado",
+                code='invalid_code'
+            )
+        except MultipleObjectsReturned:
+            raise ValidationError(
+                "Error aiuda",
+                code='system_error'
+            )
         
-        return codigo
