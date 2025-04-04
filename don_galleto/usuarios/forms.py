@@ -7,6 +7,8 @@ from django.contrib.auth import login
 from django.contrib import messages
 from django.contrib.auth.views import LoginView
 from django.core.exceptions import ValidationError, MultipleObjectsReturned
+from django_recaptcha.fields import ReCaptchaField
+from django_recaptcha.widgets import ReCaptchaV2Invisible
 
 class Registro_admin_form(UserCreationForm):
         
@@ -55,6 +57,7 @@ class Login_form(forms.Form):
     
     username = forms.CharField(max_length=100)
     password = forms.CharField(max_length=100, widget=forms.PasswordInput)
+    captcha = ReCaptchaField()
         
     def auth(self):                                         
         usuario = self.cleaned_data['username']

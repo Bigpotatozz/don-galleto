@@ -53,6 +53,14 @@
         </div>
       </div>
 
+      <!-- Campo CAPTCHA -->
+      <div class="mb-4">
+        <label for="{{ form.captcha.id_for_label }}" class="form-label" style="color: #34495e; font-weight: 500;">Verificación CAPTCHA</label>
+        <div class="input-group">
+          {{ form.captcha }}  <!-- Aquí se renderiza el campo CAPTCHA -->
+        </div>
+      </div>
+
       <input type="hidden" name="next" value="{{ next }}">
 
       <button type="submit" class="btn w-100 py-2 mb-3" 

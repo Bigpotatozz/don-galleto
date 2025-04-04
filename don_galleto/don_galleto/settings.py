@@ -49,6 +49,7 @@ INSTALLED_APPS = [
     'usuarios',
     'ventas',
     'clientes',
+    'django_recaptcha',
 ]
 
 MIDDLEWARE = [
@@ -165,3 +166,6 @@ EMAIL_HOST_PASSWORD = 'gspr lsxu hzxd ahqi'
 
 SESSION_COOKIE_DOMAIN = None 
 SESSION_SAVE_EVERY_REQUEST = True
+
+RECAPTCHA_PUBLIC_KEY = '6LdtWQorAAAAAPVDZv1cyCAOPrXl20v4UeJuWz90'
+RECAPTCHA_PRIVATE_KEY = '6LdtWQorAAAAAIo0Z02NpvJ4R77o7D2925VG721_'
