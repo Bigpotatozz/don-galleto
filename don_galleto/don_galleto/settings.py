@@ -47,8 +47,7 @@ INSTALLED_APPS = [
     'proovedores',
     'tienda',
     'usuarios',
-    'ventas',
-    'clientes',
+    'ventas'
 ]
 
 MIDDLEWARE = [
@@ -153,5 +152,5 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 LOGIN_URL = '/cuentas/login/'
 LOGIN_REDIRECT_URL = 'home'
-LOGOUT_REDIRECT_URL = 'login'
+LOGOUT_REDIRECT_URL = 'home'
 AUTH_USER_MODEL = 'usuarios.Usuario'

@@ -1,4 +1,4 @@
-from django.shortcuts import get_object_or_404, redirect
+from django.shortcuts import get_object_or_404, redirect, render
 from django.views.generic import TemplateView, FormView
 from django.urls import reverse_lazy
 from django.contrib.auth.mixins import PermissionRequiredMixin, LoginRequiredMixin
@@ -6,11 +6,13 @@ from ventas.models import Venta, Galleta, Detalle_venta
 from ventas.forms import VentaRegistroForms 
 from django.db import connection
 import datetime
-from datetime import timedelta
+from datetime import timedelta, datetime
 from django.http import HttpResponse
 from reportlab.pdfgen import canvas
 from reportlab.lib.pagesizes import letter
 from io import BytesIO
+from django.db.models import Sum, Count
+from .models import Venta, Detalle_venta, Galleta
 
 class Lista_Ventas_View(PermissionRequiredMixin, TemplateView):
     permission_required = 'usuarios.empleado'
@@ -140,7 +142,7 @@ def generar_ticket(request, id_venta):
     
     c.setFont("Helvetica-Bold", 9) 
     c.drawString(30, 440, f"Ticket #: {id_venta}")
-    c.drawString(30, 430, f"Fecha: {datetime.datetime.now().strftime('%d/%m/%Y %H:%M')}")
+    c.drawString(30, 430, f"Fecha: {datetime.now().strftime('%d/%m/%Y %H:%M')}")
     c.line(30, 420, 170, 420)
     
     c.setFont("Helvetica-Bold", 8) 
@@ -198,12 +200,6 @@ def cambiar_estatus(request, venta_id, estatus):
     
     venta.save()
     return redirect('lista_ventas')
-
-from django.shortcuts import render
-from django.db import connection
-from django.db.models import Sum, Count
-#from datetime import datetime, timedelta
-from .models import Venta, Detalle_venta, Galleta
 
 def dashboard_ventas(request):
     fecha_limite = datetime.now() - timedelta(days=7)
