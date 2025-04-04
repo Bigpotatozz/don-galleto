@@ -6,7 +6,7 @@
 <div class="container">
     <h3 class="title">Historial de Compras</h3>
 
-    {% if ventas_con_totales %}
+    {% if ventas_con_detalles %}
     <div class="table-wrapper">
         <table class="purchase-table">
             <thead>
@@ -14,14 +14,53 @@
                     <th>N°Compra</th>
                     <th>Fecha</th>
                     <th>Total</th>
+                    <th>Estatus</th>
+                    <th>Acciones</th>
                 </tr>
             </thead>
             <tbody>
-                {% for item in ventas_con_totales %}
+                {% for item in ventas_con_detalles %}
                 <tr>
                     <td>{{ forloop.counter }}</td>
                     <td>{{ item.venta.fecha_venta|date:"d/m/Y" }}</td>
                     <td>${{ item.total|floatformat:2 }}</td>
+                    <td>
+                        <span class="badge bg-{% if item.venta.estatus == 'completado' %}success{% elif item.venta.estatus == 'pendiente' %}warning{% elif item.venta.estatus == 'cancelado' %}danger{% else %}secondary{% endif %}">
+                            {{ item.venta.estatus }}
+                        </span>
+                    </td>
+                    <td>
+                        <button class="btn btn-sm btn-outline-dark toggle-details" data-venta-id="{{ item.venta.id_venta }}">
+                            Ver Detalles
+                        </button>
+                    </td>
+                </tr>
+                <tr class="detalle-compra" id="detalle-{{ item.venta.id_venta }}" style="display: none;">
+                    <td colspan="5">
+                        <div class="p-3">
+                            <h5>Detalles de la Compra</h5>
+                            <table class="table table-sm">
+                                <thead>
+                                    <tr>
+                                        <th>Producto</th>
+                                        <th>Cantidad</th>
+                                        <th>Precio Unitario</th>
+                                        <th>Total</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for detalle in item.detalles %}
+                                    <tr>
+                                        <td>{{ detalle.id_galleta.nombre }}</td>
+                                        <td>{{ detalle.cantidad }}</td>
+                                        <td>${{ detalle.precio_galleta|floatformat:2 }}</td>
+                                        <td>${{ detalle.total|floatformat:2 }}</td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </td>
                 </tr>
                 {% endfor %}
             </tbody>
@@ -33,4 +72,17 @@
     </div>
     {% endif %}
 </div>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        document.querySelectorAll(".toggle-details").forEach(button => {
+            button.addEventListener("click", function () {
+                const ventaId = this.getAttribute("data-venta-id");
+                const detalleRow = document.getElementById(`detalle-${ventaId}`);
+                detalleRow.style.display = detalleRow.style.display === "none" ? "table-row" : "none";
+            });
+        });
+    });
+</script>
+
 {% endblock %}

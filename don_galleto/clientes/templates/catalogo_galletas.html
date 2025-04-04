@@ -4,42 +4,52 @@
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <link rel="stylesheet" href="/static/css/lista.css">
 
-<div class="container">
-  <div class="dashboard-header">Menú de Galletas</div>
-  <div class="row row-cols-2 row-cols-md-3 g-4">
-    {% for galleta in galletas %}
-    <div class="col">
-      <div class="card border-0 shadow-sm text-center">
-        <div class="card-body">
-          <h5 class="card-title">{{ galleta.nombre }}</h5>
-          <p class="text-muted">${{ galleta.precio_venta }}</p>
-          <select id="presentacion_{{ galleta.id_galleta }}" class="form-select">
-            <option value="Individual">Individual</option>
-            <option value="Bolsa">Bolsa</option>
-            <option value="Caja">Caja</option>
-          </select>
-          <input type="number" id="cantidad_{{ galleta.id_galleta }}" class="form-control" value="1" min="1" style="width: 60px; margin: 10px auto;">
-          <button class="btn btn-dark rounded-pill agregar-carrito" data-id="{{ galleta.id_galleta }}">+</button>
+<body data-login-url="{% url 'login' %}" data-is-authenticated="{{ user.is_authenticated }}">
+  <div class="container">
+    <div class="dashboard-header">Menú de Galletas</div>
+    <div class="row row-cols-2 row-cols-md-3 g-4">
+      {% for galleta in galletas %}
+      <div class="col">
+        <div class="card border-0 shadow-sm text-center">
+          <div class="card-body">
+            <h5 class="card-title">{{ galleta.nombre }}</h5>
+            <p class="text-muted">${{ galleta.precio_venta|floatformat:2 }}</p>
+            <select id="presentacion_{{ galleta.id_galleta }}" class="form-select">
+              <option value="Individual">Individual</option>
+              <option value="Bolsa">Bolsa (15 piezas)</option>
+              <option value="Caja">Caja (50 piezas)</option>
+            </select>
+            <input type="number" id="cantidad_{{ galleta.id_galleta }}" class="form-control" value="1" min="1" max="100"
+              style="width: 60px; margin: 10px auto;" oninput="validarCantidad(this)">
+            <button class="btn btn-dark rounded-pill agregar-carrito" data-id="{{ galleta.id_galleta }}">+</button>
+          </div>
         </div>
       </div>
-    </div>
-    {% endfor %}
-  </div>
-
-  <button id="abrir-carrito">🛒</button>
-  <div id="carrito">
-    <button id="btn-cerrar-carrito" class="btn btn-danger">&times;</button>
-    <h4>Carrito de Compras</h4>
-    <ul id="lista-carrito">
-      {% for item in carrito %}
-      <li style="display: flex; justify-content: space-between; align-items: center; padding: 10px; background-color: #f8f9fa; border-radius: 8px; margin-bottom: 8px;">
-        <span>{{ item.nombre }} - ${{ item.precio_venta }} (x{{ item.cantidad }})</span>
-      </li>
       {% endfor %}
-    </ul>
-    <div id="total-carrito">Total: $0.00</div>
-    <button id="btn-comprar" class="btn-dark" data-id="{{ id_venta }}">Comprar</button>
+    </div>
+
+    <button id="abrir-carrito">🛒</button>
+    <div id="carrito-overlay">
+      <div id="carrito">
+        <button id="btn-cerrar-carrito" class="btn btn-danger">&times;</button>
+        <h4>Carrito de Compras</h4>
+        <ul id="lista-carrito">
+          {% for item in carrito.values %}
+          <li class="item-carrito" data-id="{{ item.id }}"
+            style="display: flex; justify-content: space-between; align-items: center; padding: 10px; background-color: #f8f9fa; border-radius: 8px; margin-bottom: 8px;">
+            <span>{{ item.nombre }}
+              <br>Precio individual: ${{ item.precio_venta|floatformat:2 }}
+              <br><span>cantidad:{{ item.cantidad }} pieza(s)</span>
+              <br><span>Subtotal: ${{ item.subtotal|floatformat:2 }}</span>
+              <br><button class="btn btn-danger btn-sm eliminar-item" data-id="{{ item.id_galleta }}">Eliminar</button>
+          </li>
+          {% endfor %}
+        </ul>
+        <div id="total-carrito">Total: ${{ total_carrito|floatformat:2 }}</div>
+        <button id="btn-comprar" class="btn-dark" data-id="{{ id_venta }}">Comprar</button>
+      </div>
+    </div>
   </div>
-</div>
-<script src="/static/js/lista.js"></script>
+  <script src="/static/js/lista.js"></script>
+</body>
 {% endblock %}

@@ -22,4 +22,20 @@ document.addEventListener("DOMContentLoaded", function () {
       const totalProducto = precio * cantidad;
       document.querySelector(`#total-producto-${id}`).textContent = `Total por producto: $${totalProducto.toFixed(2)}`;
     }
+
+
+    const alertContainer = document.querySelector(".alert-container");
+    if (alertContainer) {
+      const alertMessage = alertContainer.querySelector(".alert").textContent.trim();
+      const alertType = alertContainer.querySelector(".alert").classList.contains("alert-success") ? "success" : "error";
+
+      Swal.fire({
+        title: alertType === "success" ? "¡Éxito!" : "Error",
+        text: alertMessage,
+        icon: alertType,
+        confirmButtonText: "Aceptar",
+        confirmButtonColor: "#27ae60",
+      });
+    }
+
   });

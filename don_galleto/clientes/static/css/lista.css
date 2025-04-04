@@ -118,12 +118,15 @@ body {
   right: -400px;
   width: 350px;
   height: 100vh;
-  background: linear-gradient(135deg, #f9fafb, #ffffff);
-  box-shadow: -4px 0 15px rgba(0, 0, 0, 0.1);
-  border-radius: 1.5rem 0 0 1.5rem;
+  background: linear-gradient(135deg, #ffecd2, lightgray);
+  box-shadow: -4px 0 15px rgba(0, 0, 0, 0.2);
   padding: 2rem;
   transition: right 0.3s ease-in-out;
   z-index: 1000;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  overflow: scroll;
 }
 
 #carrito.mostrar {
@@ -169,9 +172,11 @@ body {
 #lista-carrito li {
   list-style: none;
   padding: 12px;
-  background: #dfe6e9;
+  background: #ffffff;
   margin: 10px 0;
   border-radius: 8px;
+  border: 2px solid #ff6f61;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
   opacity: 0;
   transform: translateX(-20px);
   animation: fadeInItem 0.5s forwards;
@@ -182,8 +187,45 @@ body {
   font-size: 1.5rem;
   font-weight: 700;
   margin-top: 15px;
-  color: #27ae60;
+  color: #2d3436;
 }
+
+#btn-comprar {
+  display: block;
+  margin: 20px auto;
+  background-color: #27ae60;
+  color: white;
+  border: none;
+  border-radius: 30px;
+  padding: 10px 20px;
+  font-size: 1.2rem;
+  cursor: pointer;
+  transition: background-color 0.2s ease, transform 0.2s ease;
+}
+
+#btn-comprar:hover {
+  background-color: #218838;
+  transform: scale(1.1);
+  transition: transform 0.3s ease-out;
+}
+
+#carrito-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(255, 255, 255, 0);
+  display: none;
+  z-index: 999;
+  backdrop-filter: blur(5px);
+  transition: all 0.3s ease;
+}
+
+#overlay.mostrar {
+  display: block;
+}
+
 
 /* Animations */
 @keyframes fadeIn {

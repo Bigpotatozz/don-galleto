@@ -18,25 +18,45 @@
 <link rel="stylesheet" href="/static/css/detalle.css">
 
 <div class="detalle-compra-container">
-  <h4>Detalle de Compra</h4>
+  <h4 class="titulo-detalle">Detalle de tu Compra</h4>
+
   <form method="post" action="{% url 'finalizar_compra' %}">
     {% csrf_token %}
-    <ul class="detalle-list">
-      {% for item in carrito %}
-      <li>
-        <span>{{ item.nombre }} - ${{ item.precio_venta }} (x{{ item.cantidad }})</span>
-        <span>{{ item.descripcion }}</span>
-        <div class="cantidad-control">
-          <button type="button" class="btn-decrementar" data-id="{{ item.id }}">-</button>
-          <input type="number" name="cantidad_{{ item.id }}" class="cantidad-input" value="{{ item.cantidad }}" min="1"
-            readonly>
-          <button type="button" class="btn-incrementar" data-id="{{ item.id }}">+</button>
+    
+    <div class="detalle-list-container">
+      <div class="productos-lista">
+        <ul class="detalle-list">
+          {% for item in carrito %}
+          <li class="detalle-item">
+            <div class="producto-info">
+              <img src="{{ item.imagen.url }}" alt="{{ item.nombre }}" class="producto-imagen">
+              <div>
+                <h5 class="producto-nombre">{{ item.nombre }}</h5>
+                <p class="producto-descripcion">{{ item.descripcion }}</p>
+              </div>
+            </div>
+            <div class="precio-cantidad">
+              <span class="precio">${{ item.precio_venta }}</span>
+              <br><span class="cantidad">{{ item.cantidad }} Pieza(s)</span>
+            </div>
+            <div class="subtotal">
+              <span>Subtotal: ${{ item.subtotal|floatformat:2 }}</span>
+            </div>
+          </li>
+          {% endfor %}
+        </ul>
+      </div>
+
+      <div class="resumen-compra">
+        <div class="totales">
+          <div class="total">
+            <span>Total de la Compra:</span>
+            <span>$ {{ total|floatformat:2 }}</span>
+          </div>
         </div>
-      </li>
-      {% endfor %}
-    </ul>
-    <div class="total-compra">Total: ${{ total }}</div>
-    <button type="submit" class="btn-finalizar">Finalizar Compra</button>
+        <button type="submit" class="btn-finalizar">Finalizar Compra</button>
+      </div>
+    </div>
   </form>
 </div>
 
