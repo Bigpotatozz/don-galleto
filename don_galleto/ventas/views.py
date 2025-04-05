@@ -6,12 +6,12 @@ from ventas.models import Venta, Galleta, Detalle_venta
 from ventas.forms import VentaRegistroForms 
 from django.db import connection
 import datetime
-from datetime import timedelta, datetime
+from datetime import timedelta, datetime    
 from django.http import HttpResponse
 from reportlab.pdfgen import canvas
 from reportlab.lib.pagesizes import letter
 from io import BytesIO
-from django.db.models import Sum, Count
+from django.db.models import Sum, Count, F
 from .models import Venta, Detalle_venta, Galleta
 
 class Lista_Ventas_View(PermissionRequiredMixin, TemplateView):
@@ -202,8 +202,38 @@ def cambiar_estatus(request, venta_id, estatus):
     return redirect('lista_ventas')
 
 def dashboard_ventas(request):
-    fecha_limite = datetime.now() - timedelta(days=7)
+    fecha_limite = datetime.now() - timedelta(days=30)
     
+    with connection.cursor() as cursor:
+        cursor.execute("""
+            SELECT SUM(cantidad_restante * precio_unitario) 
+            FROM compra_insumo
+            WHERE estatus = 'disponible'
+        """)
+        costo_inventario = cursor.fetchone()[0] or 0
+
+    with connection.cursor() as cursor:
+        cursor.execute("""
+            SELECT 
+                g.nombre AS galleta,
+                SUM(dv.cantidad) AS cantidad_vendida,
+                SUM(dv.cantidad * dv.precio_galleta) AS total_obtenido
+            FROM 
+                detalle_venta dv
+            JOIN 
+                galleta g ON dv.id_galleta_id = g.id_galleta
+            JOIN
+                venta v ON dv.id_venta_id = v.id_venta
+            WHERE 
+                v.fecha_venta >= %s
+            GROUP BY 
+                g.nombre
+            ORDER BY 
+                total_obtenido DESC
+            LIMIT 5
+        """, [fecha_limite])
+        productos_vendidos = cursor.fetchall()
+
     with connection.cursor() as cursor:
         cursor.execute("""
             SELECT DATE(v.fecha_venta) as fecha, 
@@ -216,29 +246,32 @@ def dashboard_ventas(request):
             ORDER BY fecha DESC
         """, [fecha_limite])
         ventas_diarias = cursor.fetchall()
-    
-    productos_vendidos = Detalle_venta.objects.filter(
+
+    ventas_por_galleta = Detalle_venta.objects.filter(
         id_venta__fecha_venta__gte=fecha_limite
     ).values(
-        'id_galleta__nombre' 
+        'id_galleta__nombre'
     ).annotate(
-        total_vendido=Sum('cantidad'),
-        total_ventas=Sum('precio_galleta')
-    ).order_by('-total_vendido')[:5]
-    
-    presentaciones_vendidas = Detalle_venta.objects.filter(
-        id_venta__fecha_venta__gte=fecha_limite
-    ).values(
-        'id_galleta__nombre',  
-        'id_galleta__peso_unidad'  
-    ).annotate(
-        cantidad_vendida=Sum('cantidad')
-    ).order_by('-cantidad_vendida')[:5]
-    
+        total_unidades=Sum('cantidad')
+    ).order_by('-total_unidades')
+
+    ganancia_esperada = Galleta.objects.aggregate(
+        total_ganancia=Sum(F('cantidad') * (F('precio_venta') - F('costo')))
+    )['total_ganancia'] or 0
+
+    galletas_rentables = Galleta.objects.annotate(
+        margen_ganancia=F('precio_venta') - F('costo'),
+        rentabilidad=(F('precio_venta') - F('costo')) / F('costo') * 100,
+        ganancia_potencial=(F('precio_venta') - F('costo')) * F('cantidad')
+    ).order_by('-margen_ganancia')
+
     context = {
         'ventas_diarias': ventas_diarias,
         'productos_vendidos': productos_vendidos,
-        'presentaciones_vendidas': presentaciones_vendidas,
+        'ventas_por_galleta': ventas_por_galleta,
+        'costo_inventario': float(costo_inventario),
+        'ganancia_esperada': float(ganancia_esperada),
+        'galletas_rentables': galletas_rentables,
     }
-    
-    return render(request, 'dashboard_ventas.html', context)
+
+    return render(request, 'dashboards.html', context)
