@@ -7,213 +7,159 @@ body {
   padding: 0;
 }
 
-.container {
-  max-width: 1200px;
-  margin: 3rem auto;
-  padding: 2.5rem;
-  background: #ffffff;
-  border-radius: 1.5rem;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
-  animation: fadeIn 0.8s ease-in-out;
+.dashboard-header {
+  font-size: 28px;
+  font-weight: bold;
+  margin: 20px 0 30px;
+  color: #5a3e36;
+  text-align: center;
 }
 
-.dashboard-header {
-  font-size: 24px;
-  font-weight: bold;
-  margin-bottom: 20px;
+.dashboard-header i {
+  margin-right: 10px;
+  color: #d4a76a;
 }
 
 .galletas-container {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 30px;
-  padding: 10px;
+  gap: 25px;
+  padding: 20px;
+  max-width: 1200px;
+  margin: 0 auto;
 }
 
-.galleta-item {
+.galleta-card {
   display: flex;
-  flex-direction: column;
-  align-items: center;
-  transition: transform 0.2s;
+  background: white;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
-.galleta-item:hover {
+.galleta-card:hover {
   transform: translateY(-5px);
+  box-shadow: 0 12px 20px rgba(0, 0, 0, 0.15);
 }
 
-.galleta-imagen-container {
-  width: 100%;
-  height: 250px;
+.card-image-container {
+  width: 150px;
+  height: 180px;
   overflow: hidden;
   display: flex;
   align-items: center;
   justify-content: center;
-  background: #f8f9fa;
-  border-radius: 8px;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  background: #f8f4f0;
 }
 
-.galleta-imagen {
+.card-image {
   width: 100%;
   height: 100%;
   object-fit: cover;
   transition: transform 0.3s;
 }
 
-.galleta-imagen:hover {
+.card-image:hover {
   transform: scale(1.05);
 }
 
-.galleta-sin-imagen {
-  color: #6c757d;
+.card-sin-imagen {
+  color: #b7a997;
   padding: 20px;
+  text-align: center;
 }
 
-.galleta-detalles {
-  width: 100%;
-  padding: 15px 0;
-  text-align: left;
-  font-weight: bold;
+.card-sin-imagen i {
+  font-size: 24px;
+  display: block;
+  margin-bottom: 10px;
 }
 
-.galleta-nombre {
+.card-content {
+  flex: 1;
+  padding: 15px;
+  display: flex;
+  flex-direction: column;
+}
+
+.card-nombre {
   font-size: 18px;
-  margin: 10px 0 5px;
-  color: #333;
-  font-weight: bold;
+  margin: 0 0 8px;
+  color: #5a3e36;
+  font-weight: 600;
 }
 
-.galleta-precio {
+.card-precio {
   font-size: 16px;
   font-weight: bold;
-  color: #2d3436;
-  margin-bottom: 10px;
+  color: #8b5a2b;
+  margin: 0 0 15px;
 }
 
-.galleta-select {
-  width: 100%;
-  padding: 8px;
-  margin-bottom: 10px;
-  border: 1px solid #ddd;
-  border-radius: 4px;
-  font-size: 14px;
-  background: #f9fafb;
-  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+.card-precio i {
+  margin-right: 5px;
+  color: #d4a76a;
 }
 
-.galleta-select:focus {
-  border-color: #27ae60;
-  box-shadow: 0 0 5px rgba(39, 174, 96, 0.5);
-}
-
-.galleta-cantidad-container {
+.card-select-container, .card-cantidad-container {
   display: flex;
-  justify-content: center;
   align-items: center;
-  gap: 10px;
-  margin-top: 10px;
+  margin-bottom: 12px;
 }
 
-.galleta-cantidad {
+.card-select-container i, .card-cantidad-container i {
+  margin-right: 10px;
+  color: #d4a76a;
+  font-size: 16px;
+}
+
+.card-select {
+  flex: 1;
+  padding: 8px;
+  border: 1px solid #e0d5c8;
+  border-radius: 6px;
+  font-size: 14px;
+  background: #f9f9f7;
+  transition: border-color 0.3s ease;
+}
+
+.card-select:focus {
+  border-color: #d4a76a;
+  outline: none;
+}
+
+.card-cantidad {
   width: 60px;
   padding: 8px;
   text-align: center;
-  border: 1px solid #ddd;
-  border-radius: 4px;
+  border: 1px solid #e0d5c8;
+  border-radius: 6px;
+  background: #f9f9f7;
 }
 
-.galleta-boton-agregar {
-  background-color: #2d3436;
+.card-boton-agregar {
+  background-color: #8b5a2b;
   color: white;
   border: none;
-  width: 40px;
-  height: 40px;
-  font-size: 20px;
+  padding: 10px;
+  border-radius: 6px;
   cursor: pointer;
   transition: background-color 0.2s, transform 0.2s;
+  margin-top: auto;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
-.galleta-boton-agregar:hover {
-  background-color: #2d3436;
-  transform: scale(1.1);
+.card-boton-agregar i {
+  margin-right: 8px;
 }
 
-
-.card img {
-  width: 400px;
-  height: auto;
-  border-radius: 16px;
-  margin-bottom: 15px;
-}
-
-.card:hover {
-  transform: translateY(-10px);
-  box-shadow: 0 6px 30px rgba(0, 0, 0, 0.15);
-}
-
-.card-title {
-  font-size: 1.5rem;
-  font-weight: 600;
-  color: #2d3436;
-}
-
-.text-muted {
-  font-size: 1.2rem;
-  color: #636e72;
-}
-
-/* Form Styles */
-.form-select, .form-control {
-  margin-top: 8px;
-  padding: 10px;
-  border-radius: 8px;
-  border: 1px solid #ccc;
-  font-size: 1rem;
-  background: #f9fafb;
-  transition: border-color 0.3s ease, box-shadow 0.3s ease;
-}
-
-.form-select:focus, .form-control:focus {
-  border-color: #27ae60;
-  box-shadow: 0 0 5px rgba(39, 174, 96, 0.5);
-}
-
-.form-control {
-  width: 80px;
-  text-align: center;
-}
-
-/* Button Styles */
-.agregar-carrito {
-  background-color: #27ae60;
-  color: white;
-  border: none;
-  border-radius: 50%;
-  width: 50px;
-  height: 50px;
-  font-size: 1.5rem;
-  cursor: pointer;
-  transition: transform 0.2s ease, background-color 0.2s ease;
-}
-
-.agregar-carrito:hover {
-  background-color: #218838;
-  transform: scale(1.1);
-}
-
-.btn-dark {
-  background-color: #2d3436;
-  color: white;
-  border: none;
-  border-radius: 30px;
-  padding: 10px 20px;
-  transition: background-color 0.2s ease, transform 0.2s ease;
-  font-size: 1rem;
-}
-
-.btn-dark:hover {
-  background-color: #1a1e22;
-  transform: scale(1.1);
+.card-boton-agregar:hover {
+  background-color: #5a3e36;
+  transform: translateY(-2px);
 }
 
 /* Cart Styles */
@@ -223,7 +169,7 @@ body {
   right: -400px;
   width: 350px;
   height: 100vh;
-  background: linear-gradient(135deg, #ffecd2, lightgray);
+  background: linear-gradient(135deg, #fff9f0, #f5e6d8);
   box-shadow: -4px 0 15px rgba(0, 0, 0, 0.2);
   padding: 2rem;
   transition: right 0.3s ease-in-out;
@@ -246,7 +192,7 @@ body {
   border: none;
   font-size: 1.5rem;
   cursor: pointer;
-  color: #2d3436;
+  color: #5a3e36;
   transition: color 0.2s ease;
 }
 
@@ -258,19 +204,24 @@ body {
   position: fixed;
   top: 20px;
   right: 20px;
-  background: #2d3436;
+  background: #8b5a2b;
   color: white;
   border: none;
   border-radius: 50%;
   padding: 15px;
-  font-size: 1.5rem;
+  font-size: 1.2rem;
   cursor: pointer;
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
-  transition: background-color 0.2s ease, transform 0.2s ease;
+  transition: all 0.3s ease;
+  width: 50px;
+  height: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 #abrir-carrito:hover {
-  background-color: #1a1e22;
+  background-color: #5a3e36;
   transform: scale(1.1);
 }
 
@@ -280,8 +231,8 @@ body {
   background: #ffffff;
   margin: 10px 0;
   border-radius: 8px;
-  border: 2px solid #ff6f61;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  border: 1px solid #e0d5c8;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
   opacity: 0;
   transform: translateX(-20px);
   animation: fadeInItem 0.5s forwards;
@@ -289,29 +240,43 @@ body {
 
 #total-carrito {
   text-align: center;
-  font-size: 1.5rem;
+  font-size: 1.3rem;
   font-weight: 700;
   margin-top: 15px;
-  color: #2d3436;
+  color: #5a3e36;
+  padding: 10px;
+  background: rgba(255, 255, 255, 0.7);
+  border-radius: 8px;
+}
+
+#total-carrito i {
+  margin-right: 8px;
+  color: #d4a76a;
 }
 
 #btn-comprar {
   display: block;
   margin: 20px auto;
-  background-color: #27ae60;
+  background-color: #8b5a2b;
   color: white;
   border: none;
-  border-radius: 30px;
-  padding: 10px 20px;
-  font-size: 1.2rem;
+  border-radius: 6px;
+  padding: 12px 25px;
+  font-size: 1.1rem;
   cursor: pointer;
-  transition: background-color 0.2s ease, transform 0.2s ease;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+#btn-comprar i {
+  margin-right: 10px;
 }
 
 #btn-comprar:hover {
-  background-color: #218838;
-  transform: scale(1.1);
-  transition: transform 0.3s ease-out;
+  background-color: #5a3e36;
+  transform: translateY(-2px);
 }
 
 #carrito-overlay {
@@ -320,29 +285,36 @@ body {
   left: 0;
   width: 100vw;
   height: 100vh;
-  background: rgba(255, 255, 255, 0);
+  background: rgba(0, 0, 0, 0.5);
   display: none;
   z-index: 999;
   backdrop-filter: blur(5px);
   transition: all 0.3s ease;
 }
 
-#overlay.mostrar {
-  display: block;
+/* Responsive */
+@media (max-width: 1024px) {
+  .galletas-container {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 768px) {
+  .galletas-container {
+    grid-template-columns: 1fr;
+  }
+  
+  .galleta-card {
+    flex-direction: column;
+  }
+  
+  .card-image-container {
+    width: 100%;
+    height: 200px;
+  }
 }
 
 /* Animations */
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-    transform: translateY(-20px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
 @keyframes fadeInItem {
   from {
     opacity: 0;

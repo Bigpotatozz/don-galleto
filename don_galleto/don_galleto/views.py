@@ -7,7 +7,6 @@ from django.contrib.auth.models import Group
 class IndexView(TemplateView):
     template_name = 'index.html'
 
-
 def registro(request):
     if request.method == "POST":
         form = RegistroForm(request.POST)

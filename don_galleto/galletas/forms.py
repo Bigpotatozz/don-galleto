@@ -10,63 +10,8 @@ from django.core.validators import MinValueValidator
 class Registro_galleta_form(forms.ModelForm):
     nombre = forms.CharField(max_length=30)
     descripcion = forms.CharField(max_length=100)
-<<<<<<< HEAD
-    peso_unidad = forms.FloatField()
-    imagen = forms.ImageField(required=False)
-    duracion_promedio = forms.IntegerField()
-    cantidad_receta = forms.IntegerField()
-    
-    ingrediente1 = forms.ModelChoiceField(
-        queryset = Insumo.objects.filter(estatus = 'disponible'),
-        label = "Ingrediente",
-        to_field_name = "id_insumo"
-    )
-    cantidad1 = forms.FloatField()
-    
-    ingrediente2 = forms.ModelChoiceField(
-        queryset = Insumo.objects.filter(estatus = 'disponible'),
-        label = "Ingrediente",
-        to_field_name = "id_insumo"
-    )
-    cantidad2 = forms.FloatField()
-    ingrediente3 = forms.ModelChoiceField(
-        queryset = Insumo.objects.filter(estatus = 'disponible'),
-        label = "Ingrediente",
-        to_field_name = "id_insumo"
-    )
-    cantidad3 = forms.FloatField()
-    ingrediente4 = forms.ModelChoiceField(
-        queryset = Insumo.objects.filter(estatus = 'disponible'),
-        label = "Ingrediente",
-        to_field_name = "id_insumo"
-    )
-    cantidad4 = forms.FloatField()
-    ingrediente5 = forms.ModelChoiceField(
-        queryset = Insumo.objects.filter(estatus = 'disponible'),
-        label = "Ingrediente",
-        to_field_name = "id_insumo"
-    )
-    cantidad5 = forms.FloatField()
-    ingrediente6 = forms.ModelChoiceField(
-        queryset = Insumo.objects.filter(estatus = 'disponible'),
-        label = "Ingrediente",
-        to_field_name = "id_insumo"
-    )
-    cantidad6 = forms.FloatField()
-    ingrediente7 = forms.ModelChoiceField(
-        queryset = Insumo.objects.filter(estatus = 'disponible'),
-        label = "Ingrediente",
-        to_field_name = "id_insumo"
-    )
-    cantidad7 = forms.FloatField()
-    ingrediente8 = forms.ModelChoiceField(
-        queryset = Insumo.objects.filter(estatus = 'disponible'),
-        label = "Ingrediente",
-        to_field_name = "id_insumo"
-    )
-    cantidad8 = forms.FloatField()
-=======
     peso_unidad = forms.FloatField(validators=[MinValueValidator(1)])
+    imagen = forms.ImageField(required=False)
     duracion_promedio = forms.IntegerField(validators=[MinValueValidator(1)])
     cantidad_receta = forms.IntegerField(validators=[MinValueValidator(1)])
     precio_venta = forms.FloatField(validators=[MinValueValidator(1)])
@@ -77,7 +22,6 @@ class Registro_galleta_form(forms.ModelForm):
         insumos = Insumo.objects.all()
         
         for insumo in insumos:
->>>>>>> e33470e3ee6a8f4f36910eb9b4fe75097097f26a
     
             self.fields[f'insumo_{insumo.id_insumo}'] = forms.IntegerField(
                 label=insumo.nombre,
@@ -93,13 +37,15 @@ class Registro_galleta_form(forms.ModelForm):
             'descripcion', 
             'peso_unidad', 
             'duracion_promedio', 
-            'precio_venta'
+            'precio_venta',
+            'imagen',
         ]
     
     def save(self, commit=True):
         nombre = self.cleaned_data['nombre']
         descripcion = self.cleaned_data['descripcion']
         peso_unidad = self.cleaned_data['peso_unidad']
+        imagen = self.cleaned_data['imagen']
         duracion_promedio = self.cleaned_data['duracion_promedio']
         cantidad_receta = self.cleaned_data['cantidad_receta']
         precio_venta = self.cleaned_data['precio_venta']
@@ -109,6 +55,7 @@ class Registro_galleta_form(forms.ModelForm):
                 nombre=nombre,
                 descripcion=descripcion,
                 precio_venta=precio_venta,
+                imagen=imagen,
                 cantidad=0,  
                 cantidad_receta=cantidad_receta,
                 peso_unidad=peso_unidad,
@@ -135,6 +82,7 @@ class Editar_galleta_form(forms.ModelForm):
     nombre = forms.CharField(max_length=30)
     descripcion = forms.CharField(max_length=100)
     peso_unidad = forms.FloatField(validators=[MinValueValidator(1)])
+    imagen = forms.ImageField(required=False)
     duracion_promedio = forms.IntegerField(validators=[MinValueValidator(1)])
     cantidad_receta = forms.IntegerField(validators=[MinValueValidator(1)])
     precio_venta = forms.FloatField(validators=[MinValueValidator(1)])
@@ -159,6 +107,7 @@ class Editar_galleta_form(forms.ModelForm):
             'nombre', 
             'descripcion', 
             'peso_unidad', 
+            'imagen',
             'duracion_promedio', 
             'precio_venta'
         ]
@@ -175,19 +124,6 @@ class Editar_galleta_form(forms.ModelForm):
         precio_venta = self.cleaned_data['precio_venta']
 
         with transaction.atomic():
-<<<<<<< HEAD
-            
-            galleta = Galleta(nombre = nombre,
-                              descripcion = descripcion,
-                              precio_venta = 0,
-                              cantidad = 0,
-                              cantidad_receta = cantidad_receta,
-                              peso_unidad = peso_unidad,
-                              imagen = imagen,
-                              duracion_promedio = duracion_promedio,
-                              costo = 0)
-=======
->>>>>>> e33470e3ee6a8f4f36910eb9b4fe75097097f26a
 
             galleta = Galleta.objects.get(id_galleta = id);
             galleta.nombre = nombre
