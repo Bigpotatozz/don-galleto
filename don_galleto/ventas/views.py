@@ -202,43 +202,21 @@ def cambiar_estatus(request, venta_id, estatus):
     return redirect('lista_ventas')
 
 def dashboard_ventas(request):
-    fecha_limite = datetime.now() - timedelta(days=30)
+    fecha_limite = datetime.now() - timedelta(days=7)
     
     with connection.cursor() as cursor:
         cursor.execute("""
-            SELECT SUM(cantidad_restante * precio_unitario) 
-            FROM compra_insumo
-            WHERE estatus = 'disponible'
+            SELECT SUM(i.precio_unitario * i.cantidad)
+            FROM insumo i
+            WHERE i.estatus = 'disponible'
         """)
         costo_inventario = cursor.fetchone()[0] or 0
 
     with connection.cursor() as cursor:
         cursor.execute("""
-            SELECT 
-                g.nombre AS galleta,
-                SUM(dv.cantidad) AS cantidad_vendida,
-                SUM(dv.cantidad * dv.precio_galleta) AS total_obtenido
-            FROM 
-                detalle_venta dv
-            JOIN 
-                galleta g ON dv.id_galleta_id = g.id_galleta
-            JOIN
-                venta v ON dv.id_venta_id = v.id_venta
-            WHERE 
-                v.fecha_venta >= %s
-            GROUP BY 
-                g.nombre
-            ORDER BY 
-                total_obtenido DESC
-            LIMIT 5
-        """, [fecha_limite])
-        productos_vendidos = cursor.fetchall()
-
-    with connection.cursor() as cursor:
-        cursor.execute("""
-            SELECT DATE(v.fecha_venta) as fecha, 
-                   SUM(dv.cantidad * dv.precio_galleta) as total_ventas, 
-                   COUNT(DISTINCT v.id_venta) as cantidad_ventas
+            SELECT DATE(v.fecha_venta) as fecha,
+                   SUM(dv.cantidad * dv.precio_galleta) as total,
+                   COUNT(DISTINCT v.id_venta) as ventas
             FROM venta v
             JOIN detalle_venta dv ON v.id_venta = dv.id_venta_id
             WHERE v.fecha_venta >= %s
@@ -247,17 +225,37 @@ def dashboard_ventas(request):
         """, [fecha_limite])
         ventas_diarias = cursor.fetchall()
 
+    with connection.cursor() as cursor:
+        cursor.execute("""
+            SELECT g.nombre, 
+                   SUM(dv.cantidad) as unidades,
+                   SUM(dv.cantidad * dv.precio_galleta) as total
+            FROM detalle_venta dv
+            JOIN galleta g ON dv.id_galleta_id = g.id_galleta
+            JOIN venta v ON dv.id_venta_id = v.id_venta
+            WHERE v.fecha_venta >= %s
+            GROUP BY g.nombre
+            ORDER BY total DESC
+            LIMIT 5
+        """, [fecha_limite])
+        productos_vendidos = cursor.fetchall()
+
+    presentaciones_vendidas = Detalle_venta.objects.filter(
+        id_venta__fecha_venta__gte=fecha_limite
+    ).values(
+        'id_galleta__nombre'
+    ).annotate(
+        cantidad=Sum('cantidad')
+    ).order_by('-cantidad')[:5]
+
     ventas_por_galleta = Detalle_venta.objects.filter(
         id_venta__fecha_venta__gte=fecha_limite
     ).values(
         'id_galleta__nombre'
     ).annotate(
-        total_unidades=Sum('cantidad')
+        total_unidades=Sum('cantidad'),
+        total_monto=Sum(F('cantidad') * F('precio_galleta'))
     ).order_by('-total_unidades')
-
-    ganancia_esperada = Galleta.objects.aggregate(
-        total_ganancia=Sum(F('cantidad') * (F('precio_venta') - F('costo')))
-    )['total_ganancia'] or 0
 
     galletas_rentables = Galleta.objects.annotate(
         margen_ganancia=F('precio_venta') - F('costo'),
@@ -265,13 +263,16 @@ def dashboard_ventas(request):
         ganancia_potencial=(F('precio_venta') - F('costo')) * F('cantidad')
     ).order_by('-margen_ganancia')
 
+    ganancia_esperada = sum(g.ganancia_potencial for g in galletas_rentables)
+
     context = {
+        'costo_inventario': costo_inventario,
         'ventas_diarias': ventas_diarias,
         'productos_vendidos': productos_vendidos,
+        'presentaciones_vendidas': presentaciones_vendidas,
         'ventas_por_galleta': ventas_por_galleta,
-        'costo_inventario': float(costo_inventario),
-        'ganancia_esperada': float(ganancia_esperada),
+        'ganancia_esperada': ganancia_esperada,
         'galletas_rentables': galletas_rentables,
     }
-
+    
     return render(request, 'dashboards.html', context)
