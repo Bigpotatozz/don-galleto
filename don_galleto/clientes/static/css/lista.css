@@ -42,7 +42,7 @@ body {
 }
 
 .galleta-imagen-container {
-  width: 110%;
+  width: 100%;
   height: 250px;
   overflow: hidden;
   display: flex;
@@ -140,7 +140,7 @@ body {
 
 
 .card img {
-  width: 500px;
+  width: 400px;
   height: auto;
   border-radius: 16px;
   margin-bottom: 15px;

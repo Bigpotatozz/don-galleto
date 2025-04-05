@@ -3,10 +3,11 @@
 
 {% block content %}
 <div class="container text-center mt-5">
-    <h1 class="display-4">¡Gracias por tu compra!</h1>
+    <img src="{% static 'images/banner.png' %}" alt="Banner de agradecimiento" class="img-fluid mb-4">    <h1 class="display-4">¡Gracias por tu compra!</h1>
     <p class="lead">Tu pedido ha sido recibido y está siendo procesado.</p>
     <p>Puedes consultar tu historial de compras debajo</p>
-    <a href="{% url 'historial_compras' %}" class="btn btn-primary">Ver Historial de Compras</a>
+    <a src="{% url 'historial_compras' %}" class="btn btn-primary">Ver Historial de Compras</a>
     <h2></h2>
 </div>
+
 {% endblock %}

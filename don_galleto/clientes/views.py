@@ -71,7 +71,6 @@ class AgregarAlCarrito(TemplateView):
         if galleta.cantidad < cantidad_total:
             return JsonResponse({'error': 'No hay suficiente stock para completar la compra.'}, status=400)
 
-        # Si el producto ya está en el carrito, actualizamos la cantidad
         if str(id_galleta) in carrito:
             carrito[str(id_galleta)]['cantidad'] += cantidad_total
         else:
@@ -84,7 +83,6 @@ class AgregarAlCarrito(TemplateView):
                 'imagen': galleta.imagen.url if galleta.imagen else None,
             }
 
-        # 🔥 **Siempre recalculamos los subtotales para todos los productos** 🔥
         for item in carrito.values():
             item['subtotal'] = item['precio_venta'] * item['cantidad']
 
@@ -197,7 +195,8 @@ class FinalizarCompraView(LoginRequiredMixin, View):
         request.session['carrito'] = {}
         return redirect('gracias')  
 
-class HistorialComprasView(PermissionRequiredMixin, LoginRequiredMixin, TemplateView):
+class HistorialComprasView(PermissionRequiredMixin, TemplateView):
+    
     permission_required = 'usuarios.cliente'
 
     template_name = 'historial_compras.html'
