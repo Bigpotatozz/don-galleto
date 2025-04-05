@@ -1,0 +1,137 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container min-vh-100 d-flex align-items-center justify-content-center">
+    <div class="card shadow-lg rounded-4 p-4" style="max-width: 800px; width: 100%;">
+        <h2 class="text-center mb-4">Registro de Galleta</h2>
+
+        <form method="POST">
+            {% csrf_token %}
+            
+            <!-- Campos principales de la galleta -->
+            <div class="mb-3">
+                <label class="form-label" style="color: #34495e; font-weight: 500;">
+                    <i style="color: #95a5a6;"></i>{{ form.nombre.label }}
+                </label>
+                <div class="input-group">
+                    <span class="input-group-text" style="background-color: #f5f7fa; border: 1px solid #ced4da; border-right: none;">
+                      <i class="bi bi-person" style="color: #95a5a6;"></i>
+                    </span>
+                    {{ form.nombre }}
+                </div>
+                {% if form.nombre.errors %}
+                <div class="text-danger mt-2">
+                    <small><i class="bi bi-exclamation-circle me-1"></i>{{ form.nombre.errors.0 }}</small>
+                </div>
+                {% endif %}
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label" style="color: #34495e; font-weight: 500;">
+                    <i style="color: #95a5a6;"></i>{{ form.descripcion.label }}
+                </label>
+                <div class="input-group">
+                    <span class="input-group-text" style="background-color: #f5f7fa; border: 1px solid #ced4da; border-right: none;">
+                      <i class="bi bi-pencil" style="color: #95a5a6;"></i>
+                    </span>
+                    {{ form.descripcion }}
+                </div>
+                {% if form.descripcion.errors %}
+                <div class="text-danger mt-2">
+                    <small><i class="bi bi-exclamation-circle me-1"></i>{{ form.descripcion.errors.0 }}</small>
+                </div>
+                {% endif %}
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label" style="color: #34495e; font-weight: 500;">
+                    <i style="color: #95a5a6;"></i>Peso por unidad (gr)
+                </label>
+                <div class="input-group">
+                    <span class="input-group-text" style="background-color: #f5f7fa; border: 1px solid #ced4da; border-right: none;">
+                      <i style="color: #95a5a6;"> </i>
+                    </span>
+                    {{ form.peso_unidad }}
+                </div>
+                {% if form.peso_unidad.errors %}
+                <div class="text-danger mt-2">
+                    <small><i class="bi bi-exclamation-circle me-1"></i>{{ form.peso_unidad.errors.0 }}</small>
+                </div>
+                {% endif %}
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label" style="color: #34495e; font-weight: 500;">
+                    <i style="color: #95a5a6;"></i>Duración promedio (días)
+                </label>
+                <div class="input-group">
+                    <span class="input-group-text" style="background-color: #f5f7fa; border: 1px solid #ced4da; border-right: none;">
+                      <i class="bi bi-alarm" style="color: #95a5a6;"></i>
+                    </span>
+                    {{ form.duracion_promedio }}
+                </div>
+                {% if form.duracion_promedio.errors %}
+                <div class="text-danger mt-2">
+                    <small><i class="bi bi-exclamation-circle me-1"></i>{{ form.duracion_promedio.errors.0 }}</small>
+                </div>
+                {% endif %}
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label" style="color: #34495e; font-weight: 500;">
+                    <i style="color: #95a5a6;"></i>Cantidad de galletas por receta
+                </label>
+                <div class="input-group">
+                    <span class="input-group-text" style="background-color: #f5f7fa; border: 1px solid #ced4da; border-right: none;">
+                      <i class="bi" style="color: #95a5a6;"></i>
+                    </span>
+                    {{ form.cantidad_receta }}
+                </div>
+                {% if form.cantidad_receta.errors %}
+                <div class="text-danger mt-2">
+                    <small><i class="bi bi-exclamation-circle me-1"></i>{{ form.cantidad_receta.errors.0 }}</small>
+                </div>
+                {% endif %}
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label" style="color: #34495e; font-weight: 500;">
+                    <i style="color: #95a5a6;"></i>Precio de venta
+                </label>
+                <div class="input-group">
+                    <span class="input-group-text" style="background-color: #f5f7fa; border: 1px solid #ced4da; border-right: none;">
+                      <i class="bi bi-currency-dollar" style="color: #95a5a6;"></i>
+                    </span>
+                    {{ form.precio_venta }}
+                </div>
+                {% if form.precio_venta.errors %}
+                <div class="text-danger mt-2">
+                    <small><i class="bi bi-exclamation-circle me-1"></i>{{ form.precio_venta.errors.0 }}</small>
+                </div>
+                {% endif %}
+            </div>
+
+        
+            <h4 class="mt-4 mb-3">Ingredientes</h4>
+            <div class="row">
+                {% for insumo in form %}
+                    {% if 'insumo_' in insumo.name %}
+                        <div class="col-md-6 mb-3">
+                            <div class="card shadow-sm">
+                                <div class="card-body">
+                                    <h5 class="card-title">{{ insumo.label }}</h5>
+                                    <div class="form-group">
+                                        {{ insumo }} 
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    {% endif %}
+                {% endfor %}
+            </div>
+
+            <button type="submit" class="btn btn-primary btn-lg w-100 mt-4">Registrar Galleta</button>
+        </form>
+    </div>
+</div>
+{% endblock %}

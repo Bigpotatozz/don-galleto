@@ -4,8 +4,6 @@ from usuarios.models import Usuario
 from django.core.validators import MinValueValidator
 from django.utils import timezone
 
-
-# Create your models here.
 # Create your models here.
 class Insumo(models.Model):
     id_insumo = models.AutoField(primary_key=True)

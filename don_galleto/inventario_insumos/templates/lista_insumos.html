@@ -30,52 +30,25 @@
         <table class="table table-hover align-middle">
           <thead class="table-light">
             <tr>
-              <th style="color: #495057; font-weight: 500;">
-                <i class="bi bi-tag me-1"></i>Nombre
-              </th>
-              <th style="color: #495057; font-weight: 500;">
-                <i class="bi bi-box-seam me-1"></i>Cantidad
-              </th>
-              <th style="color: #495057; font-weight: 500;">
-                <i class="bi bi-info-circle me-1"></i>Estatus
-              </th>
-              <th style="color: #495057; font-weight: 500;">
-                <i class="bi bi-gear me-1"></i>Acciones
-              </th>
+                <th>Nombre</th>
+                <th>Tipo</th>
+                <th>Cantidad</th>
+                <th>Estatus</th>
+                <th>Acción</th>
             </tr>
           </thead>
           <tbody>
             {% for insumo in insumos %}
             <tr>
-              <td>{{ insumo.nombre }}</td>
-              <td>
-                <span class="badge bg-primary rounded-pill">
-                  {{ insumo.cantidad }} {{ insumo.tipo_medida }}
-                </span>
-              </td>
-              <td>
-                <span class="badge rounded-pill {% if insumo.estatus == 'disponible' %}bg-success{% else %}bg-secondary{% endif %}">
-                  {% if insumo.estatus == 'disponible' %}
-                    <i class="bi bi-check-circle-fill me-1"></i>
-                  {% else %}
-                    <i class="bi bi-x-circle-fill me-1"></i>
-                  {% endif %}
-                  {{ insumo.estatus }}
-                </span>
-              </td>
-              <td>
-                <div class="d-flex gap-2">
-                  <button class="btn btn-sm" 
-                          style="background-color: #f8f9fa; color: #17a2b8; border: 1px solid #17a2b8; border-radius: 6px;"
-                          data-bs-toggle="collapse" data-bs-target="#compras{{ insumo.id_insumo }}" aria-expanded="false">
-                    <i class="bi bi-eye me-1"></i>Ver Compras
-                  </button>
-                  <a href="{% url 'editar_insumo' insumo.id_insumo %}" class="btn btn-sm" 
-                     style="background-color: #f8f9fa; color: #3498db; border: 1px solid #3498db; border-radius: 6px;">
-                    <i class="bi bi-pencil-square me-1"></i>Editar
-                  </a>
-                </div>
-              </td>
+                <td>{{ insumo.nombre }}</td>
+                <td>{{ insumo.tipo }}</td>
+                <td>{{ insumo.cantidad }} {{insumo.tipo_medida}} </td>
+                <td>{{ insumo.estatus }}</td>
+                <td>
+                    <button class="btn btn-info btn-sm" data-bs-toggle="collapse" data-bs-target="#compras{{ insumo.id_insumo }}" aria-expanded="false">
+                        Ver compras
+                    </button>
+                </td>
             </tr>
             <tr class="collapse" id="compras{{ insumo.id_insumo }}">
               <td colspan="4" class="p-0">

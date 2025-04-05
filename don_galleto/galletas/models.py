@@ -9,22 +9,22 @@ class Galleta(models.Model):
     descripcion = models.CharField(max_length=100)
     imagen = models.ImageField(upload_to='galleta/', null=True, blank=True)
     costo = models.FloatField(
-        validators=[MinValueValidator(0)]
+        validators=[MinValueValidator(1)]
     )
     precio_venta = models.FloatField(
-        validators=[MinValueValidator(0)]
+        validators=[MinValueValidator(1)]
     )
     cantidad = models.IntegerField(
-        validators=[MinValueValidator(0)]
+        validators=[MinValueValidator(1)]
     )
     cantidad_receta = models.IntegerField(
-        validators=[MinValueValidator(0)]
+        validators=[MinValueValidator(1)]
     )
     peso_unidad = models.FloatField(
-        validators=[MinValueValidator(0)]
+        validators=[MinValueValidator(1)]
     )
     duracion_promedio = models.IntegerField(
-        validators=[MinValueValidator(0)]
+        validators=[MinValueValidator(1)]
     )
     
     class Meta: 
