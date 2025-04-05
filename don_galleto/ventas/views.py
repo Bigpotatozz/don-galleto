@@ -257,6 +257,14 @@ def dashboard_ventas(request):
         total_monto=Sum(F('cantidad') * F('precio_galleta'))
     ).order_by('-total_unidades')
 
+    ventas_por_monto = Detalle_venta.objects.filter(
+        id_venta__fecha_venta__gte=fecha_limite
+    ).values(
+        'id_galleta__nombre'
+    ).annotate(
+        total_monto=Sum(F('cantidad') * F('precio_galleta'))
+    ).order_by('-total_monto')
+
     galletas_rentables = Galleta.objects.annotate(
         margen_ganancia=F('precio_venta') - F('costo'),
         rentabilidad=(F('precio_venta') - F('costo')) / F('costo') * 100,
@@ -271,6 +279,7 @@ def dashboard_ventas(request):
         'productos_vendidos': productos_vendidos,
         'presentaciones_vendidas': presentaciones_vendidas,
         'ventas_por_galleta': ventas_por_galleta,
+        'ventas_por_monto': ventas_por_monto,  
         'ganancia_esperada': ganancia_esperada,
         'galletas_rentables': galletas_rentables,
     }
