@@ -232,11 +232,16 @@ function actualizarCarrito(carrito) {
     li.className = "item-carrito";
     li.dataset.id = item.id_galleta; 
     li.innerHTML = `
-      <span>${item.nombre} 
-      <br>$${item.precio_venta} 
-      <br>Cantidad: ${item.cantidad} pieza(s)</span>
-      <br><span>Subtotal: $${item.subtotal.toFixed(2)}</span>
-      <button class="btn btn-danger btn-sm eliminar-item" data-id="${item.id_galleta}">Eliminar</button>
+       <div style="display: flex; align-items: center;">
+          ${item.imagen ? `<img src="${item.imagen}" alt="${item.nombre}" style="width: 50px; height: 50px; margin-right: 10px; object-fit: cover; border-radius: 5px;">` : `<div style="width: 50px; height: 50px; margin-right: 10px; background-color: #ddd; display: flex; justify-content: center; align-items: center; border-radius: 5px;">No disponible</div>`}
+          <div>
+            <span>${item.nombre} 
+            <br>Precio: $${item.precio_venta.toFixed(2)} 
+            <br>Cantidad: ${item.cantidad} pieza(s)</span>
+            <br><span>Subtotal: $${item.subtotal.toFixed(2)}</span>
+            <button class="btn btn-danger btn-sm eliminar-item" data-id="${item.id_galleta}">Eliminar</button>
+          </div>
+        </div>
     `;
     li.style.animationDelay = `${index * 0.1}s`;
     listaCarrito.appendChild(li);

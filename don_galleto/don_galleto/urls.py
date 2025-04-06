@@ -23,3 +23,6 @@ urlpatterns = [
     path('galletas/', include('galletas.urls')),
     path('ventas/', include ('ventas.urls'), name = 'ventas'),
 ]
+
+if settings.DEBUG:
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

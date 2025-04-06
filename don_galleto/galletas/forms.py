@@ -11,6 +11,7 @@ class Registro_galleta_form(forms.ModelForm):
     nombre = forms.CharField(max_length=30)
     descripcion = forms.CharField(max_length=100)
     peso_unidad = forms.FloatField(validators=[MinValueValidator(1)])
+    imagen = forms.ImageField(required=False)
     duracion_promedio = forms.IntegerField(validators=[MinValueValidator(1)])
     cantidad_receta = forms.IntegerField(validators=[MinValueValidator(1)])
     precio_venta = forms.FloatField(validators=[MinValueValidator(1)])
@@ -36,13 +37,15 @@ class Registro_galleta_form(forms.ModelForm):
             'descripcion', 
             'peso_unidad', 
             'duracion_promedio', 
-            'precio_venta'
+            'precio_venta',
+            'imagen',
         ]
     
     def save(self, commit=True):
         nombre = self.cleaned_data['nombre']
         descripcion = self.cleaned_data['descripcion']
         peso_unidad = self.cleaned_data['peso_unidad']
+        imagen = self.cleaned_data['imagen']
         duracion_promedio = self.cleaned_data['duracion_promedio']
         cantidad_receta = self.cleaned_data['cantidad_receta']
         precio_venta = self.cleaned_data['precio_venta']
@@ -52,6 +55,7 @@ class Registro_galleta_form(forms.ModelForm):
                 nombre=nombre,
                 descripcion=descripcion,
                 precio_venta=precio_venta,
+                imagen=imagen,
                 cantidad=0,  
                 cantidad_receta=cantidad_receta,
                 peso_unidad=peso_unidad,
@@ -87,6 +91,7 @@ class Editar_galleta_form(forms.ModelForm):
     nombre = forms.CharField(max_length=30)
     descripcion = forms.CharField(max_length=100)
     peso_unidad = forms.FloatField(validators=[MinValueValidator(1)])
+    imagen = forms.ImageField(required=False)
     duracion_promedio = forms.IntegerField(validators=[MinValueValidator(1)])
     cantidad_receta = forms.IntegerField(validators=[MinValueValidator(1)])
     precio_venta = forms.FloatField(validators=[MinValueValidator(1)])
@@ -111,6 +116,7 @@ class Editar_galleta_form(forms.ModelForm):
             'nombre', 
             'descripcion', 
             'peso_unidad', 
+            'imagen',
             'duracion_promedio', 
             'precio_venta'
         ]
@@ -121,6 +127,7 @@ class Editar_galleta_form(forms.ModelForm):
         nombre = self.cleaned_data['nombre']
         descripcion = self.cleaned_data['descripcion']
         peso_unidad = self.cleaned_data['peso_unidad']
+        imagen = self.cleaned_data['imagen']
         duracion_promedio = self.cleaned_data['duracion_promedio']
         cantidad_receta = self.cleaned_data['cantidad_receta']
         precio_venta = self.cleaned_data['precio_venta']

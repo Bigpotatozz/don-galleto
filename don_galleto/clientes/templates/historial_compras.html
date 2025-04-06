@@ -1,51 +1,58 @@
 {% extends 'base.html' %}
 {% block content %}
 
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 <link rel="stylesheet" href="/static/css/historial.css">
 
-<div class="container">
-    <h3 class="title">Historial de Compras</h3>
+<div class="historial-container">
+    <h3 class="historial-title"><i class="fas fa-history"></i> Historial de Compras</h3>
 
     {% if ventas_con_detalles %}
-    <div class="table-wrapper">
+    <div class="table-container">
         <table class="purchase-table">
             <thead>
                 <tr>
-                    <th>N°Compra</th>
-                    <th>Fecha</th>
-                    <th>Total</th>
-                    <th>Estatus</th>
-                    <th>Acciones</th>
+                    <th><i class="fas fa-hashtag"></i> N°Compra</th>
+                    <th><i class="far fa-calendar-alt"></i> Fecha</th>
+                    <th><i class="fas fa-receipt"></i> Total</th>
+                    <th><i class="fas fa-info-circle"></i> Estatus</th>
+                    <th><i class="fas fa-cog"></i> Acciones</th>
                 </tr>
             </thead>
             <tbody>
                 {% for item in ventas_con_detalles %}
-                <tr>
+                <tr class="purchase-row">
                     <td>{{ forloop.counter }}</td>
                     <td>{{ item.venta.fecha_venta|date:"d/m/Y" }}</td>
                     <td>${{ item.total|floatformat:2 }}</td>
                     <td>
-                        <span class="badge bg-{% if item.venta.estatus == 'completado' %}success{% elif item.venta.estatus == 'pendiente' %}warning{% elif item.venta.estatus == 'cancelado' %}danger{% else %}secondary{% endif %}">
+                        <span class="status-badge status-{{ item.venta.estatus }}">
+                            <i class="status-icon 
+                                {% if item.venta.estatus == 'completado' %}fa-check-circle
+                                {% elif item.venta.estatus == 'pendiente' %}fa-clock
+                                {% elif item.venta.estatus == 'cancelado' %}fa-times-circle
+                                {% else %}fa-question-circle{% endif %}">
+                            </i>
                             {{ item.venta.estatus }}
                         </span>
                     </td>
                     <td>
-                        <button class="btn btn-sm btn-outline-dark toggle-details" data-venta-id="{{ item.venta.id_venta }}">
-                            Ver Detalles
+                        <button class="toggle-details-btn" data-venta-id="{{ item.venta.id_venta }}">
+                            <i class="fas fa-chevron-down"></i> Detalles
                         </button>
                     </td>
                 </tr>
-                <tr class="detalle-compra" id="detalle-{{ item.venta.id_venta }}" style="display: none;">
+                <tr class="detail-row" id="detalle-{{ item.venta.id_venta }}">
                     <td colspan="5">
-                        <div class="p-3">
-                            <h5>Detalles de la Compra</h5>
-                            <table class="table table-sm">
+                        <div class="detail-container">
+                            <h5 class="detail-title"><i class="fas fa-list-ul"></i> Detalles de la Compra</h5>
+                            <table class="detail-table">
                                 <thead>
                                     <tr>
-                                        <th>Producto</th>
-                                        <th>Cantidad</th>
-                                        <th>Precio Unitario</th>
-                                        <th>Total</th>
+                                        <th><i class="fas fa-cookie"></i> Producto</th>
+                                        <th><i class="fas fa-sort-amount-up"></i> Cantidad</th>
+                                        <th><i class="fas fa-tag"></i> Precio Unitario</th>
+                                        <th><i class="fas fa-calculator"></i> Total</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -57,6 +64,10 @@
                                         <td>${{ detalle.total|floatformat:2 }}</td>
                                     </tr>
                                     {% endfor %}
+                                    <tr class="detail-total">
+                                        <td colspan="3" class="text-end"><strong>Total de la compra:</strong></td>
+                                        <td><strong>${{ item.total|floatformat:2 }}</strong></td>
+                                    </tr>
                                 </tbody>
                             </table>
                         </div>
@@ -67,22 +78,39 @@
         </table>
     </div>
     {% else %}
-    <div class="no-purchases">
-        No tienes compras registradas.
+    <div class="empty-history">
+        <i class="fas fa-shopping-bag"></i>
+        <h4>No tienes compras registradas</h4>
+        <p>Aún no has realizado ninguna compra en nuestra tienda</p>
+        <a href="{% url 'lista_galletas' %}" class="btn-shop-now">
+            <i class="fas fa-chevron-left"></i> Ir a la tienda
+        </a>
     </div>
     {% endif %}
 </div>
 
 <script>
-    document.addEventListener("DOMContentLoaded", function () {
-        document.querySelectorAll(".toggle-details").forEach(button => {
-            button.addEventListener("click", function () {
+    document.addEventListener("DOMContentLoaded", function() {
+        document.querySelectorAll(".toggle-details-btn").forEach(button => {
+            button.addEventListener("click", function() {
                 const ventaId = this.getAttribute("data-venta-id");
                 const detalleRow = document.getElementById(`detalle-${ventaId}`);
-                detalleRow.style.display = detalleRow.style.display === "none" ? "table-row" : "none";
+                const icon = this.querySelector('i');
+                
+                detalleRow.classList.toggle("active");
+                
+                if (detalleRow.classList.contains("active")) {
+                    icon.classList.remove("fa-chevron-down");
+                    icon.classList.add("fa-chevron-up");
+                } else {
+                    icon.classList.remove("fa-chevron-up");
+                    icon.classList.add("fa-chevron-down");
+                }
             });
         });
     });
 </script>
 
 {% endblock %}
+
+//comment for push
