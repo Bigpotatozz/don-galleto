@@ -64,20 +64,6 @@
                 <div class="flex-grow-1">
                     <h5 class="mb-1">Prioriza vender:</h5>
                     <p class="h4 text-success mb-1">{{ mejor_galleta.nombre }}</p>
-                    <div class="d-flex flex-wrap">
-                        <span class="badge badge-primary badge-sm mr-1 mb-1">
-                            Margen: ${{ mejor_galleta.margen_ganancia|floatformat:2 }}
-                        </span>
-                        <span class="badge badge-info badge-sm mr-1 mb-1">
-                            Rentabilidad: {{ mejor_galleta.rentabilidad|floatformat:2 }}%
-                        </span>
-                        <span class="badge badge-secondary badge-sm mr-1 mb-1">
-                            Stock: {{ mejor_galleta.cantidad }}
-                        </span>
-                        <span class="badge badge-warning badge-sm mb-1">
-                            Ganancia potencial: ${{ mejor_galleta.ganancia_potencial|floatformat:2 }}
-                        </span>
-                    </div>
                 </div>
             </div>
             {% endwith %}
@@ -90,15 +76,16 @@
                 <div class="card-body text-center py-2">
                     <h5 class="card-title mb-1" style="font-size: 0.9rem;">Costo total del inventario</h5>
                     <p class="h4 mb-0">${{ costo_inventario|floatformat:2 }}</p>
+                    <small class="text-muted">Costo de producción del stock actual</small>
                 </div>
             </div>
         </div>
         <div class="col-md-6 mb-2">
             <div class="card kpi-card h-100">
                 <div class="card-body text-center py-2">
-                    <h5 class="card-title mb-1" style="font-size: 0.9rem;">Ganancia Esperada</h5>
+                    <h5 class="card-title mb-1" style="font-size: 0.9rem;">Ganancia Neta Esperada</h5>
                     <p class="h4 mb-0">${{ ganancia_esperada|floatformat:2 }}</p>
-                    <small class="text-muted">Si se vende todo el inventario de galletas</small>
+                    <small class="text-muted">Beneficio real al vender todo el stock</small>
                 </div>
             </div>
         </div>
@@ -267,9 +254,9 @@
         for (let i = 0; i < texto.length; i++) {
             hash = texto.charCodeAt(i) + ((hash << 7) - hash);
         }
-        const hue = Math.abs(hash) % 360;  
-        const saturation = 60 + (hash % 20);  
-        const lightness = 80 + (hash % 10);   
+        const hue = Math.abs(hash) % 360;
+        const saturation = 60 + (hash % 20);
+        const lightness = 80 + (hash % 10);
         return `hsl(${hue}, ${saturation}%, ${lightness}%)`;
     }
 
@@ -337,7 +324,7 @@
                 datasets: [{
                     data: [{% for presentacion in presentaciones_vendidas %}{{ presentacion.cantidad }},{% endfor %}],
                     backgroundColor: [{% for presentacion in presentaciones_vendidas %}`${getPastelColor('{{ presentacion.id_galleta__nombre }}')}`,{% endfor %}],
-                    borderWidth: 0  
+                    borderWidth: 0
                 }]
             },
             options: {

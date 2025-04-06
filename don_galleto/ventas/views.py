@@ -206,9 +206,9 @@ def dashboard_ventas(request):
     
     with connection.cursor() as cursor:
         cursor.execute("""
-            SELECT SUM(i.precio_unitario * i.cantidad)
-            FROM insumo i
-            WHERE i.estatus = 'disponible'
+            SELECT SUM(g.costo * g.cantidad)
+            FROM galleta g
+            WHERE g.cantidad > 0
         """)
         costo_inventario = cursor.fetchone()[0] or 0
 
@@ -239,6 +239,18 @@ def dashboard_ventas(request):
             LIMIT 5
         """, [fecha_limite])
         productos_vendidos = cursor.fetchall()
+        
+    with connection.cursor() as cursor:
+        cursor.execute("""
+            SELECT 
+                SUM(g.costo * g.cantidad) as costo_total,
+                SUM(g.precio_venta * g.cantidad) as valor_total
+            FROM galleta g
+            WHERE g.cantidad > 0
+        """)
+        resultado = cursor.fetchone()
+        costo_inventario = resultado[0] or 0
+        valor_inventario_vendible = resultado[1] or 0
 
     presentaciones_vendidas = Detalle_venta.objects.filter(
         id_venta__fecha_venta__gte=fecha_limite
@@ -271,7 +283,7 @@ def dashboard_ventas(request):
         ganancia_potencial=(F('precio_venta') - F('costo')) * F('cantidad')
     ).order_by('-margen_ganancia')
 
-    ganancia_esperada = sum(g.ganancia_potencial for g in galletas_rentables)
+    ganancia_esperada = valor_inventario_vendible - costo_inventario
 
     context = {
         'costo_inventario': costo_inventario,
