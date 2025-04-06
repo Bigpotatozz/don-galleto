@@ -195,9 +195,8 @@ class FinalizarCompraView(LoginRequiredMixin, View):
         request.session['carrito'] = {}
         return redirect('gracias')  
 
-class HistorialComprasView(PermissionRequiredMixin, TemplateView):
+class HistorialComprasView(TemplateView):
     
-    permission_required = 'usuarios.cliente'
 
     template_name = 'historial_compras.html'
 
@@ -225,7 +224,7 @@ class HistorialComprasView(PermissionRequiredMixin, TemplateView):
         context['ventas_con_detalles'] = ventas_con_detalles
         return context
     
-class ActualizarCarritoView(LoginRequiredMixin, View):
+class ActualizarCarritoView(View):
     def post(self, request, id_galleta):
         carrito = request.session.get('carrito', {})
         data = json.loads(request.body.decode('utf-8'))

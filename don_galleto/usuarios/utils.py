@@ -2,6 +2,8 @@ from django.contrib.auth.models import Group,  Permission
 from django.shortcuts import render, get_object_or_404, redirect
 from usuarios.models import Logs
 from datetime import date
+from django.contrib.auth.models import Permission
+
 
 def asignar_permisos(form, id: int | None):
 

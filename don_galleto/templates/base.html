@@ -47,10 +47,10 @@
                     <li class="nav-item"><a class="nav-link" href="{% url 'dashboard_ventas' %}">Dashboards</a></li>
                 {% endif %}
 
-                {% if perms.usuarios.cliente %}
+                
                     <li class="nav-item"><a class="nav-link" href="{% url 'catalogo_galletas' %}">Catálogo</a></li>
                     <li class="nav-item"><a class="nav-link" href="{% url 'historial_compras' %}">Historial de compras</a></li>
-                {% endif %}
+                
             {% endif %}
     </nav>
     <div class="content">

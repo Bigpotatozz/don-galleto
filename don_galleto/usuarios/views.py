@@ -85,6 +85,9 @@ class Edicion_usuario_view(FormView):
 
     def form_valid(self, form):
         id = self.kwargs.get('id')
+        usuario = get_object_or_404(Usuario, id_usuario=id)
+        usuario.user_permissions.clear()
+        usuario.groups.clear()
         asignar_permisos(form, id) 
         log(self, form, "usuario editado")
         return super().form_valid(form)

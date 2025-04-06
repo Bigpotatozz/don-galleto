@@ -15,6 +15,7 @@ class Registro_galleta_form(forms.ModelForm):
     duracion_promedio = forms.IntegerField(validators=[MinValueValidator(1)])
     cantidad_receta = forms.IntegerField(validators=[MinValueValidator(1)])
     precio_venta = forms.FloatField(validators=[MinValueValidator(1)])
+    imagen = forms.ImageField()
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -49,6 +50,7 @@ class Registro_galleta_form(forms.ModelForm):
         duracion_promedio = self.cleaned_data['duracion_promedio']
         cantidad_receta = self.cleaned_data['cantidad_receta']
         precio_venta = self.cleaned_data['precio_venta']
+        image = self.cleaned_data['imagen']
 
         with transaction.atomic():
             galleta = Galleta(
@@ -60,7 +62,7 @@ class Registro_galleta_form(forms.ModelForm):
                 cantidad_receta=cantidad_receta,
                 peso_unidad=peso_unidad,
                 duracion_promedio=duracion_promedio,
-                costo=0  
+                costo=0,
             )
             galleta.save()
             id_galleta = galleta.id_galleta
