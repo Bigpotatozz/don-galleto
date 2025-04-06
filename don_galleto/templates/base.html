@@ -47,9 +47,9 @@
                     <li class="nav-item"><a class="nav-link" href="{% url 'dashboard_ventas' %}">Dashboards</a></li>
                 {% endif %}
 
-                {% if perms.usuarios.cliente%}
-                    <li class="nav-item"><a class="nav-link" href="{% url 'historial_compras' %}">Historial de compras</a></li>
+                {% if perms.usuarios.cliente %}
                     <li class="nav-item"><a class="nav-link" href="{% url 'catalogo_galletas' %}">Catálogo</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{% url 'historial_compras' %}">Historial de compras</a></li>
                 {% endif %}
             {% endif %}
     </nav>
@@ -59,19 +59,6 @@
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="{% static '/js/bootstrap.min.js'%}"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    <script>
-        $(document).ready(function() {
-            {% if messages %}
-                {% for message in messages %}
-                    Swal.fire({
-                        title: '{{ message.tags|title }}',
-                        text: '{{ message }}',
-                        icon: '{{ message.tags }}',
-                        confirmButtonText: 'OK'
-                    });
-                {% endfor %}
-            {% endif %}
-        });
-        </script>
+
 </body>
 </html>

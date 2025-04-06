@@ -64,3 +64,4 @@ class MermaRegistrarForm(forms.ModelForm):
             "cantidad": forms.NumberInput(attrs={"class": "form-control", "placeholder": "Ingrese la cantidad de merma"}),
             "motivo": forms.TextInput(attrs={"class": "form-control", "placeholder": "Ingrese el motivo"}),
         }
+
