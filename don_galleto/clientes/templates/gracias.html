@@ -2,12 +2,202 @@
 {% load static %}
 
 {% block content %}
-<div class="container text-center mt-5">
-    <img src="{% static 'images/banner.png' %}" alt="Banner de agradecimiento" class="img-fluid mb-4">    <h1 class="display-4">¡Gracias por tu compra!</h1>
-    <p class="lead">Tu pedido ha sido recibido y está siendo procesado.</p>
-    <p>Puedes consultar tu historial de compras debajo</p>
-    <a src="{% url 'historial_compras' %}" class="btn btn-primary">Ver Historial de Compras</a>
-    <h2></h2>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+
+<div class="thank-you-container">
+    <div class="thank-you-card">
+        <div class="thank-you-header">
+            <img src="{% static 'images/banner.png' %}" alt="Banner de agradecimiento" class="thank-you-banner">
+            <div class="thank-you-icon">
+                <i class="fas fa-check-circle"></i>
+            </div>
+        </div>
+        
+        <div class="thank-you-content">
+            <h1 class="thank-you-title">¡Gracias por tu compra!</h1>
+            <p class="thank-you-message">Tu pedido ha sido recibido y está siendo procesado.</p>
+            
+            <div class="thank-you-benefits">
+                <div class="benefit-item">
+                    <i class="fas fa-clock"></i>
+                    <span>Procesamiento rápido</span>
+                </div>
+                <div class="benefit-item">
+                    <i class="fas fa-box-open"></i>
+                    <span>Embalaje premium</span>
+                </div>
+                <div class="benefit-item">
+                    <i class="fas fa-headset"></i>
+                    <span>Soporte 24/7</span>
+                </div>
+            </div>
+            
+            <a href="{% url 'historial_compras' %}" class="thank-you-button">
+                <i class="fas fa-history"></i> Ver Historial de Compras
+            </a>
+            
+            <a href="{% url 'catalogo_galletas' %}" class="continue-shopping">
+                <i class="fas fa-chevron-left"></i> Seguir comprando
+            </a>
+        </div>
+    </div>
 </div>
+
+<style>
+    /* Estilos para la página de agradecimiento */
+    .thank-you-container {
+        background: linear-gradient(135deg, #f9f5f0 0%, #ffffff 100%);
+        min-height: 100vh;
+        padding: 40px 20px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+    
+    .thank-you-card {
+        background: white;
+        border-radius: 16px;
+        overflow: hidden;
+        box-shadow: 0 15px 40px rgba(139, 90, 43, 0.15);
+        max-width: 600px;
+        width: 100%;
+        text-align: center;
+        position: relative;
+        border: 1px solid rgba(139, 90, 43, 0.1);
+    }
+    
+    .thank-you-header {
+        position: relative;
+    }
+    
+    .thank-you-banner {
+        width: 100%;
+        height: auto;
+        display: block;
+    }
+    
+    .thank-you-icon {
+        position: absolute;
+        bottom: -30px;
+        left: 50%;
+        transform: translateX(-50%);
+        background: white;
+        width: 80px;
+        height: 80px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        box-shadow: 0 5px 20px rgba(139, 90, 43, 0.2);
+        border: 5px solid #f9f5f0;
+    }
+    
+    .thank-you-icon i {
+        color: #8b5a2b;
+        font-size: 2.5rem;
+    }
+    
+    .thank-you-content {
+        padding: 50px 30px 30px;
+    }
+    
+    .thank-you-title {
+        color: #5a3e36;
+        font-size: 2.2rem;
+        margin-bottom: 15px;
+        font-weight: 600;
+    }
+    
+    .thank-you-message {
+        color: #8b5a2b;
+        font-size: 1.2rem;
+        margin-bottom: 5px;
+    }
+    
+    .thank-you-submessage {
+        color: #b7a997;
+        font-size: 0.95rem;
+        margin-bottom: 30px;
+    }
+    
+    .thank-you-benefits {
+        display: flex;
+        justify-content: space-around;
+        margin: 30px 0;
+        flex-wrap: wrap;
+        gap: 15px;
+    }
+    
+    .benefit-item {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        color: #5a3e36;
+        font-size: 0.9rem;
+        min-width: 100px;
+    }
+    
+    .benefit-item i {
+        color: #d4a76a;
+        font-size: 1.8rem;
+        margin-bottom: 8px;
+    }
+    
+    .thank-you-button {
+        display: inline-block;
+        background: linear-gradient(to right, #8b5a2b, #d4a76a);
+        color: white;
+        padding: 12px 25px;
+        border-radius: 8px;
+        text-decoration: none;
+        font-weight: 500;
+        margin: 10px 0;
+        transition: all 0.3s ease;
+        box-shadow: 0 4px 15px rgba(139, 90, 43, 0.3);
+    }
+    
+    .thank-you-button i {
+        margin-right: 8px;
+    }
+    
+    .thank-you-button:hover {
+        background: linear-gradient(to right, #7a4d25, #c4985f);
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px rgba(139, 90, 43, 0.4);
+        color: white;
+    }
+    
+    .continue-shopping {
+        display: inline-block;
+        color: #8b5a2b;
+        margin-top: 20px;
+        text-decoration: none;
+        font-size: 0.95rem;
+        transition: all 0.3s ease;
+    }
+    
+    .continue-shopping i {
+        margin-right: 5px;
+    }
+    
+    .continue-shopping:hover {
+        color: #5a3e36;
+        transform: translateX(-3px);
+    }
+    
+    @media (max-width: 576px) {
+        .thank-you-content {
+            padding: 50px 20px 20px;
+        }
+        
+        .thank-you-title {
+            font-size: 1.8rem;
+        }
+        
+        .thank-you-message {
+            font-size: 1rem;
+        }
+    }
+</style>
 
 {% endblock %}

@@ -10,7 +10,7 @@
   <div class="dashboard-header">
     <i class="fas fa-cookie-bite"></i> Menú de Galletas
   </div>
-  
+
   <div class="galletas-container">
     {% for galleta in galletas %}
     <div class="galleta-card">
@@ -24,7 +24,7 @@
       <div class="card-content">
         <h5 class="card-nombre">{{ galleta.nombre }}</h5>
         <p class="card-precio"><i class="fas fa-tag"></i> ${{ galleta.precio_venta|floatformat:2 }}</p>
-        
+
         <div class="card-select-container">
           <i class="fas fa-box-open"></i>
           <select id="presentacion_{{ galleta.id_galleta }}" class="card-select">
@@ -33,12 +33,13 @@
             <option value="Caja">Caja (50 piezas)</option>
           </select>
         </div>
-        
+
         <div class="card-cantidad-container">
           <i class="fas fa-sort-amount-up"></i>
-          <input type="number" id="cantidad_{{ galleta.id_galleta }}" class="card-cantidad" value="1" min="1" max="100" oninput="validarCantidad(this)">
+          <input type="number" id="cantidad_{{ galleta.id_galleta }}" class="card-cantidad" value="1" min="1" max="100"
+            oninput="validarCantidad(this)">
         </div>
-        
+
         <button class="card-boton-agregar agregar-carrito" data-id="{{ galleta.id_galleta }}">
           <i class="fas fa-cart-plus"></i> Agregar
         </button>
@@ -50,29 +51,70 @@
   <button id="abrir-carrito"><i class="fas fa-shopping-bag"></i></button>
   <div id="carrito-overlay">
     <div id="carrito">
-      <button id="btn-cerrar-carrito" class="btn btn-danger">&times;</button>
-      <h4><i class="fas fa-shopping-cart"></i> Carrito de Compras</h4>
-      <ul id="lista-carrito">
-        {% for item in carrito.values %}
-        <li class="item-carrito" data-id="{{ item.id }}"
-          style="display: flex; justify-content: space-between; align-items: center; padding: 10px; background-color: #f8f9fa; border-radius: 8px; margin-bottom: 8px;">
-          {% if item.imagen %}
-          <img src="{{ item.imagen }}" alt="{{ item.nombre }}"
-            style="width: 50px; height: 50px; margin-right: 10px; object-fit: cover; border-radius: 5px;">
-          {% else %}
-          <div class="galleta-sin-imagen" style="width: 50px; height: 50px; margin-right: 10px;"><i class="fas fa-cookie"></i></div>
-          {% endif %}
-          <span>{{ item.nombre }}
-            <br><i class="fas fa-tag"></i> Precio individual: ${{ item.precio_venta|floatformat:2 }}
-            <br><i class="fas fa-sort-amount-up"></i> cantidad:{{ item.cantidad }} pieza(s)
-            <br><i class="fas fa-calculator"></i> Subtotal: ${{ item.subtotal|floatformat:2 }}
-            <br><button class="btn btn-danger btn-sm eliminar-item" data-id="{{ item.id_galleta }}"><i class="fas fa-trash"></i> Eliminar</button>
-        </li>
-        {% endfor %}
-      </ul>
-      <div id="total-carrito"><i class="fas fa-receipt"></i> Total: ${{ total_carrito|floatformat:2 }}</div>
-      <button id="btn-comprar" class="btn-dark" data-id="{{ id_venta }}"><i class="fas fa-credit-card"></i> Comprar</button>
+      <div class="carrito-header">
+        <h4><i class="fas fa-gem"></i> Tu Selección</h4>
+        <button id="btn-cerrar-carrito" class="btn-cerrar">&times;</button>
+      </div>
+
+      <div class="carrito-body">
+        <ul id="lista-carrito">
+          {% for item in carrito.values %}
+          <li class="item-carrito" data-id="{{ item.id }}">
+            <div class="item-imagen">
+              {% if item.imagen %}
+              <img src="{{ item.imagen }}" alt="{{ item.nombre }}">
+              {% else %}
+              <div class="item-sin-imagen"><i class="fas fa-cookie"></i></div>
+              {% endif %}
+            </div>
+            <div class="item-detalles">
+              <h5>{{ item.nombre }}</h5>
+              <div class="item-info">
+                <span><i class="fas fa-tag"></i> ${{ item.precio_venta|floatformat:2 }}</span>
+                <span><i class="fas fa-hashtag"></i> {{ item.cantidad }} pieza(s)</span>
+                <span><i class="fas fa-calculator"></i> ${{ item.subtotal|floatformat:2 }}</span>
+              </div>
+              <button class="btn-eliminar eliminar-item" data-id="{{ item.id_galleta }}">
+                <i class="fas fa-trash-alt"></i> Eliminar
+              </button>
+            </div>
+          </li>
+          {% endfor %}
+        </ul>
+      </div>
+
+      <div class="carrito-footer">
+        <div class="total-container">
+          <div class="total-label">Total a Pagar:</div>
+          <div id="total-carrito" class="total-amount">${{ total_carrito|floatformat:2 }}</div>
+        </div>
+
+        <div class="carrito-acciones">
+          <button id="btn-continuar" class="btn-secundario">
+            <i class="fas fa-chevron-left"></i> Seguir Comprando
+          </button>
+          <button id="btn-comprar" class="btn-primario" data-id="{{ id_venta }}">
+            <i class="fas fa-credit-card"> </i>Comprar
+          </button>
+        </div>
+
+        <div class="carrito-beneficios">
+          <div class="beneficio-item">
+            <i class="fas fa-shield-alt"></i>
+            <span>Compra 100% segura</span>
+          </div>
+          <div class="beneficio-item">
+            <i class="fas fa-truck"></i>
+            <span>Envío rápido</span>
+          </div>
+          <div class="beneficio-item">
+            <i class="fas fa-gift"></i>
+            <span>Embalaje premium</span>
+          </div>
+        </div>
+      </div>
     </div>
+  </div>
   </div>
 
   <script src="/static/js/lista.js"></script>

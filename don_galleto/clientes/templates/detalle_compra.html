@@ -3,6 +3,8 @@
 
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11.4.28/dist/sweetalert2.min.css">
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.4.28/dist/sweetalert2.min.js"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+
 
 {% block content %}
 {% if messages %}
@@ -17,8 +19,10 @@
 
 <link rel="stylesheet" href="/static/css/detalle.css">
 
+
+
 <div class="detalle-compra-container">
-  <h4 class="titulo-detalle">Detalle de tu Compra</h4>
+  <h4 class="titulo-detalle"><i class="fas fa-receipt"></i> Detalle de tu Compra</h4>
 
   <form method="post" action="{% url 'finalizar_compra' %}">
     {% csrf_token %}
@@ -33,20 +37,20 @@
                 {% if item.imagen %}
                 <img src="{{ item.imagen }}" class="producto-imagen">
                 {% else %}
-                <div class="galleta-sin-imagen">No disponible</div>
+                <div class="galleta-sin-imagen"><i class="fas fa-cookie"></i></div>
                 {% endif %}
               </div>
-              <div>
+              <div class="producto-texto">
                 <h5 class="producto-nombre">{{ item.nombre }}</h5>
                 <p class="producto-descripcion">{{ item.descripcion }}</p>
               </div>
             </div>
             <div class="precio-cantidad">
-              <span class="precio">${{ item.precio_venta|floatformat:2 }}</span>
-              <br><span class="cantidad">{{ item.cantidad }} Pieza(s)</span>
+              <span class="precio"><i class="fas fa-tag"></i> ${{ item.precio_venta|floatformat:2 }}</span>
+              <span class="cantidad"><i class="fas fa-hashtag"></i> {{ item.cantidad }} Pieza(s)</span>
             </div>
             <div class="subtotal">
-              <span>Subtotal: ${{ item.subtotal|floatformat:2 }}</span>
+              <span><i class="fas fa-calculator"></i> ${{ item.subtotal|floatformat:2 }}</span>
             </div>
           </li>
           {% endfor %}
@@ -57,10 +61,14 @@
         <div class="totales">
           <div class="total">
             <span>Total:</span>
-            <span>$ {{ total|floatformat:2 }}</span>
+            <span class="total-amount">${{ total|floatformat:2 }}</span>
           </div>
         </div>
-        <button type="submit" class="btn-finalizar">Finalizar Compra</button>
+        <div class="carrito-beneficios">
+        </div>
+        <button type="submit" class="btn-finalizar">
+          <i class="fas fa-credit-card"></i> Finalizar Compra
+        </button>
       </div>
     </div>
   </form>
