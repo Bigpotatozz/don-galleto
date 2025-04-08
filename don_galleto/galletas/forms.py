@@ -148,7 +148,6 @@ class Editar_galleta_form(forms.ModelForm):
             for insumo in Insumo.objects.all():  
                 field_name = f'insumo_{insumo.id_insumo}'  
                 cantidad = self.cleaned_data.get(field_name, 0)
-                 # Buscar el detalle existente
                 detalle = Detalle_receta.objects.filter(
                     id_insumo=insumo,
                     id_galleta=galleta

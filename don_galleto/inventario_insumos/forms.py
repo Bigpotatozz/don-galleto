@@ -4,6 +4,7 @@ from proovedores.models import Proovedor
 from inventario_insumos.models import Compra_insumo, Merma_insumo
 from django.utils.timezone import now
 from django.contrib.auth import get_user_model
+from galletas.models import Galleta, Detalle_receta
 
 class Registro_insumo_form(forms.ModelForm):
     nombre = forms.CharField(max_length=45)
@@ -64,7 +65,7 @@ class Registro_compra_insumo_form(forms.ModelForm):
         model = Compra_insumo
         fields = ['nombre', 'cantidad','caducidad', 'total','id_proovedor_id', 'id_insumo_id']
 
-    def save(self, commit = True):
+    def save(self):
         nombre = self.cleaned_data['nombre']
         cantidad = self.cleaned_data['cantidad']
         caducidad = self.cleaned_data['caducidad']
@@ -89,18 +90,34 @@ class Registro_compra_insumo_form(forms.ModelForm):
         insumo.estatus = "disponible"
         insumo.precio_unitario = precio_unitario
 
+        new_compra_insumo.save()
+        insumo.save()
         
+      
+        galletas = Galleta.objects.all()
+        for galleta in galletas:
+            costo_galleta = 0
+            detalle_receta = Detalle_receta.objects.filter(id_galleta_id=galleta.id_galleta)
+            if detalle_receta.exists():
+                for detalle in detalle_receta:
+                    insumo = Insumo.objects.get(id_insumo=detalle.id_insumo_id)
+                    costo_galleta += detalle.cantidad * insumo.precio_unitario
+            galleta.costo = costo_galleta
+            galleta.save()
 
-        if commit: 
-            new_compra_insumo.save()
-            insumo.save()
+
+ 
+    
+
+            
+     
+            
             
 class Registro_merma_insumo_form(forms.ModelForm):
     
     def __init__(self, *args, **kwargs):
-        # Extrae explícitamente el request
         self.request = kwargs.pop('request', None)
-        print(f"Request en __init__: {self.request}")  # Depuración
+        print(f"Request en __init__: {self.request}") 
         super().__init__(*args, **kwargs)
     
     cantidad = forms.FloatField()

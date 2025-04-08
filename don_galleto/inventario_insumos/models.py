@@ -41,6 +41,7 @@ class Compra_insumo(models.Model):
     precio_unitario = models.FloatField(default = 0,
                                         validators=[MinValueValidator(0)])
     estatus = models.CharField(max_length=15, default = "")
+    fecha_registro = models.DateField(auto_now_add=True)
     id_proovedor = models.ForeignKey(Proovedor, on_delete=models.CASCADE, null = False, related_name= 'compra_insumo_proovedor')
     id_insumo = models.ForeignKey(Insumo, on_delete=models.CASCADE, null = False, related_name= 'compra_insumo_insumo')
     
