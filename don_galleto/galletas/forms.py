@@ -80,10 +80,11 @@ class Registro_galleta_form(forms.ModelForm):
                         id_galleta_id=galleta.id_galleta
                     )
                     detalle.save()
-                    
+        
                     insumo_data = Insumo.objects.get(id_insumo=insumo.id_insumo)
                     costo_galleta += insumo_data.precio_unitario * cantidad
-                
+
+            costo_galleta = costo_galleta / cantidad_receta
             galleta.costo = costo_galleta
             galleta.save()
         
