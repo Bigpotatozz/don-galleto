@@ -102,7 +102,7 @@ class Registro_compra_insumo_form(forms.ModelForm):
                 for detalle in detalle_receta:
                     insumo = Insumo.objects.get(id_insumo=detalle.id_insumo_id)
                     costo_galleta += detalle.cantidad * insumo.precio_unitario
-            galleta.costo = costo_galleta
+            galleta.costo = costo_galleta / galleta.cantidad_receta
             galleta.save()
 
 

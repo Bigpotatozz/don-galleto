@@ -131,9 +131,9 @@ def generar_ticket(request, id_venta):
     response['Content-Disposition'] = f'inline; filename="ticket_{id_venta}.pdf"'
     buffer = BytesIO()
     c = canvas.Canvas(buffer, pagesize=(200, 500))  
-    c.setTitle(f"Ticket Don Galleto #{id_venta}")
+    c.setTitle(f"Ticket SyntaxLab #{id_venta}")
     c.setFont("Helvetica-Bold", 12)  
-    c.drawCentredString(100, 480, "Don Galleto")  
+    c.drawCentredString(100, 480, "SyntaxLab")  
     
     c.setFont("Helvetica", 7) 
     c.drawCentredString(100, 470, "Tienda de Galletas Artesanales")
@@ -181,8 +181,8 @@ def generar_ticket(request, id_venta):
     c.line(30, y_position-30, 170, y_position-30)
     c.setFont("Helvetica", 7) 
     c.drawCentredString(100, y_position-40, "¡Gracias por su compra!")
-    c.drawCentredString(100, y_position-50, "Vuelva pronto a Don Galleto")
-    c.drawCentredString(100, y_position-60, "www.dongalleto.com")
+    c.drawCentredString(100, y_position-50, "Vuelva pronto a SyntaxLab")
+    c.drawCentredString(100, y_position-60, "www.syntaxlab.com")
     
     c.showPage()
     c.save()

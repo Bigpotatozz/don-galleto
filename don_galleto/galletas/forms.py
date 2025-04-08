@@ -98,6 +98,7 @@ class Editar_galleta_form(forms.ModelForm):
     duracion_promedio = forms.IntegerField(validators=[MinValueValidator(1)])
     cantidad_receta = forms.IntegerField(validators=[MinValueValidator(1)])
     precio_venta = forms.FloatField(validators=[MinValueValidator(1)])
+    imagen = forms.ImageField()
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
